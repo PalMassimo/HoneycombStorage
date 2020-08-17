@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Login Page</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <h1>Autenticati!</h1>
+        <form action="Login" method="POST">
+            <label>Username: </label> <input type="text" name="username"/><br/>
+            <label>Password: </label> <input type="password" name="password"/><br/>
+            <input type="radio" id="consumerField" name="role" value="consumer" checked><label for="consumerField">Consumer</label>
+            <input type="radio" id="uploaderField" name="role" value="uploader"><label for="uploaderField">Uploader</label>
+            <input type="radio" id="administratorField" name="role" value="administrator"><label for="administratorField">Administrator</label>
+            <br/>
+            <input type="submit" value="submit!"/>
+        </form>
+        
+        <h1>Non sei ancora un utente?</h1>
+        <a href="subscribe.html">subscribe page</a>
+    </body>
+</html>
