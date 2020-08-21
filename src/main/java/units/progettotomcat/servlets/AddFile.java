@@ -44,11 +44,11 @@ public class AddFile extends HttpServlet {
             out.println("<title>Servlet AddFile</title>");
             out.println("</head>");
             out.println("<body>");
-            
+
             if ((request.getSession().getAttribute("role")).equals("uploader")) {
                 EntityManagerFactory emf = Persistence.createEntityManagerFactory("progettotomcatPU");
                 EntityManager em = emf.createEntityManager();
-                
+
                 UploadedFile uf = new UploadedFile();
                 uf.setContent(toByteArray(request.getPart("fileToUpload").getInputStream()));
                 uf.setName(request.getPart("fileToUpload").getSubmittedFileName());
@@ -57,18 +57,24 @@ public class AddFile extends HttpServlet {
                 uf.setAddressIP(request.getRemoteAddr());
                 uf.setHashtags(null);
                 uf.setContentType(request.getContentType());
-                uf.setUploader(em.find(Uploader.class, (String)(request.getSession().getAttribute("username"))));
+                uf.setUploader(em.find(Uploader.class, (String) (request.getSession().getAttribute("username"))));
 
                 em.getTransaction().begin();
                 em.persist(uf);
                 em.getTransaction().commit();
+
+                request.getSession().setAttribute("idFile", uf.getId());
+                request.getRequestDispatcher("/SendEmails").forward(request, response);
                 
-                out.println("<h1>File aggiunto!</h1>");
-                response.sendRedirect("UploadersRealm/UploaderHomepage.jsp");
-            } else{
+                //in attesa di essere cancellato
+                /*if ((qemails.getResultList()).isEmpty()) {
+                    response.sendRedirect("UploadersRealm/UploaderHomepage.jsp");
+                }*/
+                
+            } else {
                 out.println("<h1>Non sei un uploader</h1>");
             }
-            
+
             out.println("</body>");
             out.println("</html>");
         }

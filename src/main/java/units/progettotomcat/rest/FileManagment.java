@@ -39,6 +39,10 @@ public class FileManagment {
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("progettotomcatPU");
         EntityManager em = emf.createEntityManager();
 
+//        inutile, a cosa serve qui?
+//        TypedQuery<String> owner = em.createQuery("SELECT u.email FROM UploadedFile uf INNER JOIN uf.uploader u WHERE id=:id", String.class);
+//        owner.setParameter("id", id);
+
         em.getTransaction().begin();
         UploadedFile deleteFile = em.find(UploadedFile.class, id);
         Query deleteQuery = em.createQuery("DELETE FROM UploadedFile WHERE id=:id");
@@ -46,6 +50,6 @@ public class FileManagment {
         deleteQuery.executeUpdate();
         em.getTransaction().commit();
 
-        return "fatto!";
+        return "file eliminato con successo! Credo...";
     }
 }

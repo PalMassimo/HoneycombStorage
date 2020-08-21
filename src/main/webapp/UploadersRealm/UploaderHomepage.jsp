@@ -4,6 +4,7 @@
     Author     : massi
 --%>
 
+<%@page import="javax.persistence.TypedQuery"%>
 <%@page import="java.util.List"%>
 <%@page import="units.progettotomcat.entites.Consumer"%>
 <%@page import="units.progettotomcat.entites.Uploader"%>
@@ -21,6 +22,27 @@
         <title>Uploader's Homepage</title>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script>
+            function deleteUploadedFile(id) {
+                let xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+
+                        console.log(xhr.responseText);
+
+//                        if(xhr.responseText==="fatto!"){
+//                         console.log("l'elemento è stato eliminato correttamente");   
+//                        } else{
+//                            console.log("l'elemento NON è stato eliminato correttamente");
+//                        } //location.reload();
+                    }
+                };
+                xhr.open("DELETE", "/ProgettoTomCat/api/filemanagment/deletefile/" + id, true);
+                xhr.send(null);
+            }
+        </script>
+
+
     </head>
 
     <body>
@@ -55,40 +77,50 @@
                     for (UploadedFile uf : ufs) {
                         out.println("<li>" + uf.getName() + "</li>");
         %>
-        <a data-method="delete" href="../api/filemanagment/deletefile/<%=uf.getId()%>">elimina</a>
-            <%
 
-                        }
+
+        <!--<a data-method="delete" href="../api/filemanagment/deletefile/ onclick<%=uf.getId()%>">elimina</a>-->
+
+        <input type="button" value="elimina" onclick="deleteUploadedFile(<%=uf.getId()%>)">
+
+
+
+
+
+        <%
+
                     }
-                } else {
-                    out.println("<h1>Non sei un uploader</h1>");
                 }
-                /*if(em.find(Uploader.class, request.getSession().getAttribute("username")).getUploadedFiles()!=null){
-                    for(Consumer c: em.find(Uploader.class, request.getSession().getAttribute("username")).getConsumers()){
-                        out.println("<li>"+c.getNomecognome()+"</li>");
-                    }
-                }*/
-            %>
+            } else {
+                out.println("<h1>Non sei un uploader</h1>");
+            }
+            /*if(em.find(Uploader.class, request.getSession().getAttribute("username")).getUploadedFiles()!=null){
+                for(Consumer c: em.find(Uploader.class, request.getSession().getAttribute("username")).getConsumers()){
+                    out.println("<li>"+c.getNomecognome()+"</li>");
+                }
+            }*/
+        %>
 
-            <h1>Aggiungi Consumer!</h1>
-            <form action="../AddConsumer" method="POST">
-                <label>Username:</label><input type="text" name="username"/>
-                <br/>
-                <label>Email:</label><input type="text" name="email" />
-                <br/>
-                <label>Nome e Cognome:</label><input type="text" name="nomecognome"/>
-                <br/>
-                <label>Password: </label><input type="password" name="password" />
-                <br/>
-                <input type="submit" value="submit!"/>
-            </form>
+        <h1>Aggiungi Consumer!</h1>
+        <form action="../AddConsumer" method="POST">
+            <label>Username:</label><input type="text" name="username"/>
+            <br/>
+            <label>Email:</label><input type="text" name="email" />
+            <br/>
+            <label>Nome e Cognome:</label><input type="text" name="nomecognome"/>
+            <br/>
+            <label>Password: </label><input type="password" name="password" />
+            <br/>
+            <input type="submit" value="submit!"/>
+        </form>
 
-            <h1>Add File </h1>
-            <form action="/ProgettoTomCat/AddFile" enctype="multipart/form-data" method="POST">  
-                <label for="fileField">Select a file:</label>
-                <input type="file" id="fileField2" name="fileToUpload" ><br><br>
-                <input type="submit">
-            </form>
+        <h1>Add File </h1>
+        <form action="/ProgettoTomCat/AddFile" enctype="multipart/form-data" method="POST">  
+            <label for="fileField">Select a file:</label>
+            <input type="file" id="fileField2" name="fileToUpload" ><br><br>
+            <input type="submit">
+        </form>
 
     </body>
+
 </html>
