@@ -1,28 +1,190 @@
 <!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
 <html>
-    <head>
-        <title>Login Page</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body>
-        <h1>Autenticati!</h1>
-        <form action="Login" method="POST">
-            <label>Username: </label> <input type="text" name="username"/><br/>
-            <label>Password: </label> <input type="password" name="password"/><br/>
-            <input type="radio" id="consumerField" name="role" value="consumer" checked><label for="consumerField">Consumer</label>
-            <input type="radio" id="uploaderField" name="role" value="uploader"><label for="uploaderField">Uploader</label>
-            <input type="radio" id="administratorField" name="role" value="administrator"><label for="administratorField">Administrator</label>
-            <br/>
-            <input type="submit" value="submit!"/>
-        </form>
-        
-        <h1>Non sei ancora un utente?</h1>
-        <a href="subscribe.html">subscribe page</a>
-    </body>
+  <head>
+    <title>Login Page</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="author" content="Massimo Palmisano" />
+    <link
+      href="https://fonts.googleapis.com/css?family=Archivo Black"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Baloo 2"
+      rel="stylesheet"
+    />
+
+    <link rel="shortcut icon" type="image/x-icon" href="./favicon.ico" />
+
+    <style>
+      html {
+        margin: 0;
+        border: 0;
+        padding: 0;
+        text-align: center;
+        background-image: url("./images/background2.jpg");
+        /*background-image: url("https://media.pocketgamer.com/artwork/ra-82605-1585325135/pocketgamer-zoom-backgrounds-03.jpg");*/
+        background-size: cover;
+      }
+
+      body {
+        margin: 0;
+        padding: 0;
+      }
+
+      h1 {
+        font-family: "Archivo Black";
+        font-size: 6vh;
+        margin-top: 2vh;
+        margin-bottom: 1vh;
+        color: rgb(83, 70, 70);
+      }
+
+      label {
+        font-family: "Baloo 2";
+        font-size: 120%;
+      }
+
+      input {
+        font-size: 3vh;
+        font-family: "Baloo 2";
+        border: 0.5vh solid orange;
+        border-radius: 1vh;
+      }
+
+      input[type="text"] {
+        height: 5vh;
+        width: 90%;
+        display: block;
+        margin-bottom: 0;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      input[type="password"] {
+        height: 5vh;
+        width: 90%;
+        display: block;
+        margin-top: 2%;
+        margin-right: auto;
+        margin-left: auto;
+        margin-bottom: 0.5vh;
+      }
+
+      input[type="radio"] {
+        cursor: pointer;
+      }
+
+      input[type="submit"] {
+        margin-top: 0.5vh;
+        margin-bottom: 1vh;
+        width: 90%;
+        padding-top: 5%;
+        padding-bottom: 5%;
+        border: 0.5vh solid orange;
+        border-radius: 1.5vh;
+        background-color: orange; /*rgb(54, 51, 51);*/
+        font-size: 150%;
+        color: rgb(139,69,19);
+        font-family: "Archivo Black";
+        cursor: pointer;
+      }
+
+      #formContainer {
+        /*border: 1vh solid orange; /*rgb(85, 79, 79);*/
+        border-radius: 3vh;
+        margin-top: 10vh;
+        margin-left: auto;
+        margin-right: auto;
+        width: 27%;
+        min-width: 300px;
+        background-color: rgb(255, 255, 72);
+      }
+
+      #profile_picture {
+        width: 50%;
+        text-align: center;
+        display: block;
+        margin-right: auto; /*to center horizzontally*/
+        margin-left: auto; /*to center horizzontally*/
+        border: 5px solid orange;
+        border-radius: 50%;
+        margin-bottom: 1.5vh;
+      }
+
+      #radio_group {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: row;
+        flex-wrap: wrap;
+      }
+
+      #didascalia {
+        width: 90%;
+        margin-right: auto;
+        margin-left: auto;
+        text-align: right;
+      }
+
+    </style>
+  </head>
+  <body>
+    <div id="formContainer">
+      <h1 id="formTitle">Sign In</h1>
+      <img
+        src="./images/default_profile_image.png"
+        alt="default_profile_picture"
+        id="profile_picture"
+      />
+      <form action="Login" method="POST" id="loginForm">
+        <input
+          type="text"
+          placeholder="Enter Username"
+          id="usernameField"
+          name="username"
+          required
+        />
+        <input
+          type="password"
+          placeholder="Enter Password"
+          id="passwordField"
+          name="password"
+          required
+        />
+        <div id="radio_group">
+          <label for="consumerField"
+            ><input
+              type="radio"
+              id="consumerField"
+              name="role"
+              value="consumer"
+              checked
+            />Consumer</label
+          >
+          <label for="uploaderField"
+            ><input
+              type="radio"
+              id="uploaderField"
+              name="role"
+              value="uploader"
+            />Uploader</label
+          >
+          <label for="administratorField"
+            ><input
+              type="radio"
+              id="administratorField"
+              name="role"
+              value="administrator"
+            />Administrator</label
+          >
+        </div>
+        <input type="submit" value="LOGIN" />
+      </form>
+      <div id="didascalia">
+        Not a user? Sign up
+        <a href="subscribe.html">here</a>
+      </div>
+    </div>
+  </body>
 </html>

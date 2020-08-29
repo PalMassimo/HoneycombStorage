@@ -100,7 +100,7 @@ public class SendEmails extends HttpServlet {
                     Transport.send(message);
                 }
             } catch (MessagingException e) {
-                System.out.println("AIUTOOOOOOOOOOOOOOOOOO " + e);
+                System.out.println("help: " + e);
             }
 
             //print results, only for debugging

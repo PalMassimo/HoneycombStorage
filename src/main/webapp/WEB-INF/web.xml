@@ -8,6 +8,7 @@
     <servlet>
         <servlet-name>Jersey REST Service</servlet-name>
         <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+        <multipart-config></multipart-config>
         <init-param>
             <param-name>jersey.config.server.provider.classnames</param-name>
             <param-value>org.glassfish.jersey.server.mvc.jsp.JspMvcFeature</param-value>
@@ -23,13 +24,27 @@
         <url-pattern>/api/*</url-pattern>
     </servlet-mapping>
     
+    <!--    <servlet>
+        <servlet-name>jersey-serlvet</servlet-name>
+        <servlet-class>org.glassfish.jersey.servlet.ServletContainer</servlet-class>
+        <init-param>
+            <param-name>jersey.config.server.provider.packages</param-name>
+            <param-value>com.howtodoinjava.jersey</param-value>
+        </init-param>
+        <init-param>
+            <param-name>jersey.config.server.provider.classnames</param-name>
+            <param-value>org.glassfish.jersey.media.multipart.MultiPartFeature</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>-->
+    
     <welcome-file-list>
         <welcome-file>login.html</welcome-file>
     </welcome-file-list>
 
     <session-config>
         <session-timeout>
-            30
+            130
         </session-timeout>
     </session-config>
 </web-app>

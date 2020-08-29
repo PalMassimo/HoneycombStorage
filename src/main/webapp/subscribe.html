@@ -1,28 +1,119 @@
 <!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
 <html>
-    <head>
-        <title>Subscribe Page</title>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    </head>
-    <body>
-        <h1>Become a new consumer!</h1>
+  <head>
+    <title>Subscribe Page</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" type="image/x-icon" href="./favicon.ico"/>
+    <link
+      href="https://fonts.googleapis.com/css?family=Archivo Black"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Baloo 2"
+      rel="stylesheet"
+    />
+    <style>
+        
+        html{    
+        background-image: url("./images/background2.jpg");
+        /*background-image: url("https://media.pocketgamer.com/artwork/ra-82605-1585325135/pocketgamer-zoom-backgrounds-03.jpg");*/
+        background-size: cover;
+        }
+        
+      div {
+        display: block;
+        width: 27%;
+        max-width: 500px;
+        min-width: 300px;
+        margin-right: auto;
+        margin-left: auto;
+        margin-top: 10vh;
+        border-radius: 3vh;
+        background-color: rgb(255, 255, 72);
+      }
 
-        <form action="AddConsumer" method="POST">
-            <label>Username:</label><input type="text" name="username"/>
-            <br/>
-            <label>Email:</label><input type="text" name="email" />
-            <br/>
-            <label>Nome e Cognome</label><input type="text" name="nomecognome"/>
-            <br/>
-            <label>Password: </label><input type="password" name="password" />
-            <br/>
-            <input type="submit" value="submit!"/>
-        </form>
-    </body>
+      h1 {
+        text-align: center;
+        font-family: "Archivo Black";
+        font-size: 6vh;
+        margin-top: 2vh;
+        margin-bottom: 1vh;
+      }
+
+      img {
+        margin-top: 0;
+        border: 0.8vh solid orange;
+        border-radius: 100vh;
+        display: block;
+        width: 40%;
+        margin-left: auto;
+        margin-right: auto;
+        background-color: white;
+      }
+
+      form {
+        display: flex;
+        margin-left: auto;
+        margin-right: auto;
+        flex-direction: column;
+        justify-content: space-around;
+        flex-wrap: nowrap;
+        width: 95%;
+      }
+
+      form > input {
+        border-width: medium;
+        border-radius: 1.5vh;
+        border: 0.8vh solid orange;
+      }
+
+      input[type="text"],
+      input[type="password"] {
+        display: block;
+        height: 5vh;
+        margin-top: 1%;
+        margin-bottom: 1%;
+        margin-left: 3%;
+        margin-right: 3%;
+        font-family: "Baloo 2";
+      }
+
+      input[type="submit"] {
+        display: block;
+        margin-top: 2%;
+        margin-bottom: 5%;
+        margin-left: 3%;
+        margin-right: 3%;
+        height: 8vh;
+        font-weight: bolder;
+        font-size: 150%;
+        border: none;
+        background-color: orange;
+        color: white;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <h1>Sign Up</h1>
+      <img
+        src="./images/default_profile_image.png"
+        alt="default profile consumer picture"
+        id="profile_picture"
+      />
+      <form action="AddConsumer" method="POST" id="form">
+        <input type="text" name="username" placeholder="Enter username" />
+        <input type="text" name="email" placeholder="Enter email" />
+        <input
+          type="text"
+          name="nomecognome"
+          placeholder="Enter name and surname"
+        />
+        <input type="password" name="password" placeholder="Enter password" />
+        <input type="submit" value="SIGN UP" />
+      </form>
+    </div>
+  </body>
 </html>

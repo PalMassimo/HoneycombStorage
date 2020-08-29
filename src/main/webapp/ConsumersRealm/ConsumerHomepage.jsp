@@ -37,6 +37,7 @@
 
             for (String ua : uploadersAffiliate) {
                 out.println("<li>" + ua + "</li>");
+                %> <img src="/ProgettoTomCat/api/logomanagment/getlogo/<%=ua%>" alt="logo_uploader"/>       <%
             }
 
         %>

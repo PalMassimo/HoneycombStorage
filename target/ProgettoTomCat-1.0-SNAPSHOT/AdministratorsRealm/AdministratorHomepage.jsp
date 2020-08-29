@@ -4,6 +4,12 @@
     Author     : massi
 --%>
 
+<%@page import="units.progettotomcat.entites.UploadedFile"%>
+<%@page import="javax.persistence.TypedQuery"%>
+<%@page import="units.progettotomcat.entites.Uploader"%>
+<%@page import="javax.persistence.EntityManager"%>
+<%@page import="javax.persistence.Persistence"%>
+<%@page import="javax.persistence.EntityManagerFactory"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -12,7 +18,7 @@
         <title>Administrator Homepage</title>
     </head>
     <body>
-        <h1>Administrator Homepage!</h1>
+        <h1>Administrator Homepage! Welcome, <%=request.getSession().getAttribute("username")%></h1>
         <h2>You can add every type of user</h2>
         <form action="/ProgettoTomCat/AddUser" method="POST"><!--we can say to the browser to open a new tab with target="_blank"-->
             <label for="usernameField">Username:<input type="text" name="username" id="usernameField"/></label>
@@ -30,5 +36,34 @@
             <br />
             <input type="submit" value="subscribe" />
         </form>
+
+        <h1>Uploader Section</h1>
+        <%
+            EntityManagerFactory emf=Persistence.createEntityManagerFactory("progettotomcatPU");
+            EntityManager em = emf.createEntityManager();
+            TypedQuery<Uploader> quploader = em.createQuery("SELECT u FROM Uploader u", Uploader.class);
+            
+            for(Uploader u: quploader.getResultList()){
+                
+                TypedQuery<Long> quploadedFile= em.createQuery("SELECT count(uf.id) FROM UploadedFile AS uf WHERE uploader=:currentu", Long.class);
+                quploadedFile.setParameter("currentu", em.find(Uploader.class, u.getUsername()));
+                
+                TypedQuery<Long> qnumberConsumers=em.createQuery("SELECT count(DISTINCT uc.username) FROM Uploader AS u INNER JOIN u.consumers AS uc WHERE u.email=:currentEmail", Long.class);
+                qnumberConsumers.setParameter("currentEmail", em.find(Uploader.class, u.getUsername()).getEmail());
+                qnumberConsumers.getResultList();
+                
+                out.println("<li>Uploader "+u.getNomecognome()+": ha caricato "+quploadedFile.getSingleResult()+" files in tutto e afferiscono "+qnumberConsumers.getSingleResult()+" consumer</li>");
+            }
+            
+            
+        
+        
+        
+        
+        
+        %>
+        
+
+
     </body>
 </html>
