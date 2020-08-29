@@ -2,7 +2,6 @@ package units.progettotomcat.rest;
 
 import java.io.IOException;
 import java.util.Date;
-import java.util.Queue;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -10,7 +9,6 @@ import javax.persistence.Query;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -20,7 +18,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import static org.apache.commons.io.IOUtils.toByteArray;
-import org.apache.tomcat.util.threads.TaskQueue;
 import units.progettotomcat.entites.UploadedFile;
 import units.progettotomcat.entites.Uploader;
 
