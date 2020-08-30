@@ -2,6 +2,8 @@ package units.progettotomcat.rest;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -51,12 +53,12 @@ public class FileManagment {
     }
 
     @POST
-    @Path("/postfile")
-//    @Consumes(MediaType.MULTIPART_FORM_DATA) //serve? in teoria no
+//    @Consumes(MediaType.MULTIPART_FORM_DATA) //serve? sembra di no ma avrebbe senso metterla
     public void postFile(@Context HttpServletRequest request, @Context HttpServletResponse response) throws IOException, ServletException {
 
         //verifica inutile? chi non è administrator o uploader non può essere qui. Gestire eventualmente solo gli administrator
-        if (request.getSession().getAttribute("role") != null && (request.getSession().getAttribute("role")).equals("uploader")) {
+        //if (request.getSession().getAttribute("role") != null && (request.getSession().getAttribute("role")).equals("uploader")) {
+        if (true) {
             EntityManagerFactory emf = Persistence.createEntityManagerFactory("progettotomcatPU");
             EntityManager em = emf.createEntityManager();
 
@@ -73,14 +75,26 @@ public class FileManagment {
             uf.setAddressIP(null);
             uf.setHashtags(null);
             uf.setContentType(request.getContentType());
-            uf.setUploader(em.find(Uploader.class, (String) (request.getSession().getAttribute("username"))));
+            //uf.setUploader(em.find(Uploader.class, (String) (request.getSession().getAttribute("username")))); //elimina commento finito lo sviluppo in vue
+            uf.setUploader(em.find(Uploader.class, "Sherry")); //siamo in fase di sviluppo!!!
             em.getTransaction().begin();
             em.persist(uf);
             em.getTransaction().commit();
 
+            Logger logger = Logger.getLogger("MY LOGGER");
+            logger.info("--------------------------------------------------------------------------------------------------------------------------------");
+            logger.info("--------------------------------------------------------------------------------------------------------------------------------");
+            logger.info("Richiesta da: " + request.getRemoteAddr());
+            logger.info("File name: " + request.getParameter("Marius"));
+            logger.info("Paperino: " + request.getParameter("Paperino"));
+            logger.info("GuerrieroMagico: " + request.getParameter("GuerrieroMagico"));
+            logger.info("Anonimo: " + null);
+            logger.info("--------------------------------------------------------------------------------------------------------------------------------");
+            logger.info("--------------------------------------------------------------------------------------------------------------------------------");            
+            
 //            TaskQueue queue= new TaskQueue();
 //            ThreadPoolExecutor
-            request.getSession().setAttribute("idFile", uf.getId());
+            request.getSession().setAttribute("idFile", uf.getId()); //che senso ha metterlo nella sessione? Piuttosto aggiungilo nella richiesta
             request.getRequestDispatcher("/SendEmails").forward(request, response);
         } else {
             response.sendRedirect("/ProgettoTomCat/UploadersRealm/UploaderHomepage.jsp");

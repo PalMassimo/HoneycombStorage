@@ -3,7 +3,6 @@ package units.progettotomcat.servlets;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,6 +23,7 @@ import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import units.progettotomcat.entites.Consumer;
 import units.progettotomcat.entites.UploadedFile;
 import units.progettotomcat.entites.Uploader;
 
@@ -38,7 +38,7 @@ public class SendEmails extends HttpServlet {
             throws ServletException, IOException, AddressException, MessagingException {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
-            
+
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
@@ -47,13 +47,42 @@ public class SendEmails extends HttpServlet {
             out.println("<body>");
             out.println("<h1>Id file: " + request.getSession().getAttribute("idFile") + "</h1>");
 
-            //retrieve emails address of consumers
             EntityManagerFactory emf = Persistence.createEntityManagerFactory("progettotomcatPU");
             EntityManager em = emf.createEntityManager();
-            TypedQuery<String> qemails = em.createQuery("SELECT c.email FROM Consumer AS c INNER JOIN c.uploaders AS cu WHERE cu.username=:username", String.class);
-            qemails.setParameter("username", (String) request.getSession().getAttribute("username"));
-            List<String> addresseesAddress = qemails.getResultList();
 
+            //we have to get all consumers and check if there are some username in checkbox values sent by the post request                    
+            TypedQuery<Consumer> qconsumers = em.createQuery("SELECT c FROM Consumer AS c INNER JOIN c.uploaders AS cu WHERE cu.username=:username", Consumer.class);
+            //qemails.setParameter("username", (String) request.getSession().getAttribute("username")); //fase vera
+            qconsumers.setParameter("username", "Sherry"); //fase sviluppo
+            ArrayList<Consumer> consumers = (ArrayList<Consumer>) qconsumers.getResultList();
+
+            //for all consumers we have to check if they belong to the list of the consumers written by the uploader
+            for (Consumer consumer : consumers) {
+                if (request.getParameter(consumer.getUsername()) == null) {
+                    consumers.remove(consumer);
+                }
+            }
+
+            Logger logger = Logger.getLogger("SendEmail Logger");
+            logger.info("--------------------------------------------------------------------------------------------------------------------------------------");
+            logger.info("--------------------------------------------------------------------------------------------------------------------------------------");
+            for (Consumer consumer : consumers) {
+                logger.log(Level.INFO, "La mail di notifica sar\u00e0 inviata a: {0}", consumer.getUsername());
+            }
+            logger.info("--------------------------------------------------------------------------------------------------------------------------------------");
+            logger.info("--------------------------------------------------------------------------------------------------------------------------------------");
+
+            //retrieve email addresses of the consumers
+            ArrayList<String> addresses = new ArrayList<String>();
+                        logger.info("--------------------------------------------------------------------------------------------------------------------------------------");
+            logger.info("--------------------------------------------------------------------------------------------------------------------------------------");
+            for(Consumer consumer: consumers){
+                addresses.add(consumer.getEmail());
+                logger.log(Level.INFO, "Indirizzo email: ", addresses.get(addresses.size()));
+            }
+            logger.info("--------------------------------------------------------------------------------------------------------------------------------------");
+            logger.info("--------------------------------------------------------------------------------------------------------------------------------------");
+            
             //retrieve email address of the uploader
             TypedQuery<String> qsenderAddress = em.createQuery("SELECT ufu.email FROM UploadedFile AS uf INNER JOIN uf.uploader AS ufu WHERE uf.id=:id ", String.class);
             qsenderAddress.setParameter("id", request.getSession().getAttribute("idFile"));
@@ -81,22 +110,22 @@ public class SendEmails extends HttpServlet {
             //Used to debug SMTP issues
             //DEGUB: CAMBIO SIA MITTENTE CHE DESTINARIO
             senderAddress = "progettoprogrammazioneweb@gmail.com";
-            List<String> debugList = new ArrayList<String>();
+            ArrayList<String> debugList = new ArrayList<String>();
             debugList.add("progettoprogrammazioneweb@gmail.com");
-            addresseesAddress = debugList;
+            addresses = debugList;
 
             session.setDebug(true);
 
             try {
-                for (String s : addresseesAddress) {
+                for (String s : addresses) {
                     MimeMessage message = new MimeMessage(session);
                     message.setFrom(new InternetAddress(senderAddress));
                     message.addRecipient(Message.RecipientType.TO, new InternetAddress(s));
                     message.setSubject("New file uploaded by " + em.find(Uploader.class, request.getSession().getAttribute("username")).getNomecognome());
                     message.setText("The uploader " + em.find(Uploader.class, request.getSession().getAttribute("username")).getNomecognome()
                             + "has upload a new file \"" + em.find(UploadedFile.class, request.getSession().getAttribute("idFile")).getName() + "\" for you!\n"
-                            + "This is the link where you can download " + "http://localhost:8080/ProgettoTomCat/api/filemanagment/getfile/"//CORREGGI PER IL DEPLOY
-                            +request.getSession().getAttribute("idFile")+"/"+em.find(UploadedFile.class, request.getSession().getAttribute("idFile")).getName());
+                            + "This is the link where you can download " + "http://localhost:8080/ProgettoTomCat/api/filemanagment/"//CORREGGI PER IL DEPLOY
+                            + request.getSession().getAttribute("idFile") + "/" + em.find(UploadedFile.class, request.getSession().getAttribute("idFile")).getName());
                     Transport.send(message);
                 }
             } catch (MessagingException e) {
@@ -104,7 +133,7 @@ public class SendEmails extends HttpServlet {
             }
 
             //print results, only for debugging
-            for (String s : addresseesAddress) {
+            for (String s : addresses) {
                 out.println("<li>subject: " + s + "</li>");
             }
 

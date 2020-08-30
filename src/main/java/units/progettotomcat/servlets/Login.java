@@ -3,6 +3,7 @@ package units.progettotomcat.servlets;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
+import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -111,6 +112,7 @@ public class Login extends HttpServlet {
         
        out.println("</body>");        
        out.println("</html>"); 
+      
     }
     
     @Override
