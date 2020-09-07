@@ -33,17 +33,20 @@ public class AddLogo extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String boh = (String) request.getSession().getAttribute("role");
-        if (((String) request.getSession().getAttribute("role")).equals("uploader")) {
-
+        String role = (String) request.getSession().getAttribute("role");
+        //if (((String) request.getSession().getAttribute("role")).equals("uploader")) {
+        if (true) {
             EntityManagerFactory emf = Persistence.createEntityManagerFactory("progettotomcatPU");
             EntityManager em = emf.createEntityManager();
 
             em.getTransaction().begin();
-            Uploader uf = em.find(Uploader.class, request.getSession().getAttribute("username"));
+            //Uploader uf = em.find(Uploader.class, request.getSession().getAttribute("username"));
+            Uploader uf = em.find(Uploader.class, "Sherry");
             uf.setLogo(toByteArray(request.getPart("logo").getInputStream()));
             em.persist(uf);
             em.getTransaction().commit();
+            String referrer =request.getHeader("referer");
+            response.sendRedirect(request.getHeader("referer"));
 
             try (PrintWriter out = response.getWriter()) {
                 out.println("<!DOCTYPE html>");

@@ -4,6 +4,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -18,22 +19,25 @@ import units.progettotomcat.entites.Uploader;
 @Path("/logomanagment")
 public class LogoManagment {
 
+    @Context
+    HttpServletRequest request;
+    @Context
+    HttpServletResponse response;
+    EntityManagerFactory emf = Persistence.createEntityManagerFactory("progettotomcatPU");
+    EntityManager em = emf.createEntityManager();
+
     @GET
     @Path("/getlogo")
     @Produces(MediaType.MULTIPART_FORM_DATA)
-    public byte[] getLogo(@Context HttpServletRequest request) {
-
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("progettotomcatPU");
-        EntityManager em = emf.createEntityManager();
+    public byte[] getLogo() {
 
         //DEPLOY
-        if (request.getSession().getAttribute("username") == null) {
+        //filtro deve assicurarsi che chi fa la richiesta sia un uploader o un administrator
+        if (em.find(Uploader.class, "Sherry").getLogo() != null) {
             return em.find(Uploader.class, "Sherry").getLogo();
         } else {
-            return em.find(Uploader.class, request.getSession().getAttribute("username")).getLogo();
+            return null;
         }
-
     }
-    
-    /*implementa post per uploadare l'immagine di profilo*/
+
 }

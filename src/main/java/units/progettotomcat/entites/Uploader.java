@@ -1,10 +1,11 @@
 package units.progettotomcat.entites;
 
-import java.util.ArrayList;
+import java.io.Serializable;
 import java.util.List;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -13,20 +14,18 @@ import javax.persistence.Table;
  *
  * @author massi
  */
-@Entity
+@Entity(name="Uploader")
 @Table(name = "uploader")
-public class Uploader extends Utente {
+public class Uploader extends Utente implements Serializable {
 
     @Column(name = "logo")
     private byte[] logo;
 
-    //The mappedBy property is what we use to tell Hibernate which variable ...
-    //...we are using to represent the parent class in our child class.
-    @OneToMany(mappedBy="uploader")
+    @OneToMany(mappedBy = "uploader", fetch = FetchType.LAZY)
     private List<UploadedFile> uploadedFiles;
 
-    @ManyToMany(mappedBy="uploaders")
-    private List<Consumer> consumers = new ArrayList<>();
+    @ManyToMany(mappedBy="uploaders", fetch = FetchType.LAZY)
+    private Set<Consumer> consumers;
 
     public Uploader() {
         super();
@@ -38,16 +37,12 @@ public class Uploader extends Utente {
         return username + email + nomecognome;
     }
 
-    public List<Consumer> getConsumers() {
+    public Set<Consumer> getConsumers() {
         return consumers;
     }
 
-    public void addConsumer(Consumer consumer){
+    public void addConsumer(Consumer consumer) {
         consumers.add(consumer);
-    }
-    
-    public void deleteConsumer(Consumer consumer){
-        //implementa
     }
 
     public byte[] getLogo() {

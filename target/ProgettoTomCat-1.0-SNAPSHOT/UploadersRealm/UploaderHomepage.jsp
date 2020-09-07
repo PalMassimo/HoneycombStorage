@@ -115,7 +115,7 @@
         </form>
 
         <h1>Add File </h1>
-        <form action="/ProgettoTomCat/api/filemanagment/postfile" enctype="multipart/form-data" method="POST">  
+        <form action="/ProgettoTomCat/api/filemanagment" enctype="multipart/form-data" method="POST">  
             <label for="fileField">Select a file:</label>
             <input type="file" id="fileField2" name="fileToUpload" ><br><br>
             <input type="submit">

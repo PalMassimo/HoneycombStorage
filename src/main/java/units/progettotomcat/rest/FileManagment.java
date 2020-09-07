@@ -74,7 +74,6 @@ public class FileManagment {
             uf.setSeenDate(null);
             uf.setAddressIP(null);
             uf.setHashtags(null);
-            uf.setContentType(request.getContentType());
             //uf.setUploader(em.find(Uploader.class, (String) (request.getSession().getAttribute("username")))); //elimina commento finito lo sviluppo in vue
             uf.setUploader(em.find(Uploader.class, "Sherry")); //siamo in fase di sviluppo!!!
             em.getTransaction().begin();

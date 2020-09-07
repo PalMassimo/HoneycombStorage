@@ -1,32 +1,35 @@
 package units.progettotomcat.entites;
 
+import java.io.Serializable;
 import java.util.Date;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 
 /**
  *
  * @author massi
  */
-@Entity
-@Table(name = "UploadedFile")
-public class UploadedFile {
+@Entity(name = "UploadedFile")
+@Table(name = "uploadedFile")
+public class UploadedFile implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private long id;
 
-    @Column(name = "content"/*, columnDefinition="BLOB"*/)
+    @Column(name = "content")
     private byte[] content;
 
     @Column(name = "name")
@@ -39,19 +42,19 @@ public class UploadedFile {
     @Column(name = "seenDate")
     @Temporal(value = TemporalType.TIME)
     private Date seenDate;
-    
-    @Column(name="addressIP")
+
+    @Column(name = "addressIP")
     private String addressIP;
-    
+
     @Column(name = "hashtagList")
     private String[] hashtags;
-    
-    @Transient
-    private String contentType;
-    
-    @ManyToOne
-    @JoinColumn(name="uploader", nullable=false)
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "uploader", nullable = false)
     private Uploader uploader;
+
+    @OneToMany(mappedBy = "uploadedFile", fetch = FetchType.LAZY)
+    private Set<DownloadFile> downloadFiles;
 
     public String getAddressIP() {
         return addressIP;
@@ -67,14 +70,6 @@ public class UploadedFile {
 
     public void setUploader(Uploader uploader) {
         this.uploader = uploader;
-    }
-
-    public String getContentType() {
-        return contentType;
-    }
-
-    public void setContentType(String contentType) {
-        this.contentType = contentType;
     }
 
     public long getId() {
@@ -121,6 +116,4 @@ public class UploadedFile {
         this.hashtags = hashtags;
     }
 
-    
-    
 }

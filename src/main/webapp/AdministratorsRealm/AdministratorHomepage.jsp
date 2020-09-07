@@ -39,30 +39,25 @@
 
         <h1>Uploader Section</h1>
         <%
-            EntityManagerFactory emf=Persistence.createEntityManagerFactory("progettotomcatPU");
-            EntityManager em = emf.createEntityManager();
-            TypedQuery<Uploader> quploader = em.createQuery("SELECT u FROM Uploader u", Uploader.class);
-            
-            for(Uploader u: quploader.getResultList()){
-                
-                TypedQuery<Long> quploadedFile= em.createQuery("SELECT count(uf.id) FROM UploadedFile AS uf WHERE uploader=:currentu", Long.class);
-                quploadedFile.setParameter("currentu", em.find(Uploader.class, u.getUsername()));
-                
-                TypedQuery<Long> qnumberConsumers=em.createQuery("SELECT count(DISTINCT uc.username) FROM Uploader AS u INNER JOIN u.consumers AS uc WHERE u.email=:currentEmail", Long.class);
-                qnumberConsumers.setParameter("currentEmail", em.find(Uploader.class, u.getUsername()).getEmail());
-                qnumberConsumers.getResultList();
-                
-                out.println("<li>Uploader "+u.getNomecognome()+": ha caricato "+quploadedFile.getSingleResult()+" files in tutto e afferiscono "+qnumberConsumers.getSingleResult()+" consumer</li>");
-            }
-            
-            
-        
-        
-        
-        
-        
+            //EntityManagerFactory emf=Persistence.createEntityManagerFactory("progettotomcatPU");
+        //            EntityManager em = emf.createEntityManager();
+        //            TypedQuery<Uploader> quploader = em.createQuery("SELECT u FROM Uploader u", Uploader.class);
+        //            
+        //            for(Uploader u: quploader.getResultList()){
+        //                
+        //                TypedQuery<Long> quploadedFile= em.createQuery("SELECT count(uf.id) FROM UploadedFile AS uf WHERE uploader=:currentu", Long.class);
+        //                quploadedFile.setParameter("currentu", em.find(Uploader.class, u.getUsername()));
+        //                
+        //                TypedQuery<Long> qnumberConsumers=em.createQuery("SELECT count(DISTINCT uc.username) FROM Uploader AS u INNER JOIN u.consumers AS uc WHERE u.email=:currentEmail", Long.class);
+        //                qnumberConsumers.setParameter("currentEmail", em.find(Uploader.class, u.getUsername()).getEmail());
+        //                qnumberConsumers.getResultList();
+        //                
+        //                out.println("<li>Uploader "+u.getNomecognome()+": ha caricato "+quploadedFile.getSingleResult()+" files in tutto e afferiscono "+qnumberConsumers.getSingleResult()+" consumer</li>");
+        //            }
+
+
         %>
-        
+
 
 
     </body>

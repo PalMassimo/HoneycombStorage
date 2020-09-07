@@ -1,41 +1,41 @@
 package units.progettotomcat.entites;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.Serializable;
+import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
  *
  * @author massi
  */
-@Entity
+@Entity(name = "Consumer")
 @Table(name = "consumer")
-public class Consumer extends Utente {
+public class Consumer extends Utente implements Serializable {
 
     @ManyToMany
-    @JoinTable(name="consumers_uploaders",
-            joinColumns=@JoinColumn(name="consumer_id"),
-            inverseJoinColumns =@JoinColumn(name="uploader_id"))
-    List<Uploader> uploaders = new ArrayList<>();
+    @JoinTable(
+            name = "Affiliation",
+            joinColumns = @JoinColumn(name = "consumer_username"),
+            inverseJoinColumns = @JoinColumn(name = "uploader_username"))
+    Set<Uploader> uploaders;
+
+    @OneToMany(mappedBy="consumer")
+    private Set<DownloadFile> downloadFiles;
 
     public Consumer() {
         super();
     }
 
-    public List<Uploader> getUploaders() {
+    public Set<Uploader> getUploaders() {
         return uploaders;
     }
 
     public void addUploader(Uploader uploader) {
         uploaders.add(uploader);
     }
-
-    public void deleteUploader(Uploader uploader) {
-        //IMPLEMENTA
-    }
-
 }

@@ -44,6 +44,11 @@ public class AddAdministrator extends HttpServlet {
 
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("progettotomcatPU");
         EntityManager em = emf.createEntityManager();
+        
+        Administrator admin = new Administrator();
+        em.getTransaction().begin();
+        em.persist(administrator);
+        em.getTransaction().commit();
 
         //verify that administrator already exists
         TypedQuery<Administrator> query = em.createQuery("SELECT a FROM Administrator a", Administrator.class);

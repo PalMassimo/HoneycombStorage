@@ -9,12 +9,14 @@ C:\Users\massi\Documents\Apache\ProgettoTomCat1\src\main\java\units\progettotomc
 C:\Users\massi\Documents\Apache\ProgettoTomCat1\src\main\java\units\progettotomcat\servlets\AddConsumer.java
 C:\Users\massi\Documents\Apache\ProgettoTomCat1\src\main\java\units\progettotomcat\servlets\SendEmails.java
 C:\Users\massi\Documents\Apache\ProgettoTomCat1\src\main\java\units\progettotomcat\entites\Uploader.java
-C:\Users\massi\Documents\Apache\ProgettoTomCat1\src\main\java\units\progettotomcat\rest\UploaderAreaManager.java
 C:\Users\massi\Documents\Apache\ProgettoTomCat1\src\main\java\units\progettotomcat\rest\LogoManagment.java
 C:\Users\massi\Documents\Apache\ProgettoTomCat1\src\main\java\units\progettotomcat\servlets\Logout.java
 C:\Users\massi\Documents\Apache\ProgettoTomCat1\src\main\java\units\progettotomcat\servlets\AddFile.java
 C:\Users\massi\Documents\Apache\ProgettoTomCat1\src\main\java\units\progettotomcat\servlets\AddUser.java
+C:\Users\massi\Documents\Apache\ProgettoTomCat1\src\main\java\units\progettotomcat\rest\UploaderArea.java
 C:\Users\massi\Documents\Apache\ProgettoTomCat1\src\main\java\units\progettotomcat\servlets\AddLogo.java
 C:\Users\massi\Documents\Apache\ProgettoTomCat1\src\main\java\units\progettotomcat\entites\Utente.java
+C:\Users\massi\Documents\Apache\ProgettoTomCat1\src\main\java\units\progettotomcat\entites\DownloadFile.java
 C:\Users\massi\Documents\Apache\ProgettoTomCat1\src\main\java\units\progettotomcat\servlets\AddAdministrator.java
 C:\Users\massi\Documents\Apache\ProgettoTomCat1\src\main\java\units\progettotomcat\filters\CORSFilter.java
+C:\Users\massi\Documents\Apache\ProgettoTomCat1\src\main\java\units\progettotomcat\entites\DownloadFileId.java

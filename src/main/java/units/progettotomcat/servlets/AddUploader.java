@@ -40,7 +40,7 @@ public class AddUploader extends HttpServlet {
         Uploader uploader = new Uploader();
         uploader.setUsername(request.getParameter("username"));
         uploader.setEmail(request.getParameter("email"));
-        uploader.setNomecognome(request.getParameter("nomecognome"));
+        uploader.setNomeCognome(request.getParameter("nomecognome"));
         uploader.setPassword(request.getParameter("password"));                
 
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("progettotomcatPU");

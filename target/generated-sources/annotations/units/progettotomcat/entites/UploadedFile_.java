@@ -2,6 +2,7 @@ package units.progettotomcat.entites;
 
 import java.util.Date;
 import javax.annotation.Generated;
+import javax.persistence.metamodel.SetAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
@@ -17,6 +18,7 @@ public abstract class UploadedFile_ {
 	public static volatile SingularAttribute<UploadedFile, String> addressIP;
 	public static volatile SingularAttribute<UploadedFile, Date> seenDate;
 	public static volatile SingularAttribute<UploadedFile, byte[]> content;
+	public static volatile SetAttribute<UploadedFile, DownloadFile> downloadFiles;
 
 }
 
