@@ -8,6 +8,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -25,10 +26,12 @@ public class DownloadFile implements Serializable {
     
     @ManyToOne
     @MapsId("consumer_username")
+    @NotNull
     private Consumer consumer;
     
     @ManyToOne
     @MapsId("uploadedFileId")
+    @NotNull
     private UploadedFile uploadedFile;
     
     @Temporal(TemporalType.TIME)

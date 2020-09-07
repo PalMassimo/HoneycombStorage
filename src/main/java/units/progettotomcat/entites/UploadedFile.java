@@ -3,6 +3,7 @@ package units.progettotomcat.entites;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -15,6 +16,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -26,34 +28,37 @@ public class UploadedFile implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "id", updatable = false)
     private long id;
 
     @Column(name = "content")
+    @NotNull
     private byte[] content;
 
     @Column(name = "name")
+    @NotNull
     private String name;
 
     @Column(name = "uploadDate")
     @Temporal(value = TemporalType.TIME)
+    @NotNull
     private Date uploadDate;
 
-    @Column(name = "seenDate")
-    @Temporal(value = TemporalType.TIME)
-    private Date seenDate;
-
     @Column(name = "addressIP")
+    @NotNull
     private String addressIP;
 
     @Column(name = "hashtagList")
+    @NotNull
     private String[] hashtags;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "uploader", nullable = false)
+    @JoinColumn(name = "uploader")
+    @NotNull
     private Uploader uploader;
 
-    @OneToMany(mappedBy = "uploadedFile", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "uploadedFile", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @NotNull
     private Set<DownloadFile> downloadFiles;
 
     public String getAddressIP() {
@@ -98,14 +103,6 @@ public class UploadedFile implements Serializable {
 
     public void setUploadDate(Date uploadDate) {
         this.uploadDate = uploadDate;
-    }
-
-    public Date getSeenDate() {
-        return seenDate;
-    }
-
-    public void setSeenDate(Date seenDate) {
-        this.seenDate = seenDate;
     }
 
     public String[] getHashtags() {

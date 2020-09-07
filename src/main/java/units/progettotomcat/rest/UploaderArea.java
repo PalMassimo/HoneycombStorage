@@ -192,7 +192,6 @@ public class UploaderArea {
         uploadedFile.setAddressIP(request.getRemoteAddr());
         uploadedFile.setUploader(em.find(Uploader.class, "Sherry")); //phase sviluppo
         uploadedFile.setUploadDate(new Date());
-        uploadedFile.setSeenDate(null);
         em.getTransaction().begin();
         em.persist(uploadedFile);
         em.getTransaction().commit();
@@ -220,11 +219,12 @@ public class UploaderArea {
         //gestisci se il file non esiste
         em.getTransaction().begin();
         UploadedFile uf = em.find(UploadedFile.class, id);
-        Query deleteQuery = em.createQuery("DELETE FROM UploadedFile uf WHERE uf.id=:id");
-        deleteQuery.setParameter("id", id);
-        deleteQuery.executeUpdate();
+        //Query deleteQuery = em.createQuery("DELETE FROM UploadedFile uf WHERE uf.id=:id");
+        //deleteQuery.setParameter("id", id);
+        //deleteQuery.executeUpdate();
+        em.remove(em.find(UploadedFile.class, id));
         em.getTransaction().commit();
-
+        em.close();
         return "Eliminazione effettuata!";
     }
 

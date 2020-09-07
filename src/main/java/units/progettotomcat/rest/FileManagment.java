@@ -42,7 +42,6 @@ public class FileManagment {
         //implementare authorization
         UploadedFile downloadFile = em.find(UploadedFile.class, id);
 
-        downloadFile.setSeenDate(new Date());
         downloadFile.setAddressIP(requestContext.getRemoteAddr());
 
         em.getTransaction().begin();
@@ -71,7 +70,6 @@ public class FileManagment {
             }
 
             uf.setUploadDate(new Date());
-            uf.setSeenDate(null);
             uf.setAddressIP(null);
             uf.setHashtags(null);
             //uf.setUploader(em.find(Uploader.class, (String) (request.getSession().getAttribute("username")))); //elimina commento finito lo sviluppo in vue

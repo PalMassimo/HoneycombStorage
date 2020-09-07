@@ -16,7 +16,6 @@ public abstract class UploadedFile_ {
 	public static volatile SingularAttribute<UploadedFile, String> name;
 	public static volatile SingularAttribute<UploadedFile, Long> id;
 	public static volatile SingularAttribute<UploadedFile, String> addressIP;
-	public static volatile SingularAttribute<UploadedFile, Date> seenDate;
 	public static volatile SingularAttribute<UploadedFile, byte[]> content;
 	public static volatile SetAttribute<UploadedFile, DownloadFile> downloadFiles;
 

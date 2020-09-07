@@ -3,6 +3,7 @@ package units.progettotomcat.entites;
 import java.io.Serializable;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -13,8 +14,14 @@ public class Utente implements Serializable {
 
     @Id
     protected String username;
+    
+    @NotNull
     protected String email;
+    
+    @NotNull
     protected String nomecognome;
+    
+    @NotNull
     protected String password;
 
     public Utente() {

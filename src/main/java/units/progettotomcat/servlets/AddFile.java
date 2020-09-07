@@ -53,7 +53,6 @@ public class AddFile extends HttpServlet {
                 uf.setContent(toByteArray(request.getPart("fileToUpload").getInputStream()));
                 uf.setName(request.getPart("fileToUpload").getSubmittedFileName());
                 uf.setUploadDate(new Date());
-                uf.setSeenDate(null);
                 uf.setAddressIP(null);
                 uf.setHashtags(null);
                 uf.setUploader(em.find(Uploader.class, (String) (request.getSession().getAttribute("username"))));
