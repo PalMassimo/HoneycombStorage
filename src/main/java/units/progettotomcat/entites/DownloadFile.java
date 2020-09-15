@@ -2,8 +2,10 @@ package units.progettotomcat.entites;
 
 import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Temporal;
@@ -14,28 +16,39 @@ import javax.validation.constraints.NotNull;
  *
  * @author massi
  */
-
 @Entity
 public class DownloadFile implements Serializable {
-   
+
     @EmbeddedId
     //serve a mapping the composite primary key: it consists of the ids
     //of the ids of the associated UploadedFile e Consumer entities
     //a tale scopo servono anche le annotation @MapsId
     private final DownloadFileId id = new DownloadFileId();
-    
-    @ManyToOne
+
+    @ManyToOne(fetch=FetchType.LAZY)
     @MapsId("consumer_username")
     @NotNull
     private Consumer consumer;
-    
-    @ManyToOne
+
+    @ManyToOne(fetch=FetchType.LAZY)
     @MapsId("uploadedFileId")
     @NotNull
     private UploadedFile uploadedFile;
-    
-    @Temporal(TemporalType.TIME)
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name="downloaded")
     private Date downloaded;
+    
+    @Column(name="ipAddress")
+    private String ipAddress;
+
+    public String getIpAddress() {
+        return ipAddress;
+    }
+
+    public void setIpAddress(String ipAddress) {
+        this.ipAddress = ipAddress;
+    }
 
     public Consumer getConsumer() {
         return consumer;
@@ -61,6 +74,4 @@ public class DownloadFile implements Serializable {
         this.downloaded = downloaded;
     }
 
-    
-    
 }

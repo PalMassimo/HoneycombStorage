@@ -31,10 +31,11 @@ public class LogoManagment {
     @Produces(MediaType.MULTIPART_FORM_DATA)
     public byte[] getLogo() {
 
+        Uploader uploader=em.find(Uploader.class, "Goro");
         //DEPLOY
         //filtro deve assicurarsi che chi fa la richiesta sia un uploader o un administrator
-        if (em.find(Uploader.class, "Sherry").getLogo() != null) {
-            return em.find(Uploader.class, "Sherry").getLogo();
+        if (em.find(Uploader.class, uploader.getUsername()).getLogo() != null) {
+            return em.find(Uploader.class, uploader.getUsername()).getLogo();
         } else {
             return null;
         }

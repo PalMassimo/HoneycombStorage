@@ -8,6 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,6 +21,8 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import static org.apache.commons.io.IOUtils.toByteArray;
+import units.progettotomcat.entites.Consumer;
+import units.progettotomcat.entites.DownloadFile;
 import units.progettotomcat.entites.UploadedFile;
 import units.progettotomcat.entites.Uploader;
 
@@ -30,25 +33,40 @@ import units.progettotomcat.entites.Uploader;
 @Path("/filemanagment")
 public class FileManagment {
 
+    @Context
+    HttpServletRequest request;
+    @Context
+    HttpServletResponse response;
+    EntityManagerFactory emf = Persistence.createEntityManagerFactory("progettotomcatPU");
+    EntityManager em = emf.createEntityManager();
+
     //mettere qui @Context request e reponse? È possibile metterle come variabili globali teoricamente
     @GET
     @Path("/getfile/{id:}/{name:}")
     @Produces(MediaType.MULTIPART_FORM_DATA)
-    public byte[] getFile(@Context HttpServletRequest requestContext, @PathParam("id") long id, @PathParam("name") String name) {
-
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("progettotomcatPU");
-        EntityManager em = emf.createEntityManager();
+    public byte[] getFile(@PathParam("id") long id, @PathParam("name") String name) {
 
         //implementare authorization
-        UploadedFile downloadFile = em.find(UploadedFile.class, id);
+        
+        //file da scarica
+        UploadedFile uploadedFile = em.find(UploadedFile.class, id);
+        
+        //query per modificare data di caricamento e indirizzo ip di visualizzazione
+        TypedQuery<DownloadFile> dfQuery = em.createQuery("SELECT df FROM DownloadFile df "
+                + "WHERE df.uploadedFile=:id AND df.consumer=:consumer_username", DownloadFile.class);
+        dfQuery.setParameter("id", uploadedFile);
+        dfQuery.setParameter("consumer_username", em.find(Consumer.class, "Marius"));
+        DownloadFile df = dfQuery.getSingleResult();
 
-        downloadFile.setAddressIP(requestContext.getRemoteAddr());
+        //update data e indirizzo IP di visualizzazione 
+        df.setDownloaded(new Date());
+        df.setIpAddress(request.getRemoteAddr());
 
         em.getTransaction().begin();
-        em.persist(downloadFile);
+        em.persist(df);
         em.getTransaction().commit();
 
-        return downloadFile.getContent();
+        return uploadedFile.getContent();
     }
 
     @POST
@@ -70,7 +88,6 @@ public class FileManagment {
             }
 
             uf.setUploadDate(new Date());
-            uf.setAddressIP(null);
             uf.setHashtags(null);
             //uf.setUploader(em.find(Uploader.class, (String) (request.getSession().getAttribute("username")))); //elimina commento finito lo sviluppo in vue
             uf.setUploader(em.find(Uploader.class, "Sherry")); //siamo in fase di sviluppo!!!
@@ -78,17 +95,17 @@ public class FileManagment {
             em.persist(uf);
             em.getTransaction().commit();
 
-            Logger logger = Logger.getLogger("MY LOGGER");
-            logger.info("--------------------------------------------------------------------------------------------------------------------------------");
-            logger.info("--------------------------------------------------------------------------------------------------------------------------------");
-            logger.info("Richiesta da: " + request.getRemoteAddr());
-            logger.info("File name: " + request.getParameter("Marius"));
-            logger.info("Paperino: " + request.getParameter("Paperino"));
-            logger.info("GuerrieroMagico: " + request.getParameter("GuerrieroMagico"));
-            logger.info("Anonimo: " + null);
-            logger.info("--------------------------------------------------------------------------------------------------------------------------------");
-            logger.info("--------------------------------------------------------------------------------------------------------------------------------");            
-            
+//            Logger logger = Logger.getLogger("MY LOGGER");
+//            logger.info("--------------------------------------------------------------------------------------------------------------------------------");
+//            logger.info("--------------------------------------------------------------------------------------------------------------------------------");
+//            logger.info("Richiesta da: " + request.getRemoteAddr());
+//            logger.info("File name: " + request.getParameter("Marius"));
+//            logger.info("Paperino: " + request.getParameter("Paperino"));
+//            logger.info("GuerrieroMagico: " + request.getParameter("GuerrieroMagico"));
+//            logger.info("Anonimo: " + null);
+//            logger.info("--------------------------------------------------------------------------------------------------------------------------------");
+//            logger.info("--------------------------------------------------------------------------------------------------------------------------------");            
+//            
 //            TaskQueue queue= new TaskQueue();
 //            ThreadPoolExecutor
             request.getSession().setAttribute("idFile", uf.getId()); //che senso ha metterlo nella sessione? Piuttosto aggiungilo nella richiesta

@@ -40,13 +40,9 @@ public class UploadedFile implements Serializable {
     private String name;
 
     @Column(name = "uploadDate")
-    @Temporal(value = TemporalType.TIME)
+    @Temporal(value = TemporalType.TIMESTAMP)
     @NotNull
     private Date uploadDate;
-
-    @Column(name = "addressIP")
-    @NotNull
-    private String addressIP;
 
     @Column(name = "hashtagList")
     @NotNull
@@ -61,12 +57,12 @@ public class UploadedFile implements Serializable {
     @NotNull
     private Set<DownloadFile> downloadFiles;
 
-    public String getAddressIP() {
-        return addressIP;
+    public Set<DownloadFile> getDownloadFiles() {
+        return downloadFiles;
     }
 
-    public void setAddressIP(String addressIP) {
-        this.addressIP = addressIP;
+    public void setDownloadFiles(Set<DownloadFile> downloadFiles) {
+        this.downloadFiles = downloadFiles;
     }
 
     public Uploader getUploader() {

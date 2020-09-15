@@ -3,6 +3,7 @@ package units.progettotomcat.entites;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,17 +15,17 @@ import javax.persistence.Table;
  *
  * @author massi
  */
-@Entity(name="Uploader")
+@Entity(name = "Uploader")
 @Table(name = "uploader")
 public class Uploader extends Utente implements Serializable {
 
     @Column(name = "logo")
     private byte[] logo;
 
-    @OneToMany(mappedBy = "uploader", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "uploader", cascade=CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<UploadedFile> uploadedFiles;
 
-    @ManyToMany(mappedBy="uploaders", fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "uploaders", fetch = FetchType.LAZY)
     private Set<Consumer> consumers;
 
     public Uploader() {

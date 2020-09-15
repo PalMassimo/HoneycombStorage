@@ -103,7 +103,7 @@ public class Login extends HttpServlet {
         if (check) {
             out.println("<h1>Benvenuto/a, "+request.getParameter("username")+"! </h1>");
             out.println("<p>Il tuo ruolo è " + request.getSession().getAttribute("role") + "</p>");
-            response.sendRedirect("./ConsumersRealm/ConsumerHomepage.jsp");
+            response.sendRedirect("./consumersrealm/index.html");
         } else {
             out.println("<h1>Login Failure</h1>");
             out.println("<p>Non sei stato trovato all'interno del database....");

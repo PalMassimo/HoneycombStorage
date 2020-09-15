@@ -41,7 +41,7 @@ public class AddLogo extends HttpServlet {
 
             em.getTransaction().begin();
             //Uploader uf = em.find(Uploader.class, request.getSession().getAttribute("username"));
-            Uploader uf = em.find(Uploader.class, "Sherry");
+            Uploader uf = em.find(Uploader.class, "Goro");
             uf.setLogo(toByteArray(request.getPart("logo").getInputStream()));
             em.persist(uf);
             em.getTransaction().commit();

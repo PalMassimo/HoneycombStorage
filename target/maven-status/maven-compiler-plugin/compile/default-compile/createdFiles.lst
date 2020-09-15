@@ -5,6 +5,7 @@ units\progettotomcat\entites\Consumer_.class
 units\progettotomcat\rest\FileManagment.class
 units\progettotomcat\servlets\AddLogo.class
 units\progettotomcat\filters\CORSFilter.class
+units\progettotomcat\rest\ConsumerArea.class
 units\progettotomcat\filters\AdministratorsRealmFilter.class
 units\progettotomcat\entites\DownloadFile_.class
 units\progettotomcat\servlets\LoadFiles.class
