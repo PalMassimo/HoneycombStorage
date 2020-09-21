@@ -41,7 +41,7 @@ public class ConsumerArea {
     EntityManager em = emf.createEntityManager();
 
     @GET
-    @Path("news")
+    @Path("consumernews")
     @Produces(MediaType.APPLICATION_JSON)
     public String getNews() {
 
@@ -111,13 +111,13 @@ public class ConsumerArea {
     }
 
     @GET
-    @Path("/info")
+    @Path("/consumerinfo")
     @Produces(MediaType.APPLICATION_JSON)
     public String getInfo() {
         Consumer consumer = em.find(Consumer.class, "Marius");
         JSONObject consumerJSON = new JSONObject();
         consumerJSON.put("username", consumer.getUsername());
-        consumerJSON.put("nameSurname", consumer.getNomeCognome());
+        consumerJSON.put("nameSurname", consumer.getNameSurname());
         consumerJSON.put("email", consumer.getEmail());
         consumerJSON.put("password", consumer.getPassword());
 
@@ -148,11 +148,12 @@ public class ConsumerArea {
     }
 
     @PUT
+    @Path("/consumer")
     @Consumes(MediaType.APPLICATION_JSON)
     public void putConsumer(Consumer consumer) {
         Consumer c = em.find(Consumer.class, "Marius");
         c.setEmail(consumer.getEmail());
-        c.setNomeCognome(consumer.getNomeCognome());
+        c.setNameSurname(consumer.getNameSurname());
         c.setPassword(consumer.getPassword());
         em.getTransaction().begin();
         em.persist(c);

@@ -1,13 +1,20 @@
 package units.progettotomcat.rest;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
+import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
@@ -21,6 +28,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import static org.apache.commons.io.IOUtils.toByteArray;
 import org.json.JSONObject;
 import org.json.JSONArray;
 import units.progettotomcat.entites.Consumer;
@@ -44,22 +52,20 @@ public class UploaderArea {
     EntityManager em = emf.createEntityManager();
 
     @GET
-    @Path("/info")
+    @Path("/generalinfo")
     @Produces(MediaType.APPLICATION_JSON)
-    public String getInfo() {
+    public String getGeneralInfo() {
 
         //info: numero documenti caricati e numero consumers affiliati
         //Uploader uploader = em.find(Uploader.class, (String) request.getSession().getAttribute("username"));
-        Uploader uploader = em.find(Uploader.class, "Goro"); //only for debug
+        Uploader uploader = em.find(Uploader.class, "Sherry"); //only for debug
 
         TypedQuery<Long> qtotalConsumers = em.createQuery("SELECT COUNT(c) FROM Uploader u INNER JOIN u.consumers c"
                 + " WHERE u.username= :currentuploader", Long.class);
-        //qtotalConsumers.setParameter("currentuploader", request.getSession().getAttribute("username"));
         qtotalConsumers.setParameter("currentuploader", uploader.getUsername());
 
         TypedQuery<Long> qtotalUploadedFile = em.createQuery("SELECT COUNT(uf) FROM UploadedFile uf INNER JOIN uf.uploader ufu"
                 + " WHERE ufu.username= :currentuploader", Long.class);
-        //qtotalUploadedFile.setParameter("currentuploader", request.getSession().getAttribute("username"));
         qtotalUploadedFile.setParameter("currentuploader", uploader.getUsername());
 
         //create JSON object in which we put the info
@@ -69,128 +75,107 @@ public class UploaderArea {
         info.put("role", "uploader"); //sistema
         info.put("username", uploader.getUsername()); //sistema
 
-        //return info;
         return info.toString();
     }
 
+    @GET
+    @Path("/uploader")
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getUploader(){
+        
+        Uploader uploader=em.find(Uploader.class, "Sherry");
+        JSONObject uploaderJSON = new JSONObject();
+        uploaderJSON.put("username", uploader.getUsername());
+        uploaderJSON.put("email", uploader.getEmail());
+        uploaderJSON.put("nameSurname", uploader.getNameSurname());
+        uploaderJSON.put("password", uploader.getPassword());
+        
+        return uploaderJSON.toString();
+    }
+    
     @PUT
-    @Path("/info")
+    @Path("/uploader")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Uploader changeInfo(Uploader changes) {
+    public void modifyUploader(Uploader changes) {
 
         em.getTransaction().begin();
         Uploader uploader = em.find(Uploader.class, changes.getUsername());
         uploader.setEmail(changes.getEmail());
-        uploader.setNomeCognome(changes.getNomeCognome());
+        uploader.setNameSurname(changes.getNameSurname());
         uploader.setPassword(changes.getPassword());
         em.persist(uploader);
         em.getTransaction().commit();
-        //i parametri posti a null non devono essere salvati nel database!!
-        uploader.setLogo(null);
-        //uploader.setConsumer(null); manca il metodo...
-        uploader.setUploadedFiles(null);
-
-        return uploader;
+    }
+    
+    @GET
+    @Path("/logo")
+    public byte[] getLogo() {
+        Uploader uploader = em.find(Uploader.class, "Sherry");
+        if (em.find(Uploader.class, uploader.getUsername()).getLogo() != null) {
+            return em.find(Uploader.class, uploader.getUsername()).getLogo();
+        } else {
+            return null;
+        }
+    }
+    
+    @POST
+    @Path("/logo")
+    public void postLogo() throws IOException, ServletException{
+        Uploader uploader = em.find(Uploader.class, "Sherry");
+        uploader.setLogo(toByteArray(request.getPart("logo").getInputStream()));
+        em.getTransaction().begin();
+        em.persist(uploader);
+        em.getTransaction().commit();
     }
 
     @GET
-    @Path("/consumermanagment")
+    @Path("/consumers")
     @Produces(MediaType.APPLICATION_JSON)
-    //returns the consumers affiliate info 
     public List<Consumer> getConsumers() {
-
-        Uploader uploader = em.find(Uploader.class, "Goro");
-        //che sia possibile screamare in base a dove viene effettuata la richiesta? 
-        //Ci sono due pagine vueJS diverse che la chiamano
+        //utilizzate da due vuejs
+        Uploader uploader = em.find(Uploader.class, "Sherry");
         TypedQuery<Consumer> qconsumers = em.createQuery("SELECT c FROM Consumer c INNER JOIN c.uploaders cu "
                 + "WHERE cu.username= :currentuploader ", Consumer.class);
         qconsumers.setParameter("currentuploader", uploader.getUsername());
         List<Consumer> consumers = qconsumers.getResultList();
 
         for (Consumer consumer : consumers) {
-            consumer.SetUploaders(null);
+            consumer.setUploaders(null);
             consumer.setDownloadFiles(null);
         }
         return consumers;
     }
 
-    @GET
-    @Path("/working")
-    public String getInformation() {
+    @POST
+    @Path("/consumer")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void postConsumer(Consumer consumer) {
 
         Uploader uploader = em.find(Uploader.class, "Sherry");
-        JSONObject json = new JSONObject();
-        TypedQuery<Consumer> consumersQuery = em.createQuery("SELECT c FROM Consumer c INNER JOIN c.uploaders cu "
-                + "WHERE cu.username=:currentuploader", Consumer.class);
-        consumersQuery.setParameter("currentuploader", uploader.getUsername());
-
-        for (Consumer consumer : consumersQuery.getResultList()) {
-
-            JSONArray uploadedFilesJSON = new JSONArray();
-            //dobbiamo restituire solo i files caricati dall'uploader
-            TypedQuery<DownloadFile> downloadFileQuery = em.createQuery("SELECT df "+
-                    "FROM DownloadFile df INNER JOIN df.uploadedFile uf INNER JOIN uf.uploader "+
-                    "WHERE uf.uploader=:currentuploader", DownloadFile.class);
-            downloadFileQuery.setParameter("currentuploader", uploader);
-            
-            //for (DownloadFile downloadfile : consumer.getDownloadFiles()) {
-            for (DownloadFile downloadfile : downloadFileQuery.getResultList()) {
-                UploadedFile uf = downloadfile.getUploadedFile();
-                JSONObject uploadedFileJSON = new JSONObject();
-                uploadedFileJSON.put("id", uf.getId());
-                uploadedFileJSON.put("name", uf.getName());
-                if (downloadfile.getDownloaded() == null) {
-                    uploadedFileJSON.put("seen", "");
-                    uploadedFileJSON.put("ipAddress", "");
-                } else {
-                    uploadedFileJSON.put("seen", downloadfile.getDownloaded().toString());
-                    uploadedFileJSON.put("ipAddress", downloadfile.getIpAddress());
-                }
-                JSONArray hashtags = new JSONArray();
-
-                uploadedFilesJSON.put(uploadedFileJSON);
-            }
-
-            json.put(consumer.getUsername(), uploadedFilesJSON);
-        }
-        return json.toString();
-    }
-
-    @POST
-    @Path("/consumermanagment")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public String postConsumer(Consumer consumer) {
-
-        Uploader uploader = em.find(Uploader.class, "Goro");
         consumer.addUploader(uploader);
         em.getTransaction().begin();
         em.persist(consumer);
         em.getTransaction().commit();
-
-        return "everything is fine";
     }
 
     @PUT
-    @Path("/consumermanagment")
+    @Path("/consumer")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Consumer changeInfo(Consumer update) {
+    public void changeInfo(Consumer update) {
 
         em.getTransaction().begin();
         Consumer consumer = em.find(Consumer.class, update.getUsername());
         consumer.setEmail(update.getEmail());
-        consumer.setNomeCognome(update.getNomeCognome());
+        consumer.setNameSurname(update.getNameSurname());
         consumer.setPassword(update.getPassword());
         em.persist(consumer);
         em.getTransaction().commit();
-
-        return consumer;
     }
 
     @DELETE
-    @Path("/consumermanagment/{username:}")
-    //delete a consumer
+    @Path("/consumer/{username:}")
     public String deleteConsumer(@PathParam("username") String username) throws IOException {
 
         em.getTransaction().begin();
@@ -202,30 +187,103 @@ public class UploaderArea {
         return "consumer eliminato con successo!";
     }
 
-    //usata da qualcuno sta roba?
     @GET
-    @Path("/uploadermanagment")
+    @Path("/consumersextended")
     @Produces(MediaType.APPLICATION_JSON)
-    public Uploader getUploader() {
+    public String getConsumersExtended() {
 
-        Uploader uploader = em.find(Uploader.class, "Goro");
-        uploader.setLogo(null);
-        uploader.setUploadedFiles(null);
-        return uploader;
+        Uploader uploader = em.find(Uploader.class, "Sherry");
+        JSONArray consumersJSONArray = new JSONArray();
+        SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy HH:mm:ss", Locale.ENGLISH);
+
+        //take all the affiliate consumers
+        TypedQuery<Consumer> consumersQuery = em.createQuery("SELECT c FROM Consumer c INNER JOIN c.uploaders cu "
+                + "WHERE cu.username=:currentuploader", Consumer.class);
+        consumersQuery.setParameter("currentuploader", uploader.getUsername());
+
+        for (Consumer consumer : consumersQuery.getResultList()) {
+
+            JSONObject consumerJSON = new JSONObject();
+            consumerJSON.put("username", consumer.getUsername());
+            JSONArray filesJSONArray = new JSONArray();
+            //dobbiamo restituire solo i files caricati dall'uploader
+            TypedQuery<DownloadFile> downloadFileQuery = em.createQuery("SELECT df "
+                    + "FROM DownloadFile df INNER JOIN df.uploadedFile uf INNER JOIN uf.uploader "
+                    + "WHERE uf.uploader=:currentuploader AND df.consumer=:currentconsumer", DownloadFile.class);
+            downloadFileQuery.setParameter("currentuploader", uploader);
+            downloadFileQuery.setParameter("currentconsumer", consumer);
+
+            for (DownloadFile downloadfile : downloadFileQuery.getResultList()) {
+                UploadedFile uf = downloadfile.getUploadedFile();
+                JSONObject uploadedFileJSON = new JSONObject();
+                uploadedFileJSON.put("id", uf.getId());
+                uploadedFileJSON.put("name", uf.getName());
+                if (downloadfile.getDownloaded() == null) {
+                    uploadedFileJSON.put("seen", "");
+                    uploadedFileJSON.put("ipAddress", "");
+                } else {
+                    uploadedFileJSON.put("seen", formatter.format(downloadfile.getDownloaded()));
+                    uploadedFileJSON.put("ipAddress", downloadfile.getIpAddress());
+                }
+                //JSONArray hashtags = new JSONArray();
+
+                filesJSONArray.put(uploadedFileJSON);
+            }
+
+            consumerJSON.put("files", filesJSONArray);
+            consumersJSONArray.put(consumerJSON);
+        }
+        return consumersJSONArray.toString();
+
+//        Uploader uploader = em.find(Uploader.class, "Sherry");
+//        JSONObject json = new JSONObject();
+//        TypedQuery<Consumer> consumersQuery = em.createQuery("SELECT c FROM Consumer c INNER JOIN c.uploaders cu "
+//                + "WHERE cu.username=:currentuploader", Consumer.class);
+//        consumersQuery.setParameter("currentuploader", uploader.getUsername());
+//
+//        for (Consumer consumer : consumersQuery.getResultList()) {
+//
+//            JSONArray uploadedFilesJSON = new JSONArray();
+//            //dobbiamo restituire solo i files caricati dall'uploader
+//            TypedQuery<DownloadFile> downloadFileQuery = em.createQuery("SELECT df "+
+//                    "FROM DownloadFile df INNER JOIN df.uploadedFile uf INNER JOIN uf.uploader "+
+//                    "WHERE uf.uploader=:currentuploader", DownloadFile.class);
+//            downloadFileQuery.setParameter("currentuploader", uploader);
+//            
+//            //for (DownloadFile downloadfile : consumer.getDownloadFiles()) {
+//            for (DownloadFile downloadfile : downloadFileQuery.getResultList()) {
+//                UploadedFile uf = downloadfile.getUploadedFile();
+//                JSONObject uploadedFileJSON = new JSONObject();
+//                uploadedFileJSON.put("id", uf.getId());
+//                uploadedFileJSON.put("name", uf.getName());
+//                if (downloadfile.getDownloaded() == null) {
+//                    uploadedFileJSON.put("seen", "");
+//                    uploadedFileJSON.put("ipAddress", "");
+//                } else {
+//                    uploadedFileJSON.put("seen", downloadfile.getDownloaded().toString());
+//                    uploadedFileJSON.put("ipAddress", downloadfile.getIpAddress());
+//                }
+//                JSONArray hashtags = new JSONArray();
+//
+//                uploadedFilesJSON.put(uploadedFileJSON);
+//            }
+//
+//            json.put(consumer.getUsername(), uploadedFilesJSON);
+//        }
+//        return json.toString();
     }
 
     @GET
-    @Path("/filemanagment")
+    @Path("/files")
     @Produces(MediaType.APPLICATION_JSON)
     public String getFileInfo() {
 
         //SIAMO IN MODALITA' SVILUPPO
-        Uploader uploader = em.find(Uploader.class, "Goro");
+        Uploader uploader = em.find(Uploader.class, "Sherry");
         TypedQuery<UploadedFile> quf = em.createQuery("SELECT uf FROM UploadedFile uf INNER JOIN uf.uploader ufu "
                 + "WHERE ufu.username =:currentuploader", UploadedFile.class
         );
         quf.setParameter("currentuploader", uploader.getUsername());
-        //quf.setParameter("currentuploader", request.getSession().getAttribute("username")); perché siamo in sviluppo ancora
 
         ArrayList<UploadedFile> results = new ArrayList<UploadedFile>();
 
@@ -250,34 +308,56 @@ public class UploaderArea {
 
     @POST
     @Path("/filemanagment")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public void postFile(@QueryParam("consumers") String consumers, UploadedFile uploadedFile) {
+    @Consumes(MediaType.TEXT_PLAIN)
+    public void uploadFile(String fileString) {
 
-        Uploader uploader=em.find(Uploader.class, "Sherry");
-        uploadedFile.setUploader(uploader); //phase sviluppo
+        Uploader uploader = em.find(Uploader.class, "Sherry");
+        JSONObject json = new JSONObject(fileString);
+        UploadedFile uploadedFile = new UploadedFile();
+        uploadedFile.setName(json.getString("name"));
+        uploadedFile.setContent(Base64.getDecoder().decode(json.getString("content")));
         uploadedFile.setUploadDate(new Date());
+
         em.getTransaction().begin();
         em.persist(uploadedFile);
         em.getTransaction().commit();
 
-        String[] arrayConsumers = consumers.split(" ");
+        JSONArray hashtagsJSONArray = json.getJSONArray("hashtags");
+        String[] hashtags = new String[hashtagsJSONArray.length()];
+        for (int i = 0; i < hashtags.length; i++) {
+            hashtags[i] = hashtagsJSONArray.getString(i);
+        }
+        uploadedFile.setHashtags(hashtags);
 
-        for (String consumer : arrayConsumers) {
+        uploadedFile.setUploader(uploader);
+
+        JSONArray consumersJSONArray = json.getJSONArray("consumers");
+        //Set<DownloadFile> downloadFiles = new HashSet<DownloadFile>();
+        for (int i = 0; i < consumersJSONArray.length(); i++) {
             DownloadFile downloadFile = new DownloadFile();
-            downloadFile.setDownloaded(null);
-            downloadFile.setConsumer(em.find(Consumer.class, consumer));
             downloadFile.setUploadedFile(uploadedFile);
+            if (em.find(Consumer.class, consumersJSONArray.getJSONObject(i).getString("username")) != null) {
+                downloadFile.setConsumer(em.find(Consumer.class, consumersJSONArray.getJSONObject(i).getString("username")));
+            } else {
+                Consumer consumer = new Consumer();
+                consumer.setUsername(consumersJSONArray.getJSONObject(i).getString("username"));
+                consumer.setEmail(consumersJSONArray.getJSONObject(i).getString("email"));
+                consumer.setNameSurname(consumersJSONArray.getJSONObject(i).getString("nameSurname"));
+                consumer.setPassword("password");
+                downloadFile.setConsumer(consumer);
+                em.getTransaction().begin();
+                em.persist(consumer);
+                em.getTransaction().commit();
+            }
             em.getTransaction().begin();
             em.persist(downloadFile);
             em.getTransaction().commit();
-
+            //downloadFiles.add(downloadFile);
         }
-
-        //response.sendRedirect(request.getHeader("referer"));
     }
 
     @DELETE
-    @Path("/filemanagment/{id:}")
+    @Path("/file/{id:}")
     public String deleteFile(@PathParam("id") long id) {
 
         //gestisci se il file non esiste
@@ -292,4 +372,50 @@ public class UploaderArea {
         return "Eliminazione effettuata!";
     }
 
+    ////////////////////////////////////////////////////
+    
+//    //usata da qualcuno sta roba?
+//    @GET
+//    @Path("/uploadermanagment")
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public Uploader getUploader() {
+//
+//        Uploader uploader = em.find(Uploader.class, "Goro");
+//        uploader.setLogo(null);
+//        uploader.setUploadedFiles(null);
+//        return uploader;
+//    }
+
+//    @POST
+//    @Path("/filemanagment")
+//    @Consumes(MediaType.APPLICATION_JSON)
+//    public void postFile(@QueryParam("consumers") String consumers, UploadedFile uploadedFile) {
+//
+//        Uploader uploader = em.find(Uploader.class, "Sherry");
+//        uploadedFile.setUploader(uploader); //phase sviluppo
+//        uploadedFile.setUploadDate(new Date());
+//        em.getTransaction().begin();
+//        em.persist(uploadedFile);
+//        em.getTransaction().commit();
+//
+//        String[] arrayConsumers = consumers.split(" ");
+//
+//        for (String consumer : arrayConsumers) {
+//            DownloadFile downloadFile = new DownloadFile();
+//            downloadFile.setDownloaded(null);
+//            if (em.find(Consumer.class, consumer) != null) {
+//                downloadFile.setConsumer(em.find(Consumer.class, consumer));
+//            } else {
+//                Consumer newConsumer = new Consumer();
+//            }
+//
+//            downloadFile.setUploadedFile(uploadedFile);
+//            em.getTransaction().begin();
+//            em.persist(downloadFile);
+//            em.getTransaction().commit();
+//
+//        }
+//
+//        //response.sendRedirect(request.getHeader("referer"));
+//    }
 }

@@ -1,5 +1,6 @@
 units\progettotomcat\entites\Administrator_.class
 units\progettotomcat\entites\Uploader_.class
+units\progettotomcat\rest\AdministratorArea.class
 units\progettotomcat\servlets\SendEmails$1.class
 units\progettotomcat\entites\Consumer_.class
 units\progettotomcat\rest\FileManagment.class

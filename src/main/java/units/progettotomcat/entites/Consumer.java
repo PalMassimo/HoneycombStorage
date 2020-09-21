@@ -38,7 +38,7 @@ public class Consumer extends Utente implements Serializable {
         return uploaders;
     }
     
-    public void SetUploaders(Set<Uploader> uploaders){
+    public void setUploaders(Set<Uploader> uploaders){
         this.uploaders=null;
     }
 

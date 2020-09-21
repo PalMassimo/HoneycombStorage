@@ -41,7 +41,7 @@ public class AddConsumer extends HttpServlet {
         Consumer consumer = new Consumer();
         consumer.setUsername(request.getParameter("username"));
         consumer.setEmail(request.getParameter("email"));
-        consumer.setNomeCognome(request.getParameter("nomecognome"));
+        consumer.setNameSurname(request.getParameter("nomecognome"));
         consumer.setPassword(request.getParameter("password"));
 
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("progettotomcatPU");

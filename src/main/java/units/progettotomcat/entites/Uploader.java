@@ -35,7 +35,7 @@ public class Uploader extends Utente implements Serializable {
 
     @Override
     public String toString() {
-        return username + email + nomecognome;
+        return username + email + nameSurname;
     }
 
     public Set<Consumer> getConsumers() {

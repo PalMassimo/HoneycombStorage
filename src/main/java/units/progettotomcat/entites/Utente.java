@@ -19,7 +19,7 @@ public class Utente implements Serializable {
     protected String email;
     
     @NotNull
-    protected String nomecognome;
+    protected String nameSurname;
     
     @NotNull
     protected String password;
@@ -27,14 +27,14 @@ public class Utente implements Serializable {
     public Utente() {
         username = null;
         email = null;
-        nomecognome = null;
+        nameSurname = null;
         password = null;
     }
 
     public Utente(String username, String email, String nomecognome, String password) {
         this.username = username;
         this.email = email;
-        this.nomecognome = nomecognome;
+        this.nameSurname = nomecognome;
         this.password = password;
     }
 
@@ -54,12 +54,12 @@ public class Utente implements Serializable {
         this.email = email;
     }
 
-    public String getNomeCognome() {
-        return nomecognome;
+    public String getNameSurname() {
+        return nameSurname;
     }
 
-    public void setNomeCognome(String nomecognome) {
-        this.nomecognome = nomecognome;
+    public void setNameSurname(String nomecognome) {
+        this.nameSurname = nomecognome;
     }
 
     public String getPassword() {

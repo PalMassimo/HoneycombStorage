@@ -124,9 +124,9 @@ public class SendEmails extends HttpServlet {
                     MimeMessage message = new MimeMessage(session);
                     message.setFrom(new InternetAddress(senderAddress));
                     message.addRecipient(Message.RecipientType.TO, new InternetAddress(s));
-                    //message.setSubject("New file uploaded by " + em.find(Uploader.class, request.getSession().getAttribute("username")).getNomeCognome());
-                    message.setSubject("New file uploaded by " + em.find(Uploader.class, "Sherry").getNomeCognome());
-                    message.setText("The uploader " + em.find(Uploader.class, "Sherry").getNomeCognome()//SISTEMA IL FIND, NON TUTTI GLI UPLOADERS SONO SHERRY!
+                    //message.setSubject("New file uploaded by " + em.find(Uploader.class, request.getSession().getAttribute("username")).getNameSurname());
+                    message.setSubject("New file uploaded by " + em.find(Uploader.class, "Sherry").getNameSurname());
+                    message.setText("The uploader " + em.find(Uploader.class, "Sherry").getNameSurname()//SISTEMA IL FIND, NON TUTTI GLI UPLOADERS SONO SHERRY!
                             + "has upload a new file \"" + em.find(UploadedFile.class, request.getSession().getAttribute("idFile")).getName() + "\" for you!\n"
                             + "This is the link where you can download " + "http://localhost:8080/ProgettoTomCat/api/filemanagment/"//CORREGGI PER IL DEPLOY
                             + request.getSession().getAttribute("idFile") + "/" + em.find(UploadedFile.class, request.getSession().getAttribute("idFile")).getName());
