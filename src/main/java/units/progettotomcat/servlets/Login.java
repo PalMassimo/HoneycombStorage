@@ -40,7 +40,7 @@ public class Login extends HttpServlet {
         String role = null;
         boolean check = false;
         
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("progettotomcatPU");
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("developmentPU");
         EntityManager em = emf.createEntityManager();
         
         switch (request.getParameter("role")) {
