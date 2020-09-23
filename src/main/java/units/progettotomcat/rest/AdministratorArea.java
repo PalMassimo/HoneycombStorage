@@ -47,7 +47,7 @@ public class AdministratorArea {
     public String getGeneralInfo() {
 
         //it will contain the number of administrator, uploaders, consumers and uploaded files
-        JSONObject info = new JSONObject();
+        JSONObject generalinfo = new JSONObject();
 
         TypedQuery<Long> administratorNumberQuery = em.createQuery("SELECT COUNT(a.username) "
                 + "FROM Administrator a", Long.class);
@@ -58,12 +58,12 @@ public class AdministratorArea {
         TypedQuery<Long> uploadedFilesNumberQuery = em.createQuery("SELECT COUNT(uf.id) "
                 + "FROM UploadedFile uf", Long.class);
 
-        info.put("totalAdministrators", administratorNumberQuery.getSingleResult());
-        info.put("totalUploaders", uploaderNumberQuery.getSingleResult());
-        info.put("totalConsumers", consumerNumberQuery.getSingleResult());
-        info.put("totalUploadedFiles", uploadedFilesNumberQuery.getSingleResult());
+        generalinfo.put("totalAdministrators", administratorNumberQuery.getSingleResult());
+        generalinfo.put("totalUploaders", uploaderNumberQuery.getSingleResult());
+        generalinfo.put("totalConsumers", consumerNumberQuery.getSingleResult());
+        generalinfo.put("totalUploadedFiles", uploadedFilesNumberQuery.getSingleResult());
 
-        return info.toString();
+        return generalinfo.toString();
     }
 
     @GET
@@ -78,11 +78,11 @@ public class AdministratorArea {
             uploaderJSON.put("username", uploader.getUsername());
             uploaderJSON.put("email", uploader.getEmail());
             uploaderJSON.put("nameSurname", uploader.getNameSurname());
-            if(uploader.getLogo()!=null){
-            uploaderJSON.put("logo", Base64.getMimeEncoder().encodeToString(uploader.getLogo()));    
-            } else{
+            if (uploader.getLogo() != null) {
+                uploaderJSON.put("logo", Base64.getMimeEncoder().encodeToString(uploader.getLogo()));
+            } else {
                 uploaderJSON.put("logo", "");
-            }            
+            }
             uploaderJSON.put("password", uploader.getPassword());
             uploadersJSONArray.put(uploaderJSON);
         }
@@ -94,6 +94,7 @@ public class AdministratorArea {
     public void addUploader(
             @FormParam("username") String username, @FormParam("nameSurname") String nameSurname,
             @FormParam("email") String email, @FormParam("password") String password) {
+
         Uploader uploader = new Uploader();
         uploader.setUsername(username);
         uploader.setNameSurname(nameSurname);
@@ -163,7 +164,7 @@ public class AdministratorArea {
     public void addAdministrator(
             @FormParam("username") String username, @FormParam("nameSurname") String nameSurname,
             @FormParam("email") String email, @FormParam("password") String password) {
-        Administrator administrator= new Administrator();
+        Administrator administrator = new Administrator();
         administrator.setUsername(username);
         administrator.setNameSurname(nameSurname);
         administrator.setEmail(email);
@@ -184,7 +185,6 @@ public class AdministratorArea {
         update.setEmail(administrator.getEmail());
         update.setNameSurname(administrator.getNameSurname());
         update.setPassword(administrator.getPassword());
-        em.persist(update);
         em.getTransaction().commit();
     }
 

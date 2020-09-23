@@ -2,9 +2,9 @@ package units.progettotomcat.rest;
 
 import java.text.SimpleDateFormat;
 import java.util.Base64;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -15,6 +15,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -81,7 +82,7 @@ public class ConsumerArea {
                 JSONObject jsonObjectUploadedFile = new JSONObject();
                 jsonObjectUploadedFile.put("name", uf.getName());
                 jsonObjectUploadedFile.put("uploaded", formatter.format(uf.getUploadDate()));
-                jsonObjectUploadedFile.put("link", "http://localhost:8080/ProgettoTomCat/api/filemanagment/getfile/" + uf.getId() + "/" + uf.getName());
+                jsonObjectUploadedFile.put("link", "http://localhost:8080/ProgettoTomCat/api/consumerarea/file/" + uf.getId() + "/" + uf.getName());
                 if (uf.getHashtags() != null) {
                     jsonObjectUploadedFile.put("hashtags", uf.getHashtags());
                 } else {
@@ -151,13 +152,36 @@ public class ConsumerArea {
     @Path("/consumer")
     @Consumes(MediaType.APPLICATION_JSON)
     public void putConsumer(Consumer consumer) {
+        
+        em.getTransaction().begin();
         Consumer c = em.find(Consumer.class, "Marius");
         c.setEmail(consumer.getEmail());
         c.setNameSurname(consumer.getNameSurname());
         c.setPassword(consumer.getPassword());
-        em.getTransaction().begin();
-        em.persist(c);
         em.getTransaction().commit();
+    }
+
+    @GET
+    @Path("/file/{id:}/{name:}")
+    @Produces(MediaType.MULTIPART_FORM_DATA)
+    public byte[] getFile(@PathParam("id") long id, @PathParam("name") String name) {
+
+        UploadedFile uploadedFile = em.find(UploadedFile.class, id);
+
+        TypedQuery<DownloadFile> dfQuery = em.createQuery("SELECT df FROM DownloadFile df "
+                + "WHERE df.uploadedFile=:id AND df.consumer=:consumer_username", DownloadFile.class);
+        dfQuery.setParameter("id", uploadedFile);
+        dfQuery.setParameter("consumer_username", em.find(Consumer.class, "Marius"));
+        DownloadFile df = dfQuery.getSingleResult();
+
+        df.setDownloaded(new Date());
+        df.setIpAddress(request.getRemoteAddr());
+
+        em.getTransaction().begin();
+        em.persist(df);
+        em.getTransaction().commit();
+
+        return uploadedFile.getContent();
     }
 
 }

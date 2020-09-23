@@ -1,7 +1,6 @@
 package units.progettotomcat.entites;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -19,11 +18,11 @@ import javax.persistence.Table;
 @Table(name = "uploader")
 public class Uploader extends Utente implements Serializable {
 
-    @Column(name = "logo")
+    @Column(name = "logo", nullable = true)
     private byte[] logo;
 
-    @OneToMany(mappedBy = "uploader", cascade=CascadeType.REMOVE, fetch = FetchType.LAZY)
-    private List<UploadedFile> uploadedFiles;
+    @OneToMany(mappedBy = "uploader", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private Set<UploadedFile> uploadedFiles;
 
     @ManyToMany(mappedBy = "uploaders", fetch = FetchType.LAZY)
     private Set<Consumer> consumers;
@@ -31,11 +30,6 @@ public class Uploader extends Utente implements Serializable {
     public Uploader() {
         super();
         logo = null;
-    }
-
-    @Override
-    public String toString() {
-        return username + email + nameSurname;
     }
 
     public Set<Consumer> getConsumers() {
@@ -54,11 +48,11 @@ public class Uploader extends Utente implements Serializable {
         this.logo = logo;
     }
 
-    public List<UploadedFile> getUploadedFiles() {
+    public Set<UploadedFile> getUploadedFiles() {
         return uploadedFiles;
     }
 
-    public void setUploadedFiles(List<UploadedFile> uploadedFiles) {
+    public void setUploadedFiles(Set<UploadedFile> uploadedFiles) {
         this.uploadedFiles = uploadedFiles;
     }
 

@@ -7,7 +7,7 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>war</packaging>
 
-    <name>ProgettoTomCat1</name>
+    <name>HoneycombStorage</name>
 
     <properties>
         <endorsed.dir>${project.build.directory}/endorsed</endorsed.dir>
@@ -29,19 +29,13 @@
             <version>20200518</version>
         </dependency>
         
-        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-core -->
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-core</artifactId>
-            <version>2.11.2</version>
-        </dependency>
-
         <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-entitymanager -->
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-entitymanager</artifactId>
             <version>5.4.21.Final</version>
         </dependency>
+        
         <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-core -->
         <dependency>
             <groupId>org.hibernate</groupId>
@@ -49,18 +43,18 @@
             <version>5.4.21.Final</version>
         </dependency>
 
-        <dependency>
+<!--        <dependency>
             <groupId>unknown.binary</groupId>
             <artifactId>hibernate-jpamodelgen-4.3.1.Final</artifactId>
             <version>SNAPSHOT</version>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
+        </dependency>-->
+<!--        <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
             <version>2.10.2</version>
             <type>jar</type>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-web-api</artifactId>
@@ -73,7 +67,7 @@
             <artifactId>postgresql</artifactId>
             <version>42.2.0</version>
         </dependency>
-        <!-- messo per salvere i files all'interno del database. Ha funzionato? -->
+
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>

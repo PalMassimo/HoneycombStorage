@@ -27,7 +27,7 @@ public class Consumer extends Utente implements Serializable {
             inverseJoinColumns = @JoinColumn(name = "uploader_username"))
     Set<Uploader> uploaders = new HashSet<Uploader>(0);
 
-    @OneToMany(mappedBy = "consumer", cascade = CascadeType.REMOVE, fetch=FetchType.LAZY)
+    @OneToMany(mappedBy = "consumer", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private Set<DownloadFile> downloadFiles;
 
     public Consumer() {
@@ -37,9 +37,9 @@ public class Consumer extends Utente implements Serializable {
     public Set<Uploader> getUploaders() {
         return uploaders;
     }
-    
-    public void setUploaders(Set<Uploader> uploaders){
-        this.uploaders=null;
+
+    public void setUploaders(Set<Uploader> uploaders) {
+        this.uploaders = null;
     }
 
     public void addUploader(Uploader uploader) {
@@ -51,9 +51,7 @@ public class Consumer extends Utente implements Serializable {
     }
 
     public void setDownloadFiles(Set<DownloadFile> downloadFiles) {
-        this.downloadFiles=null;
+        this.downloadFiles = null;
     }
-    
-    
 
 }
