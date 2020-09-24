@@ -1,190 +1,264 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Login Page</title>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="author" content="Massimo Palmisano" />
-    <link
-      href="https://fonts.googleapis.com/css?family=Archivo Black"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css?family=Baloo 2"
-      rel="stylesheet"
-    />
+<html lang="en">
 
-    <link rel="shortcut icon" type="image/x-icon" href="./favicon.ico" />
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="author" content="Massimo Palmisano">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Russo One">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito">
+        <link rel="icon" href="favicon.ico"/>
+        <title>Login Page</title>
 
-    <style>
-      html {
-        margin: 0;
-        border: 0;
-        padding: 0;
-        text-align: center;
-        background-image: url("./images/background2.jpg");
-        /*background-image: url("https://media.pocketgamer.com/artwork/ra-82605-1585325135/pocketgamer-zoom-backgrounds-03.jpg");*/
-        background-size: cover;
-      }
+        <style>
+            @media screen and (orientation: landscape) {
 
-      body {
-        margin: 0;
-        padding: 0;
-      }
+                html,
+                body {
+                    margin: 0;
+                    border: 0;
+                    padding: 0;
+                }
 
-      h1 {
-        font-family: "Archivo Black";
-        font-size: 6vh;
-        margin-top: 2vh;
-        margin-bottom: 1vh;
-        color: rgb(83, 70, 70);
-      }
+                body {
+                    box-sizing: border-box;
+                    background-image: url("background.jpg");
+                    background-color: rgba(0, 0, 0, 0.83);
+                    background-position: right;
+                    background-repeat: no-repeat;
+                    display: flex;
+                    align-items: center;
+                    height: 100vh;
+                }
 
-      label {
-        font-family: "Baloo 2";
-        font-size: 120%;
-      }
+                form {
+                    background-color: white;
+                    margin-right: auto;
+                    margin-left: auto;
+                    width: 800px;
+                    height: 500px;
+                    display: flex;
+                    flex-flow: column wrap;
+                }
 
-      input {
-        font-size: 3vh;
-        font-family: "Baloo 2";
-        border: 0.5vh solid orange;
-        border-radius: 1vh;
-      }
+                form img:first-of-type {
+                    width: 50%;
+                    height: 100%;
+                    flex-basis: 100%;
+                }
 
-      input[type="text"] {
-        height: 5vh;
-        width: 90%;
-        display: block;
-        margin-bottom: 0;
-        margin-left: auto;
-        margin-right: auto;
-      }
+                form h1 {
+                    margin: 30px auto 15px auto;
+                    font-family: "Nunito";
+                    font-size: 2em;
+                }
 
-      input[type="password"] {
-        height: 5vh;
-        width: 90%;
-        display: block;
-        margin-top: 2%;
-        margin-right: auto;
-        margin-left: auto;
-        margin-bottom: 0.5vh;
-      }
+                form img:last-of-type {
+                    margin-right: auto;
+                    margin-left: auto;
+                    width: 120px;
+                    height: auto;
+                }
 
-      input[type="radio"] {
-        cursor: pointer;
-      }
+                form div {
+                    width: 40%;
+                    margin: 5vh auto 1vh auto;
+                    min-height: 20px;
+                    display: flex;
+                    flex-flow: row nowrap;
+                    justify-items: center;
+                    box-sizing: border-box;
+                }
 
-      input[type="submit"] {
-        margin-top: 0.5vh;
-        margin-bottom: 1vh;
-        width: 90%;
-        padding-top: 5%;
-        padding-bottom: 5%;
-        border: 0.5vh solid orange;
-        border-radius: 1.5vh;
-        background-color: orange; /*rgb(54, 51, 51);*/
-        font-size: 150%;
-        color: rgb(139,69,19);
-        font-family: "Archivo Black";
-        cursor: pointer;
-      }
+                form div label {
+                    box-sizing: border-box;
+                    font-family: "Nunito";
+                    font-size: 100%;
+                }
 
-      #formContainer {
-        /*border: 1vh solid orange; /*rgb(85, 79, 79);*/
-        border-radius: 3vh;
-        margin-top: 10vh;
-        margin-left: auto;
-        margin-right: auto;
-        width: 27%;
-        min-width: 300px;
-        background-color: rgb(255, 255, 72);
-      }
+                form div label:first-child {
+                    flex-basis: 32%;
+                }
 
-      #profile_picture {
-        width: 50%;
-        text-align: center;
-        display: block;
-        margin-right: auto; /*to center horizzontally*/
-        margin-left: auto; /*to center horizzontally*/
-        border: 5px solid orange;
-        border-radius: 50%;
-        margin-bottom: 1.5vh;
-      }
+                form div label:nth-child(2) {
+                    flex-basis: 30%;
+                }
 
-      #radio_group {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: row;
-        flex-wrap: wrap;
-      }
+                form div label:last-child {
+                    flex-basis: 40%;
+                }
 
-      #didascalia {
-        width: 90%;
-        margin-right: auto;
-        margin-left: auto;
-        text-align: right;
-      }
+                form input[type="text"],
+                form input[type="password"] {
+                    box-sizing: border-box;
+                    width: 40%;
+                    flex-basis: 8%;
+                    margin: 10px 5%;
+                    border-radius: 5px;
+                    background-color: whitesmoke;
+                    border: 1px solid black;
+                }
 
-    </style>
-  </head>
-  <body>
-    <div id="formContainer">
-      <h1 id="formTitle">Sign In</h1>
-      <img
-        src="./images/default_profile_image.png"
-        alt="default_profile_picture"
-        id="profile_picture"
-      />
-      <form action="Login" method="POST" id="loginForm">
-        <input
-          type="text"
-          placeholder="Enter Username"
-          id="usernameField"
-          name="username"
-          required
-        />
-        <input
-          type="password"
-          placeholder="Enter Password"
-          id="passwordField"
-          name="password"
-          required
-        />
-        <div id="radio_group">
-          <label for="consumerField"
-            ><input
-              type="radio"
-              id="consumerField"
-              name="role"
-              value="consumer"
-              checked
-            />Consumer</label
-          >
-          <label for="uploaderField"
-            ><input
-              type="radio"
-              id="uploaderField"
-              name="role"
-              value="uploader"
-            />Uploader</label
-          >
-          <label for="administratorField"
-            ><input
-              type="radio"
-              id="administratorField"
-              name="role"
-              value="administrator"
-            />Administrator</label
-          >
-        </div>
-        <input type="submit" value="LOGIN" />
-      </form>
-      <div id="didascalia">
-        Not a user? Sign up
-        <a href="subscribe.html">here</a>
-      </div>
-    </div>
-  </body>
+                form input[type="submit"] {
+                    background-color: rgba(0, 0, 0, 0.83);
+                    box-sizing: border-box;
+                    width: 40%;
+                    flex-basis: 11%;
+                    margin: 10px 5%;
+                    border: 3px solid black;
+                    color: #D68B00;
+                    border-radius: 5px;
+                    font-family: "Russo One";
+                    font-size: 140%;
+                }
+
+                form span {
+                    font-family: "Nunito";
+                    font-size: 80%;
+                    margin-right: auto;
+                    margin-left: auto;
+                    width: 40%;
+                    text-align: right;
+                }
+
+                form input[type="submit"]:hover {
+                    cursor: pointer;
+                }
+            }
+
+            @media screen and (orientation: portrait) {
+
+                html,
+                body {
+                    margin: 0;
+                    border: 0;
+                    padding: 0;
+                }
+
+                body {
+                    box-sizing: border-box;
+                    background-image: url("background.jpg");
+                    background-color: rgba(0, 0, 0, 0.83);
+                    background-position: center;
+                    background-repeat: no-repeat;
+                    display: flex;
+                    align-items: center;
+                    height: 100vh;
+                }
+
+                form {
+                    background-color: white;
+                    margin-right: auto;
+                    margin-left: auto;
+                    border-radius: 10px;
+                    width: 85%;
+                    display: flex;
+                    flex-flow: column nowrap;
+                }
+
+                form img:first-of-type {
+                    display: none;
+                }
+
+                form h1 {
+                    margin: 3vh auto 2vh auto;
+                    font-family: "Nunito";
+                    font-size: 2.5em;
+                }
+
+                form img:last-of-type {
+                    margin-right: auto;
+                    margin-left: auto;
+                    height: 15vh;
+                }
+
+                form div {
+                    width: 90%;
+                    margin: 2vh auto 1vh auto;
+                    display: flex;
+                    justify-content: center;
+                    flex-flow: row wrap;
+                    box-sizing: border-box;
+                }
+
+                form div label {
+                    box-sizing: border-box;
+                    font-family: "Nunito";
+                    font-size: 2.5vh;
+                    margin: 1vh;
+                }
+
+                form div label:nth-child(1) {
+                    padding-left: 8px;
+                }
+
+                form div label:nth-child(3) {
+                    padding-left: 32px;
+                }
+
+                form input[type="text"],
+                form input[type="password"] {
+                    box-sizing: border-box;
+                    width: 90%;
+                    height: 6vh;
+                    margin: 1vh 5%;
+                    border-radius: 5px;
+                    background-color: whitesmoke;
+                    border: 1px solid black;
+                }
+
+                form input[type="submit"] {
+                    background-color: rgba(0, 0, 0, 0.83);
+                    box-sizing: border-box;
+                    width: 90%;
+                    height: 10vh;
+                    margin: 1vh auto;
+                    border: 3px solid black;
+                    color: #D68B00;
+                    border-radius: 5px;
+                    font-family: "Russo One";
+                    font-size: 4vh;
+                }
+
+                form span {
+                    font-family: "Nunito";
+                    font-size: 80%;
+                    margin-right: auto;
+                    margin-left: auto;
+                    margin-bottom: 1vh;
+                    width: 90%;
+                    text-align: right;
+                }
+            }
+        </style>
+    </head>
+
+    <body>
+        <form action="Login" method="post" autocomplete="on">
+            <img src="honey.jpg" alt="honey" />
+            <h1>Welcome Back!</h1>
+            <img src="default_profile_picture.png" alt="default_profile_picture">
+            <div>
+                <label for="consumerRadio">
+                    <input type="radio" value="consumer" name="role" id="consumerRadio" checked>
+                    Consumer
+                </label>
+                <label for="uploaderRadio">
+                    <input type="radio" value="uploader" name="role" id="uploaderRadio">
+                    Uploader
+                </label>
+                <label for="administratorRadio">
+                    <input type="radio" value="administrator" name="role" id="administratorRadio">
+                    Administrator
+                </label>
+            </div>
+            <input type="text" name="username" placeholder="enter username" />
+            <input type="password" name="password" placeholder="enter password">
+            <input type="submit" value="Login" />
+
+            <span>Not a user? Subscribe <a href="subscribe.html">here</a></span>
+        </form>
+
+    </body>
+
 </html>

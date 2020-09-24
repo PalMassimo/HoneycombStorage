@@ -1,119 +1,210 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Subscribe Page</title>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="shortcut icon" type="image/x-icon" href="./favicon.ico"/>
-    <link
-      href="https://fonts.googleapis.com/css?family=Archivo Black"
-      rel="stylesheet"
-    />
-    <link
-      href="https://fonts.googleapis.com/css?family=Baloo 2"
-      rel="stylesheet"
-    />
-    <style>
-        
-        html{    
-        background-image: url("./images/background2.jpg");
-        /*background-image: url("https://media.pocketgamer.com/artwork/ra-82605-1585325135/pocketgamer-zoom-backgrounds-03.jpg");*/
-        background-size: cover;
-        }
-        
-      div {
-        display: block;
-        width: 27%;
-        max-width: 500px;
-        min-width: 300px;
-        margin-right: auto;
-        margin-left: auto;
-        margin-top: 10vh;
-        border-radius: 3vh;
-        background-color: rgb(255, 255, 72);
-      }
+<html lang="en">
 
-      h1 {
-        text-align: center;
-        font-family: "Archivo Black";
-        font-size: 6vh;
-        margin-top: 2vh;
-        margin-bottom: 1vh;
-      }
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="author" content="Massimo Palmisano">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Russo One">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito">
+        <link rel="icon" href="favicon.ico"/>
+        <title>Subscribe Page</title>
 
-      img {
-        margin-top: 0;
-        border: 0.8vh solid orange;
-        border-radius: 100vh;
-        display: block;
-        width: 40%;
-        margin-left: auto;
-        margin-right: auto;
-        background-color: white;
-      }
+        <style>
+            @media screen and (orientation: landscape) {
 
-      form {
-        display: flex;
-        margin-left: auto;
-        margin-right: auto;
-        flex-direction: column;
-        justify-content: space-around;
-        flex-wrap: nowrap;
-        width: 95%;
-      }
+                html,
+                body {
+                    margin: 0;
+                    border: 0;
+                    padding: 0;
+                }
 
-      form > input {
-        border-width: medium;
-        border-radius: 1.5vh;
-        border: 0.8vh solid orange;
-      }
+                body {
+                    box-sizing: border-box;
+                    background-image: url("background.jpg");
+                    background-color: rgba(0, 0, 0, 0.83);
+                    background-position: right;
+                    background-repeat: no-repeat;
+                    display: flex;
+                    align-items: center;
+                    height: 100vh;
+                }
 
-      input[type="text"],
-      input[type="password"] {
-        display: block;
-        height: 5vh;
-        margin-top: 1%;
-        margin-bottom: 1%;
-        margin-left: 3%;
-        margin-right: 3%;
-        font-family: "Baloo 2";
-      }
+                form {
+                    background-color: white;
+                    margin-right: auto;
+                    margin-left: auto;
+                    width: 800px;
+                    height: 500px;
+                    display: flex;
+                    flex-flow: column wrap;
+                }
 
-      input[type="submit"] {
-        display: block;
-        margin-top: 2%;
-        margin-bottom: 5%;
-        margin-left: 3%;
-        margin-right: 3%;
-        height: 8vh;
-        font-weight: bolder;
-        font-size: 150%;
-        border: none;
-        background-color: orange;
-        color: white;
-        cursor: pointer;
-      }
-    </style>
-  </head>
-  <body>
-    <div>
-      <h1>Sign Up</h1>
-      <img
-        src="./images/default_profile_image.png"
-        alt="default profile consumer picture"
-        id="profile_picture"
-      />
-      <form action="AddConsumer" method="POST" id="form">
-        <input type="text" name="username" placeholder="Enter username" />
-        <input type="text" name="email" placeholder="Enter email" />
-        <input
-          type="text"
-          name="nomecognome"
-          placeholder="Enter name and surname"
-        />
-        <input type="password" name="password" placeholder="Enter password" />
-        <input type="submit" value="SIGN UP" />
-      </form>
-    </div>
-  </body>
+                form img:first-of-type {
+                    width: 50%;
+                    height: 100%;
+                    flex-basis: 100%;
+                }
+
+                form h1 {
+                    margin: 20px auto 0 auto;
+                    font-family: "Nunito";
+                    font-size: 2em;
+                }
+
+                form img:last-of-type {
+                    margin: 10px auto;
+                    width: 100px;
+                    height: auto;
+                }
+
+                form input[type="text"],
+                form input[type="email"],
+                form input[type="password"] {
+                    box-sizing: border-box;
+                    width: 40%;
+                    flex-basis: 8%;
+                    margin: 8px 5%;
+                    border-radius: 5px;
+                    background-color: whitesmoke;
+                    border: 1px solid black;
+                }
+
+                form input[type="submit"] {
+                    background-color: rgba(0, 0, 0, 0.83);
+                    box-sizing: border-box;
+                    width: 40%;
+                    flex-basis: 11%;
+                    margin: 10px 5%;
+                    border: 3px solid black;
+                    color: #D68B00;
+                    border-radius: 5px;
+                    font-family: "Russo One";
+                    font-size: 140%;
+                }
+
+                form input[type="submit"]:hover {
+                    cursor: pointer;
+                }
+
+                form input[type="submit"]:disabled {
+                    border-color: grey;
+                    background-color: grey;
+                    color: white
+                }
+            }
+
+            @media screen and (orientation: portrait) {
+
+                html,
+                body {
+                    margin: 0;
+                    border: 0;
+                    padding: 0;
+                }
+
+                body {
+                    box-sizing: border-box;
+                    background-image: url("background.jpg");
+                    background-color: rgba(0, 0, 0, 0.83);
+                    background-position: center;
+                    background-repeat: no-repeat;
+                    display: flex;
+                    align-items: center;
+                    height: 100vh;
+                }
+
+                form {
+                    background-color: white;
+                    margin-right: auto;
+                    margin-left: auto;
+                    border-radius: 10px;
+                    width: 85%;
+                    display: flex;
+                    flex-flow: column nowrap;
+                }
+
+                form img:first-of-type {
+                    display: none;
+                }
+
+                form h1 {
+                    margin: 3vh auto 0 auto;
+                    font-family: "Nunito";
+                    font-size: 2.5em;
+                }
+
+                form img:last-of-type {
+                    margin: 1vh auto;
+                    height: 15vh;
+                }
+
+                form input[type="text"],
+                form input[type="email"],
+                form input[type="password"] {
+                    box-sizing: border-box;
+                    width: 90%;
+                    height: 6vh;
+                    margin: 1vh 5%;
+                    border-radius: 5px;
+                    background-color: whitesmoke;
+                    border: 1px solid black;
+                }
+
+                form input[type="submit"] {
+                    background-color: rgba(0, 0, 0, 0.83);
+                    box-sizing: border-box;
+                    width: 90%;
+                    height: 10vh;
+                    margin: 1vh auto 2vh auto;
+                    border: 3px solid black;
+                    color: #D68B00;
+                    border-radius: 5px;
+                    font-family: "Russo One";
+                    font-size: 4vh;
+                }
+
+                form input[type="submit"]:disabled {
+                    border-color: grey;
+                    background-color: grey;
+                    color: white;
+                    cursor: not-allowed;
+                }
+            }
+        </style>
+
+        <script>
+            let validateUsername = function () {
+                let username = document.querySelector("input[name='username']").value;
+                let submitElement = document.querySelector("input[type='submit']");
+                let regex = /^[a-zA-Z]{6}[0-9]{2}[abcdehlmprstABCDEHLMPRST]{1}[0-9]{2}([a-zA-Z]{1}[0-9]{3})[a-zA-Z]{1}$/i;
+                if (regex.exec(username)) {
+                    console.log("abilitato");
+                    submitElement.disabled = false;
+                    return true;
+                } else {
+                    console.log("disabilitato");
+                    submitElement.disabled = true;
+                    return false;
+                }
+                return false;
+            }
+        </script>
+
+    </head>
+
+    <body>
+        <form action="AddConsumer" method="post">
+            <img src="honey.jpg" alt="honey" />
+            <h1>Subcribe now!</h1>
+            <img src="default_profile_picture.png" alt="default_profile_picture">
+            <input type="text" name="username" placeholder="enter username" onchange="validateUsername()" required />
+            <input type="email" name="email" placeholder="enter email" required />
+            <input type="text" name="namesurname" placeholder="enter name and surname" required>
+            <input type="password" name="password" placeholder="enter password" required>
+            <input type="submit" value="Subscribe" />
+        </form>
+    </body>
+
 </html>

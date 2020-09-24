@@ -1,13 +1,9 @@
 package units.progettotomcat.servlets;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.List;
-import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.persistence.TypedQuery;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -23,100 +19,78 @@ import units.progettotomcat.entites.Uploader;
  */
 @WebServlet(name = "Login", urlPatterns = {"/Login"})
 public class Login extends HttpServlet {
-    
+
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws IOException {
 
-        //NON SONO ACCETTATE RICHIESTE DI LOGIN CON IL METODO GET
+        //servlet doesn't accept get requests
         response.sendRedirect("/login.html");
-        
+
     }
-    
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws IOException {
+
         
-        String role = null;
-        boolean check = false;
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        String role = request.getParameter("role");
         
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("developmentPU");
         EntityManager em = emf.createEntityManager();
-        
+
+        //search in database based on entity type
         switch (request.getParameter("role")) {
-            
+
             case "consumer":
-                
-                TypedQuery<Consumer> qc = em.createQuery("SELECT c FROM Consumer c", Consumer.class);
-                List<Consumer> consumers = qc.getResultList();
-                
-                for (Consumer consumer : consumers) {
-                    if ((consumer.getUsername()).equals(request.getParameter("username")) && (consumer.getPassword()).equals(request.getParameter("password"))) {
-                        check = true;
-                        role = "consumer";
-                        break;
+                if (em.find(Consumer.class, username) != null) {
+                    if ((em.find(Consumer.class, username).getPassword()).equals(password)) {
+                        request.getSession().setAttribute("role", role);
+                        response.sendRedirect("consumersrealm/index.html");
+                    } else {
+                        response.sendError(404, "the password is wrong");
                     }
+                } else {
+                    response.sendError(404, "consumer doesn't exist");
                 }
                 break;
-            
+
             case "uploader":
-                TypedQuery<Uploader> qu = em.createQuery("SELECT u FROM Uploader u", Uploader.class);
-                List<Uploader> uploaders = qu.getResultList();
-                
-                for (Uploader uploader : uploaders) {
-                    if ((uploader.getUsername()).equals(request.getParameter("username")) && (uploader.getPassword()).equals(request.getParameter("password"))) {
-                        check = true;
-                        role = "uploader";
-                        break;
+                if (em.find(Uploader.class, username) != null) {
+                    if (em.find(Uploader.class, username).getPassword().equals(password)) {
+                        request.getSession().setAttribute("role", role);
+                        response.sendRedirect("uploadersrealm/index.html");
+                    } else {
+                        response.sendError(404, "the password is wrong");
                     }
+                } else {
+                    response.sendRedirect("login.html");
                 }
                 break;
-            
+
             case "administrator":
-                TypedQuery<Administrator> qa=em.createQuery("SELECT a FROM Administrator a", Administrator.class);
-                List<Administrator> administrators=qa.getResultList();
-                
-                for(Administrator administrator: administrators){
-                    if ((administrator.getUsername()).equals(request.getParameter("username")) && (administrator.getPassword()).equals(request.getParameter("password"))) {
-                        check = true;
-                        role = "administrator";
-                        break;
+                if (em.find(Administrator.class, username) != null) {
+                    if (em.find(Administrator.class, username).getPassword().equals(password)) {
+                        request.getSession().setAttribute("role", role);
+                        response.sendRedirect("administratorsrealm/index.html");
+                    } else {
+                        response.sendError(404, "the password is wring");
                     }
+                } else {
+                    response.sendError(404, "this administrator doesn't exist");
                 }
                 break;
+
             default:
                 break;
         }
-        
-        if (check) {
-            request.getSession().setAttribute("role", role);
-            request.getSession().setAttribute("username", request.getParameter("username"));
-        }
-        
-        response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out = response.getWriter();
-        out.println("<!DOCTYPE html");
-        out.println("<html>");
-        out.println("<head></head>");
-        out.println("<body>");
-        
-        if (check) {
-            out.println("<h1>Benvenuto/a, "+request.getParameter("username")+"! </h1>");
-            out.println("<p>Il tuo ruolo è " + request.getSession().getAttribute("role") + "</p>");
-            response.sendRedirect("./consumersrealm/index.html");
-        } else {
-            out.println("<h1>Login Failure</h1>");
-            out.println("<p>Non sei stato trovato all'interno del database....");
-            out.println("Forse hai un altro ruolo? Hai inserito " + request.getParameter("role") + "</p>");    
-        }
-        
-       out.println("</body>");        
-       out.println("</html>"); 
-      
+
     }
-    
+
     @Override
     public String getServletInfo() {
-        return "Questa servlet si occupa del login degli utenti";
+        return "login managment";
     }
 }

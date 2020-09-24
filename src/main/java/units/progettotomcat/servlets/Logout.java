@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package units.progettotomcat.servlets;
 
 import java.io.IOException;
@@ -17,26 +12,15 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author massi
  */
-@WebServlet(name = "Logout", urlPatterns = {"/Logout"})
+@WebServlet(name = "Logout", urlPatterns = {"/logout"})
 public class Logout extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
 
-            request.getSession().invalidate();
+        request.getSession().invalidate();
+        response.sendRedirect("/honeycombstorage/login.html");
 
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet Logout</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>La tua sessione è stata invalidata</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }
     }
 
     @Override
