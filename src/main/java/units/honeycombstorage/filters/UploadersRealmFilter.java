@@ -1,0 +1,51 @@
+package units.honeycombstorage.filters;
+
+import java.io.IOException;
+import javax.servlet.Filter;
+import javax.servlet.FilterChain;
+import javax.servlet.FilterConfig;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
+import javax.servlet.annotation.WebFilter;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+/**
+ *
+ * @author massi
+ */
+@WebFilter(filterName = "UploadersRealmFilter",
+        urlPatterns = {"/uploadersrealm/*", "/uploaderarea/*"})
+public class UploadersRealmFilter implements Filter {
+
+    public UploadersRealmFilter() {
+    }
+
+    @Override
+    public void init(FilterConfig filterConfig) {
+
+    }
+
+    @Override
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain chain) throws IOException, ServletException {
+        HttpServletRequest request = (HttpServletRequest) servletRequest;
+        HttpServletResponse response = (HttpServletResponse) servletResponse;
+
+        String role = (String) request.getSession().getAttribute("role");
+        if (role != null && role.equals("uploader")) {
+            chain.doFilter(request, response);
+        } else if (role != null) {
+            response.sendError(401, "Only uploaders can came here. You have the role of " + role);
+        } else {
+            response.sendError(401, "Only uploaders can came here.");
+        }
+
+    }
+
+    @Override
+    public void destroy() {
+
+    }
+
+}

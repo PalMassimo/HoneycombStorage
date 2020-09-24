@@ -15,7 +15,7 @@
         </init-param>
         <init-param>
             <param-name>jersey.config.server.provider.packages</param-name>
-            <param-value>units.progettotomcat.rest,io.swagger.v3.jaxrs2.integration.resources</param-value>
+            <param-value>units.honeycombstorage.rest,io.swagger.v3.jaxrs2.integration.resources</param-value>
         </init-param>
     </servlet>
   
