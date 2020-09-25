@@ -64,6 +64,8 @@ public class AdministratorArea {
         generalinfo.put("totalConsumers", consumerNumberQuery.getSingleResult());
         generalinfo.put("totalUploadedFiles", uploadedFilesNumberQuery.getSingleResult());
 
+        em.close();
+        emf.close();
         return generalinfo.toString();
     }
 
@@ -87,6 +89,8 @@ public class AdministratorArea {
             uploaderJSON.put("password", uploader.getPassword());
             uploadersJSONArray.put(uploaderJSON);
         }
+        em.close();
+        emf.close();
         return uploadersJSONArray.toString();
     }
 
@@ -110,6 +114,8 @@ public class AdministratorArea {
             response.sendError(409, "the username is already taken");
         }
         em.getTransaction().commit();
+        em.close();
+        emf.close();
     }
 
     @PUT
@@ -126,6 +132,8 @@ public class AdministratorArea {
         em.getTransaction().begin();
         em.persist(update);
         em.getTransaction().commit();
+        em.close();
+        emf.close();
     }
 
     @DELETE
@@ -136,6 +144,8 @@ public class AdministratorArea {
         em.getTransaction().begin();
         em.remove(em.find(Uploader.class, username));
         em.getTransaction().commit();
+        em.close();
+        emf.close();
     }
 
     @GET
@@ -153,6 +163,8 @@ public class AdministratorArea {
             administratorJSON.put("password", administrator.getPassword());
             administratorsJSONArray.put(administratorJSON);
         }
+        em.close();
+        emf.close();
         return administratorsJSONArray.toString();
     }
 
@@ -161,12 +173,14 @@ public class AdministratorArea {
     @Produces(MediaType.APPLICATION_JSON)
     public String getAdministrator() {
 
-        Administrator administrator = em.find(Administrator.class,(String)request.getSession().getAttribute("username"));
+        Administrator administrator = em.find(Administrator.class, (String) request.getSession().getAttribute("username"));
         JSONObject administratorJSON = new JSONObject();
         administratorJSON.put("username", administrator.getUsername());
         administratorJSON.put("nameSurname", administrator.getNameSurname());
         administratorJSON.put("password", administrator.getPassword());
 
+        em.close();
+        emf.close();
         return administratorJSON.toString();
     }
 
@@ -189,6 +203,8 @@ public class AdministratorArea {
             response.sendError(409, "the username is already taken");
         }
         em.getTransaction().commit();
+        em.close();
+        emf.close();
     }
 
     @PUT
@@ -201,6 +217,8 @@ public class AdministratorArea {
         update.setNameSurname(administrator.getNameSurname());
         update.setPassword(administrator.getPassword());
         em.getTransaction().commit();
+        em.close();
+        emf.close();
     }
 
     @DELETE
@@ -210,6 +228,8 @@ public class AdministratorArea {
         em.getTransaction().begin();
         em.remove(em.find(Administrator.class, username));
         em.getTransaction().commit();
+        em.close();
+        emf.close();
     }
 
     @GET
@@ -247,6 +267,8 @@ public class AdministratorArea {
 
         }
 
+        em.close();
+        emf.close();
         return particularInfoJSONArray.toString();
     }
 }

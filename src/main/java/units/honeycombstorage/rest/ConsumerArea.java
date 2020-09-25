@@ -49,7 +49,7 @@ public class ConsumerArea {
         JSONArray news = new JSONArray();
         SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy HH:mm:ss", Locale.ENGLISH); //set date format
 
-        Consumer consumer = em.find(Consumer.class, (String)request.getSession().getAttribute("username"));
+        Consumer consumer = em.find(Consumer.class, (String) request.getSession().getAttribute("username"));
 
         TypedQuery<Uploader> uploadersQuery = em.createQuery("SELECT u "
                 + "FROM Consumer c INNER JOIN c.uploaders u "
@@ -108,6 +108,8 @@ public class ConsumerArea {
             news.put(jsonObjectUploader);
         }
 
+        em.close();
+        emf.close();
         return news.toString();
     }
 
@@ -115,7 +117,7 @@ public class ConsumerArea {
     @Path("/consumerinfo")
     @Produces(MediaType.APPLICATION_JSON)
     public String getInfo() {
-        Consumer consumer = em.find(Consumer.class, (String)request.getSession().getAttribute("username"));
+        Consumer consumer = em.find(Consumer.class, (String) request.getSession().getAttribute("username"));
         JSONObject consumerJSON = new JSONObject();
         consumerJSON.put("username", consumer.getUsername());
         consumerJSON.put("nameSurname", consumer.getNameSurname());
@@ -145,6 +147,8 @@ public class ConsumerArea {
 
         consumerJSON.put("totFiles", numFilesSeenQuery.getSingleResult() + numFilesUnseenQuery.getSingleResult());
 
+        em.close();
+        emf.close();
         return consumerJSON.toString();
     }
 
@@ -152,13 +156,16 @@ public class ConsumerArea {
     @Path("/consumer")
     @Consumes(MediaType.APPLICATION_JSON)
     public void putConsumer(Consumer consumer) {
-        
+
         em.getTransaction().begin();
-        Consumer c = em.find(Consumer.class, (String)request.getSession().getAttribute("username"));
+        Consumer c = em.find(Consumer.class, (String) request.getSession().getAttribute("username"));
         c.setEmail(consumer.getEmail());
         c.setNameSurname(consumer.getNameSurname());
         c.setPassword(consumer.getPassword());
         em.getTransaction().commit();
+
+        em.close();
+        emf.close();
     }
 
     @GET
@@ -181,6 +188,8 @@ public class ConsumerArea {
         em.persist(df);
         em.getTransaction().commit();
 
+        em.close();
+        emf.close();
         return uploadedFile.getContent();
     }
 
