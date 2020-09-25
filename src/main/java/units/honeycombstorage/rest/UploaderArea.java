@@ -70,6 +70,7 @@ public class UploaderArea {
         info.put("username", uploader.getUsername()); //sistema
 
         em.close();
+        emf.close();
         return info.toString();
     }
 
@@ -87,6 +88,7 @@ public class UploaderArea {
         uploaderJSON.put("password", uploader.getPassword());
 
         em.close();
+        emf.close();
         return uploaderJSON.toString();
     }
 
@@ -105,6 +107,7 @@ public class UploaderArea {
         em.getTransaction().commit();
         //response.sendRedirect(request.getHeader("referer")+"#/PrivateArea");
         em.close();
+        emf.close();
     }
 
     @GET
@@ -116,6 +119,7 @@ public class UploaderArea {
 
         byte[] logo = em.find(Uploader.class, uploader.getUsername()).getLogo();
         em.close();
+        emf.close();
         return logo;
 
     }
@@ -131,6 +135,7 @@ public class UploaderArea {
         em.getTransaction().commit();
         response.sendRedirect(request.getHeader("referer") + "#/PrivateArea");
         em.close();
+        emf.close();
     }
 
     @GET
@@ -152,6 +157,7 @@ public class UploaderArea {
             consumer.setDownloadFiles(null);
         }
         em.close();
+        emf.close();
         return consumers;
     }
 
@@ -169,6 +175,7 @@ public class UploaderArea {
         }
         em.getTransaction().commit();
         em.close();
+        emf.close();
     }
 
     @PUT
@@ -185,6 +192,7 @@ public class UploaderArea {
         consumer.setPassword(update.getPassword());
         em.getTransaction().commit();
         em.close();
+        emf.close();
     }
 
     @DELETE
@@ -196,7 +204,7 @@ public class UploaderArea {
         em.remove(em.find(Consumer.class, username));
         em.getTransaction().commit();
         em.close();
-
+        emf.close();
     }
 
     @GET
@@ -247,6 +255,7 @@ public class UploaderArea {
             consumersJSONArray.put(consumerJSON);
         }
         em.close();
+        emf.close();
         return consumersJSONArray.toString();
 
 //        Uploader uploader = em.find(Uploader.class, "Sherry");
@@ -317,6 +326,7 @@ public class UploaderArea {
             jarray.put(jobject);
         }
         em.close();
+        emf.close();
         return jarray.toString();
     }
 
@@ -379,6 +389,7 @@ public class UploaderArea {
             thread.start();
         }
         em.close();
+        emf.close();
     }
 
     @DELETE
@@ -395,7 +406,7 @@ public class UploaderArea {
         em.remove(em.find(UploadedFile.class, id));
         em.getTransaction().commit();
         em.close();
-        em.close();
+        emf.close();
     }
 
     ////////////////////////////////////////////////////
