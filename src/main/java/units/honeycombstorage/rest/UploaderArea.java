@@ -13,7 +13,6 @@ import javax.persistence.TypedQuery;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -48,14 +47,12 @@ public class UploaderArea {
     EntityManagerFactory emf = Persistence.createEntityManagerFactory("productionPU");
     EntityManager em = emf.createEntityManager();
 
-    
-
     @GET
     @Path("/generalinfo")
     @Produces(MediaType.APPLICATION_JSON)
     public String getGeneralInfo() {
 
-        Uploader uploader = em.find(Uploader.class, (String)request.getSession().getAttribute("username"));
+        Uploader uploader = em.find(Uploader.class, (String) request.getSession().getAttribute("username"));
         //info: numero documenti caricati e numero consumers affiliati
         TypedQuery<Long> qtotalConsumers = em.createQuery("SELECT COUNT(c) FROM Uploader u INNER JOIN u.consumers c"
                 + " WHERE u.username= :currentuploader", Long.class);
@@ -72,6 +69,7 @@ public class UploaderArea {
         info.put("role", "uploader"); //sistema
         info.put("username", uploader.getUsername()); //sistema
 
+        em.close();
         return info.toString();
     }
 
@@ -80,13 +78,14 @@ public class UploaderArea {
     @Produces(MediaType.APPLICATION_JSON)
     public String getUploader() {
 
-        Uploader uploader = em.find(Uploader.class, (String)request.getSession().getAttribute("username"));
+        Uploader uploader = em.find(Uploader.class, (String) request.getSession().getAttribute("username"));
         JSONObject uploaderJSON = new JSONObject();
         uploaderJSON.put("username", uploader.getUsername());
         uploaderJSON.put("email", uploader.getEmail());
         uploaderJSON.put("nameSurname", uploader.getNameSurname());
         uploaderJSON.put("password", uploader.getPassword());
 
+        em.close();
         return uploaderJSON.toString();
     }
 
@@ -96,45 +95,48 @@ public class UploaderArea {
     @Produces(MediaType.APPLICATION_JSON)
     public void modifyUploader(Uploader changes) throws IOException {
 
-        Uploader uploader = em.find(Uploader.class, (String)request.getSession().getAttribute("username"));
+        Uploader uploader = em.find(Uploader.class, (String) request.getSession().getAttribute("username"));
         em.getTransaction().begin();
         uploader.setEmail(changes.getEmail());
         uploader.setNameSurname(changes.getNameSurname());
         uploader.setPassword(changes.getPassword());
         em.getTransaction().commit();
         //response.sendRedirect(request.getHeader("referer")+"#/PrivateArea");
-
+        em.close();
     }
 
     @GET
     @Path("/logo")
     public byte[] getLogo() {
-        Uploader uploader = em.find(Uploader.class, (String)request.getSession().getAttribute("username"));
+        Uploader uploader = em.find(Uploader.class, (String) request.getSession().getAttribute("username"));
+        em.close();////////////////////////////////////////
         if (em.find(Uploader.class, uploader.getUsername()).getLogo() != null) {
             return em.find(Uploader.class, uploader.getUsername()).getLogo();
         } else {
             return null;
         }
+
     }
 
     @POST
     @Path("/logo")
     public void postLogo() throws IOException, ServletException {
 
-        Uploader uploader = em.find(Uploader.class, (String)request.getSession().getAttribute("username"));
+        Uploader uploader = em.find(Uploader.class, (String) request.getSession().getAttribute("username"));
         em.getTransaction().begin();
         uploader.setLogo(toByteArray(request.getPart("logo").getInputStream()));
         em.getTransaction().commit();
         response.sendRedirect(request.getHeader("referer") + "#/PrivateArea");
+        em.close();
     }
 
     @GET
     @Path("/consumers")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Consumer> getConsumers() {
-        
-        Uploader uploader = em.find(Uploader.class, (String)request.getSession().getAttribute("username"));
-        
+
+        Uploader uploader = em.find(Uploader.class, (String) request.getSession().getAttribute("username"));
+
         //utilizzate da due vuejs
         TypedQuery<Consumer> qconsumers = em.createQuery("SELECT c FROM Consumer c INNER JOIN c.uploaders cu "
                 + "WHERE cu.username= :currentuploader ", Consumer.class);
@@ -145,6 +147,7 @@ public class UploaderArea {
             consumer.setUploaders(null);
             consumer.setDownloadFiles(null);
         }
+        em.close();
         return consumers;
     }
 
@@ -154,12 +157,13 @@ public class UploaderArea {
     public void postConsumer(Consumer consumer) throws IOException {
 
         em.getTransaction().begin();
-        Uploader uploader = em.find(Uploader.class, (String)request.getSession().getAttribute("username"));
+        Uploader uploader = em.find(Uploader.class, (String) request.getSession().getAttribute("username"));
         consumer.addUploader(uploader);
         if (em.find(Consumer.class, consumer.getUsername()) == null) {
             em.persist(consumer);
         }
         em.getTransaction().commit();
+        em.close();
     }
 
     @PUT
@@ -174,6 +178,7 @@ public class UploaderArea {
         consumer.setNameSurname(update.getNameSurname());
         consumer.setPassword(update.getPassword());
         em.getTransaction().commit();
+        em.close();
     }
 
     @DELETE
@@ -183,6 +188,7 @@ public class UploaderArea {
         em.getTransaction().begin();
         em.remove(em.find(Consumer.class, username));
         em.getTransaction().commit();
+        em.close();
 
     }
 
@@ -191,7 +197,7 @@ public class UploaderArea {
     @Produces(MediaType.APPLICATION_JSON)
     public String getConsumersExtended() {
 
-        Uploader uploader = em.find(Uploader.class, (String)request.getSession().getAttribute("username"));
+        Uploader uploader = em.find(Uploader.class, (String) request.getSession().getAttribute("username"));
         JSONArray consumersJSONArray = new JSONArray();
         SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy HH:mm:ss", Locale.ENGLISH);
 
@@ -232,6 +238,7 @@ public class UploaderArea {
             consumerJSON.put("files", filesJSONArray);
             consumersJSONArray.put(consumerJSON);
         }
+        em.close();
         return consumersJSONArray.toString();
 
 //        Uploader uploader = em.find(Uploader.class, "Sherry");
@@ -277,7 +284,7 @@ public class UploaderArea {
     @Produces(MediaType.APPLICATION_JSON)
     public String getFileInfo() {
 
-        Uploader uploader = em.find(Uploader.class, (String)request.getSession().getAttribute("username"));
+        Uploader uploader = em.find(Uploader.class, (String) request.getSession().getAttribute("username"));
         SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy HH:mm:ss", Locale.ENGLISH);
         //SIAMO IN MODALITA' SVILUPPO
         TypedQuery<UploadedFile> quf = em.createQuery("SELECT uf FROM UploadedFile uf INNER JOIN uf.uploader ufu "
@@ -300,7 +307,7 @@ public class UploaderArea {
             jobject.put("uploadDate", formatter.format(uf.getUploadDate()));
             jarray.put(jobject);
         }
-
+        em.close();
         return jarray.toString();
     }
 
@@ -310,7 +317,7 @@ public class UploaderArea {
     public void uploadFile(String fileString) {
 
         em.getTransaction().begin();
-        Uploader uploader = em.find(Uploader.class, (String)request.getSession().getAttribute("username"));
+        Uploader uploader = em.find(Uploader.class, (String) request.getSession().getAttribute("username"));
         JSONObject json = new JSONObject(fileString);
         UploadedFile uploadedFile = new UploadedFile();
         uploadedFile.setName(json.getString("name"));
@@ -361,11 +368,12 @@ public class UploaderArea {
             Thread thread = new Thread(mailservlet);
             thread.start();
         }
+        em.close();
     }
 
     @DELETE
     @Path("/file/{id:}")
-    public String deleteFile(@PathParam("id") long id) {
+    public void deleteFile(@PathParam("id") long id) {
 
         //gestisci se il file non esiste
         em.getTransaction().begin();
@@ -376,7 +384,7 @@ public class UploaderArea {
         em.remove(em.find(UploadedFile.class, id));
         em.getTransaction().commit();
         em.close();
-        return "Eliminazione effettuata!";
+        em.close();
     }
 
     ////////////////////////////////////////////////////
