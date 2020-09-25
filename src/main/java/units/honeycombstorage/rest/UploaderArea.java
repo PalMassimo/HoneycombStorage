@@ -45,13 +45,13 @@ public class UploaderArea {
     HttpServletResponse response;
 
     EntityManagerFactory emf = Persistence.createEntityManagerFactory("productionPU");
-    EntityManager em = emf.createEntityManager();
 
     @GET
     @Path("/generalinfo")
     @Produces(MediaType.APPLICATION_JSON)
     public String getGeneralInfo() {
 
+        EntityManager em = emf.createEntityManager();
         Uploader uploader = em.find(Uploader.class, (String) request.getSession().getAttribute("username"));
         //info: numero documenti caricati e numero consumers affiliati
         TypedQuery<Long> qtotalConsumers = em.createQuery("SELECT COUNT(c) FROM Uploader u INNER JOIN u.consumers c"
@@ -78,6 +78,7 @@ public class UploaderArea {
     @Produces(MediaType.APPLICATION_JSON)
     public String getUploader() {
 
+        EntityManager em = emf.createEntityManager();
         Uploader uploader = em.find(Uploader.class, (String) request.getSession().getAttribute("username"));
         JSONObject uploaderJSON = new JSONObject();
         uploaderJSON.put("username", uploader.getUsername());
@@ -95,6 +96,7 @@ public class UploaderArea {
     @Produces(MediaType.APPLICATION_JSON)
     public void modifyUploader(Uploader changes) throws IOException {
 
+        EntityManager em = emf.createEntityManager();
         Uploader uploader = em.find(Uploader.class, (String) request.getSession().getAttribute("username"));
         em.getTransaction().begin();
         uploader.setEmail(changes.getEmail());
@@ -108,13 +110,13 @@ public class UploaderArea {
     @GET
     @Path("/logo")
     public byte[] getLogo() {
+
+        EntityManager em = emf.createEntityManager();
         Uploader uploader = em.find(Uploader.class, (String) request.getSession().getAttribute("username"));
-        em.close();////////////////////////////////////////
-        if (em.find(Uploader.class, uploader.getUsername()).getLogo() != null) {
-            return em.find(Uploader.class, uploader.getUsername()).getLogo();
-        } else {
-            return null;
-        }
+
+        byte[] logo = em.find(Uploader.class, uploader.getUsername()).getLogo();
+        em.close();
+        return logo;
 
     }
 
@@ -122,6 +124,7 @@ public class UploaderArea {
     @Path("/logo")
     public void postLogo() throws IOException, ServletException {
 
+        EntityManager em = emf.createEntityManager();
         Uploader uploader = em.find(Uploader.class, (String) request.getSession().getAttribute("username"));
         em.getTransaction().begin();
         uploader.setLogo(toByteArray(request.getPart("logo").getInputStream()));
@@ -135,6 +138,7 @@ public class UploaderArea {
     @Produces(MediaType.APPLICATION_JSON)
     public List<Consumer> getConsumers() {
 
+        EntityManager em = emf.createEntityManager();
         Uploader uploader = em.find(Uploader.class, (String) request.getSession().getAttribute("username"));
 
         //utilizzate da due vuejs
@@ -156,6 +160,7 @@ public class UploaderArea {
     @Consumes(MediaType.APPLICATION_JSON)
     public void postConsumer(Consumer consumer) throws IOException {
 
+        EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
         Uploader uploader = em.find(Uploader.class, (String) request.getSession().getAttribute("username"));
         consumer.addUploader(uploader);
@@ -172,6 +177,7 @@ public class UploaderArea {
     @Consumes(MediaType.APPLICATION_JSON)
     public void changeInfo(Consumer update) {
 
+        EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
         Consumer consumer = em.find(Consumer.class, update.getUsername());
         consumer.setEmail(update.getEmail());
@@ -185,6 +191,7 @@ public class UploaderArea {
     @Path("/consumer/{username:}")
     public void deleteConsumer(@PathParam("username") String username) throws IOException {
 
+        EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
         em.remove(em.find(Consumer.class, username));
         em.getTransaction().commit();
@@ -197,6 +204,7 @@ public class UploaderArea {
     @Produces(MediaType.APPLICATION_JSON)
     public String getConsumersExtended() {
 
+        EntityManager em = emf.createEntityManager();
         Uploader uploader = em.find(Uploader.class, (String) request.getSession().getAttribute("username"));
         JSONArray consumersJSONArray = new JSONArray();
         SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy HH:mm:ss", Locale.ENGLISH);
@@ -284,6 +292,7 @@ public class UploaderArea {
     @Produces(MediaType.APPLICATION_JSON)
     public String getFileInfo() {
 
+        EntityManager em = emf.createEntityManager();
         Uploader uploader = em.find(Uploader.class, (String) request.getSession().getAttribute("username"));
         SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy HH:mm:ss", Locale.ENGLISH);
         //SIAMO IN MODALITA' SVILUPPO
@@ -316,6 +325,7 @@ public class UploaderArea {
     @Consumes(MediaType.TEXT_PLAIN)
     public void uploadFile(String fileString) {
 
+        EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
         Uploader uploader = em.find(Uploader.class, (String) request.getSession().getAttribute("username"));
         JSONObject json = new JSONObject(fileString);
@@ -375,6 +385,7 @@ public class UploaderArea {
     @Path("/file/{id:}")
     public void deleteFile(@PathParam("id") long id) {
 
+        EntityManager em = emf.createEntityManager();
         //gestisci se il file non esiste
         em.getTransaction().begin();
         UploadedFile uf = em.find(UploadedFile.class, id);
