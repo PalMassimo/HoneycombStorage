@@ -17,13 +17,13 @@ public class MailUtility {
     public static void sendMail(String destinatario, String mittente, String subject, String text) throws MessagingException {
 
         Properties properties = new Properties();
-        properties.put("mail.smtp.host", "marco.bianchihs@virgilio.it");
+        properties.put("mail.smtp.host", "smtp.gmail.com");
         properties.put("mail.smtp.port", "465");
         properties.put("mail.smtp.ssl.enable", "true");
         properties.put("mail.smtp.auth", "true");
         Session session = Session.getDefaultInstance(properties, new javax.mail.Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication("marco.bianchihs@virgilio.it", "bianchibianchi");
+                return new PasswordAuthentication("progettoprogrammazioneweb@gmail.com", "tomcat2020");
             }
         });
 
