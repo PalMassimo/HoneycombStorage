@@ -360,7 +360,6 @@ public class UploaderArea {
 
             Thread thread = new Thread(mailservlet);
             thread.start();
-
         }
     }
 

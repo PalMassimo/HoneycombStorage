@@ -37,9 +37,9 @@ public class ConsumersRealmFilter implements Filter {
         if (role != null && role.equals("consumer")) {
             chain.doFilter(request, response);
         } else if (role != null) {
-            response.sendError(401, "Only uploaders can came here. You have the role of " + role);
+            response.sendError(401, "Only consumers can came here. You have the role of " + role);
         } else {
-            response.sendError(401, "Only uploaders can came here.");
+            response.sendError(401, "Only consumers can came here.");
         }
 
     }

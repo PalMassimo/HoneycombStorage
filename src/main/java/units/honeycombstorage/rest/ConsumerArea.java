@@ -82,7 +82,7 @@ public class ConsumerArea {
                 JSONObject jsonObjectUploadedFile = new JSONObject();
                 jsonObjectUploadedFile.put("name", uf.getName());
                 jsonObjectUploadedFile.put("uploaded", formatter.format(uf.getUploadDate()));
-                jsonObjectUploadedFile.put("link", "http://localhost:8080/ProgettoTomCat/api/consumerarea/file/" + uf.getId() + "/" + uf.getName());
+                jsonObjectUploadedFile.put("link", "/api/consumerarea/file/" + uf.getId() + "/" + uf.getName());
                 if (uf.getHashtags() != null) {
                     jsonObjectUploadedFile.put("hashtags", uf.getHashtags());
                 } else {
