@@ -1,5 +1,6 @@
 package units.honeycombstorage.classes;
 
+import java.util.logging.Logger;
 import javax.mail.MessagingException;
 
 /**
@@ -9,7 +10,7 @@ import javax.mail.MessagingException;
 public class MailSender implements Runnable {
 
     private final String MITTENTE = "progettoprogrammazioneweb@gmail.com";
-    private final String host = "http://localhost:8080/honeycombstorage/api/consumerarea/file/";
+    private final String host = "https://honeycombstorage.heroku.com/api/consumerarea/file/";
     private String destinatario;
     private long id;
     private String filename;
@@ -71,7 +72,9 @@ public class MailSender implements Runnable {
         try {
             MailUtility.sendMail(destinatario, MITTENTE, subject, text);
         } catch (MessagingException e) {
-
+            Logger logger = Logger.getLogger("MAIL LOGGER");
+            logger.info("Invio non riuscito!");
+            logger.info(e.toString());
         }
     }
 
