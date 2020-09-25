@@ -19,7 +19,7 @@ public class Logout extends HttpServlet {
             throws ServletException, IOException {
 
         request.getSession().invalidate();
-        response.sendRedirect("/honeycombstorage/login.html");
+        response.sendRedirect("/login.html");
 
     }
 
