@@ -9,7 +9,7 @@ import javax.mail.MessagingException;
  */
 public class MailSender implements Runnable {
 
-    private final String MITTENTE = "progettoprogrammazioneweb@gmail.com";
+    private final String MITTENTE = "honeycombstorage@mail.com";
     private final String host = "https://honeycombstorage.heroku.com/api/consumerarea/file/";
     private String destinatario;
     private long id;

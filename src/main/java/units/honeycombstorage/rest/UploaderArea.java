@@ -378,18 +378,12 @@ public class UploaderArea {
             em.getTransaction().commit();
 
             //sending emails
-//            MailSender mailsender = new MailSender();
-//            mailsender.setDestinatario(consumersJSONArray.getJSONObject(i).getString("email"));
-//            mailsender.setUploaderUsername(uploader.getUsername());
-//            mailsender.setConsumerUsername(consumersJSONArray.getJSONObject(i).getString("username"));
-//            mailsender.setId(uploadedFile.getId());
-//            mailsender.setFilename(uploadedFile.getName());
             MailSender mailsender = new MailSender();
-            mailsender.setDestinatario("progettoprogrammazioneweb@gmail.com");
-            mailsender.setUploaderUsername("Sherry");
-            mailsender.setConsumerUsername("Marius");
-            mailsender.setId(1);
-            mailsender.setFilename("Ai.jpg");
+            mailsender.setDestinatario(consumersJSONArray.getJSONObject(i).getString("email"));
+            mailsender.setUploaderUsername(uploader.getUsername());
+            mailsender.setConsumerUsername(consumersJSONArray.getJSONObject(i).getString("username"));
+            mailsender.setId(uploadedFile.getId());
+            mailsender.setFilename(uploadedFile.getName());
 
             Thread thread = new Thread(mailsender);
             thread.start();
