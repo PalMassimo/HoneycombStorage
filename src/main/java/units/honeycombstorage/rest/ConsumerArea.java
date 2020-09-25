@@ -49,7 +49,7 @@ public class ConsumerArea {
         JSONArray news = new JSONArray();
         SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy HH:mm:ss", Locale.ENGLISH); //set date format
 
-        Consumer consumer = em.find(Consumer.class, "Marius");
+        Consumer consumer = em.find(Consumer.class, (String)request.getSession().getAttribute("username"));
 
         TypedQuery<Uploader> uploadersQuery = em.createQuery("SELECT u "
                 + "FROM Consumer c INNER JOIN c.uploaders u "
@@ -115,7 +115,7 @@ public class ConsumerArea {
     @Path("/consumerinfo")
     @Produces(MediaType.APPLICATION_JSON)
     public String getInfo() {
-        Consumer consumer = em.find(Consumer.class, "Marius");
+        Consumer consumer = em.find(Consumer.class, (String)request.getSession().getAttribute("username"));
         JSONObject consumerJSON = new JSONObject();
         consumerJSON.put("username", consumer.getUsername());
         consumerJSON.put("nameSurname", consumer.getNameSurname());
@@ -154,7 +154,7 @@ public class ConsumerArea {
     public void putConsumer(Consumer consumer) {
         
         em.getTransaction().begin();
-        Consumer c = em.find(Consumer.class, "Marius");
+        Consumer c = em.find(Consumer.class, (String)request.getSession().getAttribute("username"));
         c.setEmail(consumer.getEmail());
         c.setNameSurname(consumer.getNameSurname());
         c.setPassword(consumer.getPassword());

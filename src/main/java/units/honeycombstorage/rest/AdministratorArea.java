@@ -161,7 +161,7 @@ public class AdministratorArea {
     @Produces(MediaType.APPLICATION_JSON)
     public String getAdministrator() {
 
-        Administrator administrator = em.find(Administrator.class, "massimo.palmisano@gmail.com");
+        Administrator administrator = em.find(Administrator.class,(String)request.getSession().getAttribute("username"));
         JSONObject administratorJSON = new JSONObject();
         administratorJSON.put("username", administrator.getUsername());
         administratorJSON.put("nameSurname", administrator.getNameSurname());

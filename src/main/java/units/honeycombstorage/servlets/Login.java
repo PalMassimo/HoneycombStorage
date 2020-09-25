@@ -33,11 +33,10 @@ public class Login extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws IOException {
 
-        
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         String role = request.getParameter("role");
-        
+
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("developmentPU");
         EntityManager em = emf.createEntityManager();
 
@@ -63,6 +62,7 @@ public class Login extends HttpServlet {
                     if (em.find(Uploader.class, username).getPassword().equals(password)) {
                         request.getSession().setAttribute("role", role);
                         request.getSession().setAttribute("username", username);
+                        String da = (String) request.getSession().getAttribute("username");
                         response.sendRedirect("uploadersrealm/index.html");
                     } else {
                         response.sendError(422, "the password is wrong");

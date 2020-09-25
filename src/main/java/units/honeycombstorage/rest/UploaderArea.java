@@ -13,6 +13,7 @@ import javax.persistence.TypedQuery;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -47,15 +48,15 @@ public class UploaderArea {
     EntityManagerFactory emf = Persistence.createEntityManagerFactory("developmentPU");
     EntityManager em = emf.createEntityManager();
 
+    
+
     @GET
     @Path("/generalinfo")
     @Produces(MediaType.APPLICATION_JSON)
     public String getGeneralInfo() {
 
+        Uploader uploader = em.find(Uploader.class, (String)request.getSession().getAttribute("username"));
         //info: numero documenti caricati e numero consumers affiliati
-        //Uploader uploader = em.find(Uploader.class, (String) request.getSession().getAttribute("username"));
-        Uploader uploader = em.find(Uploader.class, "Sherry"); //only for debug
-
         TypedQuery<Long> qtotalConsumers = em.createQuery("SELECT COUNT(c) FROM Uploader u INNER JOIN u.consumers c"
                 + " WHERE u.username= :currentuploader", Long.class);
         qtotalConsumers.setParameter("currentuploader", uploader.getUsername());
@@ -79,7 +80,7 @@ public class UploaderArea {
     @Produces(MediaType.APPLICATION_JSON)
     public String getUploader() {
 
-        Uploader uploader = em.find(Uploader.class, "Sherry");
+        Uploader uploader = em.find(Uploader.class, (String)request.getSession().getAttribute("username"));
         JSONObject uploaderJSON = new JSONObject();
         uploaderJSON.put("username", uploader.getUsername());
         uploaderJSON.put("email", uploader.getEmail());
@@ -95,8 +96,8 @@ public class UploaderArea {
     @Produces(MediaType.APPLICATION_JSON)
     public void modifyUploader(Uploader changes) throws IOException {
 
+        Uploader uploader = em.find(Uploader.class, (String)request.getSession().getAttribute("username"));
         em.getTransaction().begin();
-        Uploader uploader = em.find(Uploader.class, changes.getUsername());
         uploader.setEmail(changes.getEmail());
         uploader.setNameSurname(changes.getNameSurname());
         uploader.setPassword(changes.getPassword());
@@ -108,7 +109,7 @@ public class UploaderArea {
     @GET
     @Path("/logo")
     public byte[] getLogo() {
-        Uploader uploader = em.find(Uploader.class, "Sherry");
+        Uploader uploader = em.find(Uploader.class, (String)request.getSession().getAttribute("username"));
         if (em.find(Uploader.class, uploader.getUsername()).getLogo() != null) {
             return em.find(Uploader.class, uploader.getUsername()).getLogo();
         } else {
@@ -120,8 +121,8 @@ public class UploaderArea {
     @Path("/logo")
     public void postLogo() throws IOException, ServletException {
 
+        Uploader uploader = em.find(Uploader.class, (String)request.getSession().getAttribute("username"));
         em.getTransaction().begin();
-        Uploader uploader = em.find(Uploader.class, "Sherry");
         uploader.setLogo(toByteArray(request.getPart("logo").getInputStream()));
         em.getTransaction().commit();
         response.sendRedirect(request.getHeader("referer") + "#/PrivateArea");
@@ -131,8 +132,10 @@ public class UploaderArea {
     @Path("/consumers")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Consumer> getConsumers() {
+        
+        Uploader uploader = em.find(Uploader.class, (String)request.getSession().getAttribute("username"));
+        
         //utilizzate da due vuejs
-        Uploader uploader = em.find(Uploader.class, "Sherry");
         TypedQuery<Consumer> qconsumers = em.createQuery("SELECT c FROM Consumer c INNER JOIN c.uploaders cu "
                 + "WHERE cu.username= :currentuploader ", Consumer.class);
         qconsumers.setParameter("currentuploader", uploader.getUsername());
@@ -151,12 +154,10 @@ public class UploaderArea {
     public void postConsumer(Consumer consumer) throws IOException {
 
         em.getTransaction().begin();
-        Uploader uploader = em.find(Uploader.class, "Sherry");
+        Uploader uploader = em.find(Uploader.class, (String)request.getSession().getAttribute("username"));
+        consumer.addUploader(uploader);
         if (em.find(Consumer.class, consumer.getUsername()) == null) {
-            consumer.addUploader(uploader);
             em.persist(consumer);
-        } else {
-            response.sendError(409);
         }
         em.getTransaction().commit();
     }
@@ -190,7 +191,7 @@ public class UploaderArea {
     @Produces(MediaType.APPLICATION_JSON)
     public String getConsumersExtended() {
 
-        Uploader uploader = em.find(Uploader.class, "Sherry");
+        Uploader uploader = em.find(Uploader.class, (String)request.getSession().getAttribute("username"));
         JSONArray consumersJSONArray = new JSONArray();
         SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy HH:mm:ss", Locale.ENGLISH);
 
@@ -276,9 +277,9 @@ public class UploaderArea {
     @Produces(MediaType.APPLICATION_JSON)
     public String getFileInfo() {
 
+        Uploader uploader = em.find(Uploader.class, (String)request.getSession().getAttribute("username"));
         SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy HH:mm:ss", Locale.ENGLISH);
         //SIAMO IN MODALITA' SVILUPPO
-        Uploader uploader = em.find(Uploader.class, "Sherry");
         TypedQuery<UploadedFile> quf = em.createQuery("SELECT uf FROM UploadedFile uf INNER JOIN uf.uploader ufu "
                 + "WHERE ufu.username =:currentuploader", UploadedFile.class
         );
@@ -309,7 +310,7 @@ public class UploaderArea {
     public void uploadFile(String fileString) {
 
         em.getTransaction().begin();
-        Uploader uploader = em.find(Uploader.class, "Sherry");
+        Uploader uploader = em.find(Uploader.class, (String)request.getSession().getAttribute("username"));
         JSONObject json = new JSONObject(fileString);
         UploadedFile uploadedFile = new UploadedFile();
         uploadedFile.setName(json.getString("name"));

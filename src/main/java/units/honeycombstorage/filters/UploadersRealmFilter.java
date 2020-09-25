@@ -33,6 +33,7 @@ public class UploadersRealmFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
         String role = (String) request.getSession().getAttribute("role");
+        String username = (String) request.getSession().getAttribute("username");
         if (role != null && role.equals("uploader")) {
             chain.doFilter(request, response);
         } else if (role != null) {

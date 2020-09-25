@@ -1,6 +1,6 @@
+units\honeycombstorage\classes\MailSender.class
 units\honeycombstorage\rest\AdministratorArea.class
 units\honeycombstorage\rest\ConsumerArea.class
-units\honeycombstorage\classes\MailServlet.class
 units\honeycombstorage\classes\MailUtility.class
 units\honeycombstorage\filters\AdministratorsRealmFilter.class
 units\honeycombstorage\entites\Administrator.class
