@@ -9,6 +9,7 @@ C:\Users\massi\Documents\Apache\HoneycombStorage\src\main\java\units\honeycombst
 C:\Users\massi\Documents\Apache\HoneycombStorage\src\main\java\units\honeycombstorage\entites\Uploader.java
 C:\Users\massi\Documents\Apache\HoneycombStorage\src\main\java\units\honeycombstorage\rest\UploaderArea.java
 C:\Users\massi\Documents\Apache\HoneycombStorage\src\main\java\units\honeycombstorage\servlets\AddConsumer.java
+C:\Users\massi\Documents\Apache\HoneycombStorage\src\main\java\units\honeycombstorage\filters\ConsumersRealmFilter.java
 C:\Users\massi\Documents\Apache\HoneycombStorage\src\main\java\units\honeycombstorage\filters\UploadersRealmFilter.java
 C:\Users\massi\Documents\Apache\HoneycombStorage\src\main\java\units\honeycombstorage\filters\AdministratorsRealmFilter.java
 C:\Users\massi\Documents\Apache\HoneycombStorage\src\main\java\units\honeycombstorage\classes\MailUtility.java

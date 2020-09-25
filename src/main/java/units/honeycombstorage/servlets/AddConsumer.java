@@ -41,7 +41,7 @@ public class AddConsumer extends HttpServlet {
         consumer.setNameSurname(request.getParameter("namesurname"));
         consumer.setPassword(request.getParameter("password"));
 
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("developmentPU");
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("productionPU");
         EntityManager em = emf.createEntityManager();
 
         //verify that the username is already taken

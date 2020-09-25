@@ -39,7 +39,7 @@ public class AdministratorArea {
     @Context
     HttpServletResponse response;
 
-    EntityManagerFactory emf = Persistence.createEntityManagerFactory("developmentPU");
+    EntityManagerFactory emf = Persistence.createEntityManagerFactory("productionPU");
     EntityManager em = emf.createEntityManager();
 
     @GET
