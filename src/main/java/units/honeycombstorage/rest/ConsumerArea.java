@@ -50,8 +50,8 @@ public class ConsumerArea {
         JSONArray news = new JSONArray();
         SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy HH:mm:ss", Locale.ENGLISH); //set date format
 
-        //Consumer consumer = em.find(Consumer.class, (String) request.getSession().getAttribute("username"));
-        Consumer consumer = em.find(Consumer.class, "RSSMRA80B27F205P");
+        Consumer consumer = em.find(Consumer.class, (String) request.getSession().getAttribute("username"));
+        //Consumer consumer = em.find(Consumer.class, "RSSMRA80B27F205P");
 
         TypedQuery<Uploader> uploadersQuery = em.createQuery("SELECT u "
                 + "FROM Consumer c INNER JOIN c.uploaders u "
@@ -119,8 +119,8 @@ public class ConsumerArea {
     @Path("/consumerinfo")
     @Produces(MediaType.APPLICATION_JSON)
     public String getInfo() {
-        //Consumer consumer = em.find(Consumer.class, (String) request.getSession().getAttribute("username"));
-        Consumer consumer = em.find(Consumer.class, "RSSMRA80B27F205P");
+        Consumer consumer = em.find(Consumer.class, (String) request.getSession().getAttribute("username"));
+        //Consumer consumer = em.find(Consumer.class, "RSSMRA80B27F205P");
         JSONObject consumerJSON = new JSONObject();
         consumerJSON.put("username", consumer.getUsername());
         consumerJSON.put("nameSurname", consumer.getNameSurname());
@@ -178,8 +178,8 @@ public class ConsumerArea {
         TypedQuery<DownloadFile> dfQuery = em.createQuery("SELECT df FROM DownloadFile df "
                 + "WHERE df.uploadedFile=:id AND df.consumer=:consumer_username", DownloadFile.class);
         dfQuery.setParameter("id", uploadedFile);
-        //dfQuery.setParameter("consumer_username", (String) request.getSession().getAttribute("username"));
-        dfQuery.setParameter("consumer_username", "RSSMRA80B27F205P");
+        dfQuery.setParameter("consumer_username", (String) request.getSession().getAttribute("username"));
+        //dfQuery.setParameter("consumer_username", "RSSMRA80B27F205P");
         DownloadFile df = dfQuery.getSingleResult();
 
         df.setDownloaded(new Date());
