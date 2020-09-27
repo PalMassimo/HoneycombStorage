@@ -30,7 +30,8 @@ public class AddConsumer extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        if (request.getParameter("username") == null || request.getParameter("email") == null || request.getParameter("nomecognome") == null || request.getParameter("password") == null) {
+        if (request.getParameter("username") == null || request.getParameter("email") == null
+                || request.getParameter("namesurname") == null || request.getParameter("password") == null) {
             response.sendRedirect("subscribe.html");
         }
 
@@ -41,23 +42,26 @@ public class AddConsumer extends HttpServlet {
         consumer.setNameSurname(request.getParameter("namesurname"));
         consumer.setPassword(request.getParameter("password"));
 
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("productionPU");
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("developmentPU");
         EntityManager em = emf.createEntityManager();
 
-        //verify that the username is already taken
-        if (em.find(Consumer.class, request.getParameter("username")) == null) {
-            response.sendRedirect(request.getHeader("referer"));
-        } else{
+        //verify if the username is already taken
+        if (em.find(Consumer.class, request.getParameter("username")) != null) {
+            response.sendRedirect("login.html");
+        } else {
             em.getTransaction().begin();
             em.persist(consumer);
             em.getTransaction().commit();
-            response.sendRedirect("consumersrealm/index.html");
+            request.getSession().setAttribute("username", consumer.getUsername());
+            request.getSession().setAttribute("role", "consumer");
+            getServletContext().getRequestDispatcher("/consumersrealm/index.html").forward(request, response);
+
         }
 
     }
 
     @Override
     public String getServletInfo() {
-        return "Servlet per aggiungere un consumer";
+        return "Servlet for adding new consumer";
     }
 }
