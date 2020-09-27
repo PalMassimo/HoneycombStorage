@@ -45,14 +45,17 @@ public class UploaderArea {
     HttpServletResponse response;
 
     EntityManagerFactory emf = Persistence.createEntityManagerFactory("productionPU");
+    //EntityManagerFactory emf = Persistence.createEntityManagerFactory("developmentPU");
     EntityManager em = emf.createEntityManager();
-    
+
     @GET
     @Path("/generalinfo")
     @Produces(MediaType.APPLICATION_JSON)
     public String getGeneralInfo() {
 
         Uploader uploader = em.find(Uploader.class, (String) request.getSession().getAttribute("username"));
+        //Uploader uploader = em.find(Uploader.class, "Sherry");
+
         //info: numero documenti caricati e numero consumers affiliati
         TypedQuery<Long> qtotalConsumers = em.createQuery("SELECT COUNT(c) FROM Uploader u INNER JOIN u.consumers c"
                 + " WHERE u.username= :currentuploader", Long.class);
@@ -80,6 +83,8 @@ public class UploaderArea {
     public String getUploader() {
 
         Uploader uploader = em.find(Uploader.class, (String) request.getSession().getAttribute("username"));
+        //Uploader uploader = em.find(Uploader.class, "Sherry");
+
         JSONObject uploaderJSON = new JSONObject();
         uploaderJSON.put("username", uploader.getUsername());
         uploaderJSON.put("email", uploader.getEmail());
@@ -97,8 +102,9 @@ public class UploaderArea {
     @Produces(MediaType.APPLICATION_JSON)
     public void modifyUploader(Uploader changes) throws IOException {
 
-        Uploader uploader = em.find(Uploader.class, (String) request.getSession().getAttribute("username"));
         em.getTransaction().begin();
+        Uploader uploader = em.find(Uploader.class, (String) request.getSession().getAttribute("username"));
+        //Uploader uploader = em.find(Uploader.class, "Sherry");
         uploader.setEmail(changes.getEmail());
         uploader.setNameSurname(changes.getNameSurname());
         uploader.setPassword(changes.getPassword());
@@ -112,6 +118,7 @@ public class UploaderArea {
     public byte[] getLogo() {
 
         Uploader uploader = em.find(Uploader.class, (String) request.getSession().getAttribute("username"));
+        //Uploader uploader = em.find(Uploader.class, "Sherry");
 
         byte[] logo = em.find(Uploader.class, uploader.getUsername()).getLogo();
         em.close();
@@ -124,8 +131,9 @@ public class UploaderArea {
     @Path("/logo")
     public void postLogo() throws IOException, ServletException {
 
-        Uploader uploader = em.find(Uploader.class, (String) request.getSession().getAttribute("username"));
         em.getTransaction().begin();
+        Uploader uploader = em.find(Uploader.class, (String) request.getSession().getAttribute("username"));
+        //Uploader uploader = em.find(Uploader.class, "Sherry");
         uploader.setLogo(toByteArray(request.getPart("logo").getInputStream()));
         em.getTransaction().commit();
         response.sendRedirect(request.getHeader("referer") + "#/PrivateArea");
@@ -139,6 +147,7 @@ public class UploaderArea {
     public List<Consumer> getConsumers() {
 
         Uploader uploader = em.find(Uploader.class, (String) request.getSession().getAttribute("username"));
+        //Uploader uploader = em.find(Uploader.class, "Sherry");
 
         //utilizzate da due vuejs
         TypedQuery<Consumer> qconsumers = em.createQuery("SELECT c FROM Consumer c INNER JOIN c.uploaders cu "
@@ -162,6 +171,7 @@ public class UploaderArea {
 
         em.getTransaction().begin();
         Uploader uploader = em.find(Uploader.class, (String) request.getSession().getAttribute("username"));
+        //Uploader uploader = em.find(Uploader.class, "Sherry");
         consumer.addUploader(uploader);
         if (em.find(Consumer.class, consumer.getUsername()) == null) {
             em.persist(consumer);
@@ -175,13 +185,14 @@ public class UploaderArea {
     @Path("/consumer")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public void changeInfo(Consumer update) {
+    public void changeInfo(Consumer consumer) {
 
         em.getTransaction().begin();
-        Consumer consumer = em.find(Consumer.class, update.getUsername());
-        consumer.setEmail(update.getEmail());
-        consumer.setNameSurname(update.getNameSurname());
-        consumer.setPassword(update.getPassword());
+        //Consumer consumer = em.find(Consumer.class, update.getUsername());
+        //consumer.setEmail(update.getEmail());
+        //consumer.setNameSurname(update.getNameSurname());
+        //consumer.setPassword(update.getPassword());
+        em.merge(consumer);
         em.getTransaction().commit();
         em.close();
         emf.close();
@@ -204,6 +215,7 @@ public class UploaderArea {
     public String getConsumersExtended() {
 
         Uploader uploader = em.find(Uploader.class, (String) request.getSession().getAttribute("username"));
+        //Uploader uploader = em.find(Uploader.class, "Sherry");
         JSONArray consumersJSONArray = new JSONArray();
         SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy HH:mm:ss", Locale.ENGLISH);
 
@@ -236,7 +248,6 @@ public class UploaderArea {
                     uploadedFileJSON.put("seen", formatter.format(downloadfile.getDownloaded()));
                     uploadedFileJSON.put("ipAddress", downloadfile.getIpAddress());
                 }
-                //JSONArray hashtags = new JSONArray();
 
                 filesJSONArray.put(uploadedFileJSON);
             }
@@ -248,42 +259,6 @@ public class UploaderArea {
         emf.close();
         return consumersJSONArray.toString();
 
-//        Uploader uploader = em.find(Uploader.class, "Sherry");
-//        JSONObject json = new JSONObject();
-//        TypedQuery<Consumer> consumersQuery = em.createQuery("SELECT c FROM Consumer c INNER JOIN c.uploaders cu "
-//                + "WHERE cu.username=:currentuploader", Consumer.class);
-//        consumersQuery.setParameter("currentuploader", uploader.getUsername());
-//
-//        for (Consumer consumer : consumersQuery.getResultList()) {
-//
-//            JSONArray uploadedFilesJSON = new JSONArray();
-//            //dobbiamo restituire solo i files caricati dall'uploader
-//            TypedQuery<DownloadFile> downloadFileQuery = em.createQuery("SELECT df "+
-//                    "FROM DownloadFile df INNER JOIN df.uploadedFile uf INNER JOIN uf.uploader "+
-//                    "WHERE uf.uploader=:currentuploader", DownloadFile.class);
-//            downloadFileQuery.setParameter("currentuploader", uploader);
-//            
-//            //for (DownloadFile downloadfile : consumer.getDownloadFiles()) {
-//            for (DownloadFile downloadfile : downloadFileQuery.getResultList()) {
-//                UploadedFile uf = downloadfile.getUploadedFile();
-//                JSONObject uploadedFileJSON = new JSONObject();
-//                uploadedFileJSON.put("id", uf.getId());
-//                uploadedFileJSON.put("name", uf.getName());
-//                if (downloadfile.getDownloaded() == null) {
-//                    uploadedFileJSON.put("seen", "");
-//                    uploadedFileJSON.put("ipAddress", "");
-//                } else {
-//                    uploadedFileJSON.put("seen", downloadfile.getDownloaded().toString());
-//                    uploadedFileJSON.put("ipAddress", downloadfile.getIpAddress());
-//                }
-//                JSONArray hashtags = new JSONArray();
-//
-//                uploadedFilesJSON.put(uploadedFileJSON);
-//            }
-//
-//            json.put(consumer.getUsername(), uploadedFilesJSON);
-//        }
-//        return json.toString();
     }
 
     @GET
@@ -291,7 +266,8 @@ public class UploaderArea {
     @Produces(MediaType.APPLICATION_JSON)
     public String getFileInfo() {
 
-        Uploader uploader = em.find(Uploader.class, (String) request.getSession().getAttribute("username"));
+        //Uploader uploader = em.find(Uploader.class, (String) request.getSession().getAttribute("username"));
+        Uploader uploader = em.find(Uploader.class, "Sherry");
         SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy HH:mm:ss", Locale.ENGLISH);
         //SIAMO IN MODALITA' SVILUPPO
         TypedQuery<UploadedFile> quf = em.createQuery("SELECT uf FROM UploadedFile uf INNER JOIN uf.uploader ufu "
@@ -326,6 +302,7 @@ public class UploaderArea {
 
         em.getTransaction().begin();
         Uploader uploader = em.find(Uploader.class, (String) request.getSession().getAttribute("username"));
+        //Uploader uploader = em.find(Uploader.class, "Sherry");
         JSONObject json = new JSONObject(fileString);
         UploadedFile uploadedFile = new UploadedFile();
         uploadedFile.setName(json.getString("name"));
@@ -384,60 +361,12 @@ public class UploaderArea {
     @Path("/file/{id:}")
     public void deleteFile(@PathParam("id") long id) {
 
-        //gestisci se il file non esiste
         em.getTransaction().begin();
         UploadedFile uf = em.find(UploadedFile.class, id);
-        //Query deleteQuery = em.createQuery("DELETE FROM UploadedFile uf WHERE uf.id=:id");
-        //deleteQuery.setParameter("id", id);
-        //deleteQuery.executeUpdate();
         em.remove(em.find(UploadedFile.class, id));
         em.getTransaction().commit();
         em.close();
         emf.close();
     }
 
-    ////////////////////////////////////////////////////
-//    //usata da qualcuno sta roba?
-//    @GET
-//    @Path("/uploadermanagment")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public Uploader getUploader() {
-//
-//        Uploader uploader = em.find(Uploader.class, "Goro");
-//        uploader.setLogo(null);
-//        uploader.setUploadedFiles(null);
-//        return uploader;
-//    }
-//    @POST
-//    @Path("/filemanagment")
-//    @Consumes(MediaType.APPLICATION_JSON)
-//    public void postFile(@QueryParam("consumers") String consumers, UploadedFile uploadedFile) {
-//
-//        Uploader uploader = em.find(Uploader.class, "Sherry");
-//        uploadedFile.setUploader(uploader); //phase sviluppo
-//        uploadedFile.setUploadDate(new Date());
-//        em.getTransaction().begin();
-//        em.persist(uploadedFile);
-//        em.getTransaction().commit();
-//
-//        String[] arrayConsumers = consumers.split(" ");
-//
-//        for (String consumer : arrayConsumers) {
-//            DownloadFile downloadFile = new DownloadFile();
-//            downloadFile.setDownloaded(null);
-//            if (em.find(Consumer.class, consumer) != null) {
-//                downloadFile.setConsumer(em.find(Consumer.class, consumer));
-//            } else {
-//                Consumer newConsumer = new Consumer();
-//            }
-//
-//            downloadFile.setUploadedFile(uploadedFile);
-//            em.getTransaction().begin();
-//            em.persist(downloadFile);
-//            em.getTransaction().commit();
-//
-//        }
-//
-//        //response.sendRedirect(request.getHeader("referer"));
-//    }
 }

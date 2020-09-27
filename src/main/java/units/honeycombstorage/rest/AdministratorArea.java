@@ -40,6 +40,7 @@ public class AdministratorArea {
     HttpServletResponse response;
 
     EntityManagerFactory emf = Persistence.createEntityManagerFactory("productionPU");
+    //EntityManagerFactory emf = Persistence.createEntityManagerFactory("developmentPU");
     EntityManager em = emf.createEntityManager();
 
     @GET
@@ -123,14 +124,14 @@ public class AdministratorArea {
     @Consumes(MediaType.APPLICATION_JSON)
     public void modifyUploader(Uploader uploader) {
 
-        Uploader update = em.find(Uploader.class, uploader.getUsername());
-        update.setEmail(uploader.getEmail());
-        update.setNameSurname(uploader.getNameSurname());
-        update.setLogo(uploader.getLogo());
-        update.setPassword(uploader.getPassword());
+//        Uploader update = em.find(Uploader.class, uploader.getUsername());
+//        update.setEmail(uploader.getEmail());
+//        update.setNameSurname(uploader.getNameSurname());
+//        update.setLogo(uploader.getLogo());
+//        update.setPassword(uploader.getPassword());
 
         em.getTransaction().begin();
-        em.persist(update);
+        em.persist(uploader);
         em.getTransaction().commit();
         em.close();
         emf.close();
@@ -173,7 +174,8 @@ public class AdministratorArea {
     @Produces(MediaType.APPLICATION_JSON)
     public String getAdministrator() {
 
-        Administrator administrator = em.find(Administrator.class, (String) request.getSession().getAttribute("username"));
+        //Administrator administrator = em.find(Administrator.class, (String) request.getSession().getAttribute("username"));
+        Administrator administrator = em.find(Administrator.class, "massimo.palmisano@gmail.com");
         JSONObject administratorJSON = new JSONObject();
         administratorJSON.put("username", administrator.getUsername());
         administratorJSON.put("nameSurname", administrator.getNameSurname());
@@ -210,12 +212,11 @@ public class AdministratorArea {
     @PUT
     @Path("/administrator")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void modifyAdministrator(Administrator administrator) {
+    public void putAdministrator(Administrator administrator) {
 
         em.getTransaction().begin();
-        Administrator update = em.find(Administrator.class, administrator.getUsername());
-        update.setNameSurname(administrator.getNameSurname());
-        update.setPassword(administrator.getPassword());
+        administrator.setEmail(administrator.getUsername());
+        em.merge(administrator);
         em.getTransaction().commit();
         em.close();
         emf.close();
