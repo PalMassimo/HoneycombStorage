@@ -55,7 +55,7 @@ public class AddConsumer extends HttpServlet {
             em.getTransaction().commit();
             request.getSession().setAttribute("username", consumer.getUsername());
             request.getSession().setAttribute("role", "consumer");
-            getServletContext().getRequestDispatcher("/consumersrealm/index.html").forward(request, response);
+            response.sendRedirect("consumersrealm/index.html");
 
         }
 
