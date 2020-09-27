@@ -31,7 +31,7 @@ public class Login extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws IOException {
+            throws IOException, ServletException {
 
         String username = request.getParameter("username");
         String password = request.getParameter("password");
@@ -48,7 +48,7 @@ public class Login extends HttpServlet {
                     if ((em.find(Consumer.class, username).getPassword()).equals(password)) {
                         request.getSession().setAttribute("role", role);
                         request.getSession().setAttribute("username", username);
-                        response.sendRedirect("consumersrealm/index.html");
+                        getServletContext().getRequestDispatcher("/consumersrealm/index.html").forward(request, response);
                     } else {
                         response.sendError(422, "the password is wrong");
                     }
@@ -63,7 +63,7 @@ public class Login extends HttpServlet {
                         request.getSession().setAttribute("role", role);
                         request.getSession().setAttribute("username", username);
                         String da = (String) request.getSession().getAttribute("username");
-                        response.sendRedirect("uploadersrealm/index.html");
+                        getServletContext().getRequestDispatcher("/uploadersrealm/index.html").forward(request, response);
                     } else {
                         response.sendError(422, "the password is wrong");
                     }
@@ -77,7 +77,7 @@ public class Login extends HttpServlet {
                     if (em.find(Administrator.class, username).getPassword().equals(password)) {
                         request.getSession().setAttribute("username", username);
                         request.getSession().setAttribute("role", role);
-                        response.sendRedirect("administratorsrealm/index.html");
+                        getServletContext().getRequestDispatcher("/administratorsrealm/index.html").forward(request, response);
                     } else {
                         response.sendError(422, "the password is wrong");
                     }
