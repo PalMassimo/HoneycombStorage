@@ -38,8 +38,8 @@ public class ConsumerArea {
     @Context
     HttpServletResponse response;
 
-    //EntityManagerFactory emf = Persistence.createEntityManagerFactory("productionPU");
-    EntityManagerFactory emf = Persistence.createEntityManagerFactory("developmentPU");
+    EntityManagerFactory emf = Persistence.createEntityManagerFactory("productionPU");
+    //EntityManagerFactory emf = Persistence.createEntityManagerFactory("developmentPU");
     EntityManager em = emf.createEntityManager();
 
     @GET
