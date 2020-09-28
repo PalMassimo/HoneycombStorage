@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author massi
  */
 @WebFilter(filterName = "UploadersRealmFilter",
-        urlPatterns = {"/uploadersrealm/*", "/uploaderarea/*"})
+        urlPatterns = {"/uploadersrealm/*", "/api/uploaderarea/*"})
 public class UploadersRealmFilter implements Filter {
 
     public UploadersRealmFilter() {
@@ -37,9 +37,9 @@ public class UploadersRealmFilter implements Filter {
         if (role != null && role.equals("uploader")) {
             chain.doFilter(request, response);
         } else if (role != null) {
-            response.sendError(401, "Only uploaders can came here. You have the role of " + role);
+            response.sendError(401, "Only uploaders can come here. You have the role of " + role);
         } else {
-            response.sendError(401, "Only uploaders can came here.");
+            response.sendError(401, "Only uploaders can come here.");
         }
 
     }

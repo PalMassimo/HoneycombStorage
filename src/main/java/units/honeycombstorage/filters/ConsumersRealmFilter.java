@@ -1,9 +1,11 @@
 package units.honeycombstorage.filters;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -39,7 +41,16 @@ public class ConsumersRealmFilter implements Filter {
         } else if (role != null) {
             response.sendError(401, "Only consumers can came here. You have the role of " + role);
         } else {
-            response.sendError(401, "Only consumers can came here.");
+            String requestURI = request.getRequestURI();
+            if (requestURI.length() > 23 && (requestURI.substring(0, 23)).equals("/api/consumerarea/file/")) {
+                String[] parameters = requestURI.split("/");
+                //check with regular expressions
+                request.setAttribute("id", parameters[4]);
+                request.setAttribute("filename", parameters[5]);
+                request.getServletContext().getRequestDispatcher("/quicklogin.jsp").forward(request, response);
+            } else {
+                response.sendError(401, "Only consumers can came here.");
+            }
         }
 
     }

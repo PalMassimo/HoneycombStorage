@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author massi
  */
 @WebFilter(filterName = "AdministatorsRealmFilter",
-        urlPatterns = {"/administratorsrealm/*", "/administratorarea/*"})
+        urlPatterns = {"/administratorsrealm/*", "/api/administratorarea/*"})
 public class AdministratorsRealmFilter implements Filter {
 
     public AdministratorsRealmFilter() {
@@ -36,7 +36,7 @@ public class AdministratorsRealmFilter implements Filter {
         if (role != null && role.equals("administrator")) {
             chain.doFilter(request, response);
         } else if(role!=null){
-            response.sendError(401, "Only administrators can came here. You have the role of "+role);
+            response.sendError(401, "Only administrators can come here. You have the role of "+role);
         } else{
             response.sendError(401, "You are not a user");
         }
