@@ -16,7 +16,6 @@
         <title>Quick Login</title>
 
         <style>
-
             html, body{
                 margin: 0;
                 border: 0;
@@ -26,7 +25,7 @@
             body{
                 width: 100vw;
                 height: 100vh;
-                display:flex;
+                display: flex;
                 flex-flow: row nowrap;
                 align-items: center;
             }
@@ -34,17 +33,18 @@
             form {
                 margin-right: auto;
                 margin-left: auto;
-                width: 450px;
+                width: 400px;
                 display: flex;
                 flex-flow: column nowrap;
                 align-items: center;
                 justify-content: center;
                 border: 3px solid black;
-                border-radius: 10px;
+                border-radius: 40px;
                 background-color: rgba(0, 0, 0, 0.83);
                 color: rgb(214, 139, 0);
                 font-family: "Nunito";
             }
+
             form h1{
                 text-align: center;
                 font-size: 2.8em;
@@ -52,23 +52,20 @@
                 font-family: "Archivo Black";
             }
 
-            p{
+            form p{
                 width: 90%;
-                margin: 10px 0;
+                margin: 4vh 0;
                 font-size: 130%;
                 text-align: center;
+                color: white;
             }
 
-            form label{
-                margin: 20px auto;
-                width: 85%;
-                text-align: center;
-            }
-
-            form label input{
-                border-radius: 8px;
-                height: 30px;
-                width: 70%;
+            form input[type="text"],
+            form input[type="password"]{
+                border-radius:8px;
+                height: 6vh;
+                width: 80%;
+                margin: 3vh auto;
             }
 
             form input[type="submit"] {
@@ -76,11 +73,58 @@
                 border: 2px solid black;
                 border-radius: 10px;
                 width: 60%;
-                height: 70px;
+                height: 9vh;
                 background-color: rgba(0, 0, 0, 0.83);
                 color: rgb(214, 139, 0);
                 font-family: "Russo One";
-                font-size: 200%;
+                font-size: 6vh;
+            }
+
+            @media screen and (orientation: portrait) {
+
+                html, body{
+                    margin: 0;
+                    border: 0;
+                    padding: 0;
+                }
+
+                body{
+                    width: 100vw;
+                    height: 100vh;
+                    display: flex;
+                    flex-flow: row nowrap;
+                    align-items: center;
+                }
+
+                form {
+                    margin-right: auto;
+                    margin-left: auto;
+                    height: 80%;
+                    width: 70%;
+                    display: flex;
+                    flex-flow: column nowrap;
+                    align-items: center;
+                    justify-content: center;
+                    border: 3px solid black;
+                    border-radius: 40px;
+                    background-color: rgba(0, 0, 0, 0.83);
+                    color: rgb(214, 139, 0);
+                    font-family: "Nunito";
+                }
+
+                form h1{
+                    margin: 2vh auto;
+                    font-size: 5em;
+                }
+
+                form p{
+                    font-size: 2em;
+                }
+
+                form input{
+                    font-size: 2em;
+                }
+
             }
 
         </style>
@@ -88,17 +132,13 @@
     </head>
     <body>
         <form action="/quicklogin" method="POST">
-            <h1>LITTLE CHECK</h1>
-            <p>Your session is expired: insert your credentials to download the file!</p>
-            <label for="usernameField"> Username:
-                <input type="text" name="username" id="usernameField"/>
-            </label>
-            <label for="passwordField"> Password:
-                <input type="password" name="password" id="passwordField"/>
-            </label>
+            <h1>Login Form</h1>
+            <p>Your session is expired: insert your credentials to download the file now!</p>
+            <input type="text" name="username" placeholder=" enter username" />
+            <input type="password" name="password" placeholder=" enter password" />
             <input type="hidden" name="id" value="<%=(String) request.getAttribute("id")%>"/>
             <input type="hidden" name="filename" value="<%=(String) request.getAttribute("filename")%>"/>
-            <input type="submit" value="CHECK"/>
+            <input type="submit" value="CHECK" />
         </form>
     </body>
 </html>
