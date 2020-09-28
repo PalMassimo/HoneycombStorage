@@ -66,7 +66,7 @@ public class MailSender implements Runnable {
         String link = host + id + "/" + filename;
         String subject = "Uploader " + uploaderUsername + " sent new file to you!";
         String text = "Dear " + consumerNameSurname + ", the uploader " + uploaderUsername
-                + " has sent the file " + filename + " to you! Click on the link "
+                + " has sent the file " + filename + " to you!\n Click on the link "
                 + link + " to download it!";
 
         try {
