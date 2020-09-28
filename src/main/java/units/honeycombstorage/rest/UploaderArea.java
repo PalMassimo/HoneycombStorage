@@ -265,8 +265,8 @@ public class UploaderArea {
     @Produces(MediaType.APPLICATION_JSON)
     public String getFileInfo() {
 
-        //Uploader uploader = em.find(Uploader.class, (String) request.getSession().getAttribute("username"));
-        Uploader uploader = em.find(Uploader.class, "Sherry");
+        Uploader uploader = em.find(Uploader.class, (String) request.getSession().getAttribute("username"));
+        //Uploader uploader = em.find(Uploader.class, "Sherry");
         SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy HH:mm:ss", Locale.ENGLISH);
         //SIAMO IN MODALITA' SVILUPPO
         TypedQuery<UploadedFile> quf = em.createQuery("SELECT uf FROM UploadedFile uf INNER JOIN uf.uploader ufu "
