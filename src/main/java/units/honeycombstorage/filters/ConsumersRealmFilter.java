@@ -44,7 +44,7 @@ public class ConsumersRealmFilter implements Filter {
         } else {
             Pattern pattern = null;
             //if (requestURI.length() > 23 && (requestURI.substring(0, 23)).equals("/api/consumerarea/file/")) {
-            if (pattern.matches("api/consumerarea/file/[0-9]+/\\w+\\.\\w+", request.getRequestURI())) {
+            if (pattern.matches("/api/consumerarea/file/[0-9]+/\\w+\\.\\w+", request.getRequestURI())) {
 
                 String[] parameters = request.getRequestURI().split("/");
                 request.setAttribute("id", parameters[4]);
