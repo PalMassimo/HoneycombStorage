@@ -1,5 +1,6 @@
 C:\Users\massi\Documents\Apache\HoneycombStorage\src\main\java\units\honeycombstorage\rest\ConsumerArea.java
 C:\Users\massi\Documents\Apache\HoneycombStorage\src\main\java\units\honeycombstorage\servlets\Login.java
+C:\Users\massi\Documents\Apache\HoneycombStorage\src\main\java\units\honeycombstorage\servlets\NewServlet.java
 C:\Users\massi\Documents\Apache\HoneycombStorage\src\main\java\units\honeycombstorage\servlets\Logout.java
 C:\Users\massi\Documents\Apache\HoneycombStorage\src\main\java\units\honeycombstorage\entites\DownloadFileId.java
 C:\Users\massi\Documents\Apache\HoneycombStorage\src\main\java\units\honeycombstorage\entites\UploadedFile.java
@@ -12,6 +13,7 @@ C:\Users\massi\Documents\Apache\HoneycombStorage\src\main\java\units\honeycombst
 C:\Users\massi\Documents\Apache\HoneycombStorage\src\main\java\units\honeycombstorage\filters\ConsumersRealmFilter.java
 C:\Users\massi\Documents\Apache\HoneycombStorage\src\main\java\units\honeycombstorage\filters\UploadersRealmFilter.java
 C:\Users\massi\Documents\Apache\HoneycombStorage\src\main\java\units\honeycombstorage\filters\AdministratorsRealmFilter.java
+C:\Users\massi\Documents\Apache\HoneycombStorage\src\main\java\units\honeycombstorage\servlets\QuickLogin.java
 C:\Users\massi\Documents\Apache\HoneycombStorage\src\main\java\units\honeycombstorage\classes\MailUtility.java
 C:\Users\massi\Documents\Apache\HoneycombStorage\src\main\java\units\honeycombstorage\entites\Administrator.java
 C:\Users\massi\Documents\Apache\HoneycombStorage\src\main\java\units\honeycombstorage\classes\MailSender.java
