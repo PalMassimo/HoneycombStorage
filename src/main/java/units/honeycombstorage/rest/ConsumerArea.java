@@ -161,7 +161,7 @@ public class ConsumerArea {
     public void putConsumer(Consumer consumer) {
 
         em.getTransaction().begin();
-        em.merge(consumer);
+        em.persist(consumer);
         em.getTransaction().commit();
 
         em.close();
