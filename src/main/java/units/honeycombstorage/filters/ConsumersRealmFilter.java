@@ -2,6 +2,7 @@ package units.honeycombstorage.filters;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.regex.Pattern;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -41,10 +42,11 @@ public class ConsumersRealmFilter implements Filter {
         } else if (role != null) {
             response.sendError(401, "Only consumers can came here. You have the role of " + role);
         } else {
-            String requestURI = request.getRequestURI();
-            if (requestURI.length() > 23 && (requestURI.substring(0, 23)).equals("/api/consumerarea/file/")) {
-                String[] parameters = requestURI.split("/");
-                //check with regular expressions
+            Pattern pattern = null;
+            //if (requestURI.length() > 23 && (requestURI.substring(0, 23)).equals("/api/consumerarea/file/")) {
+            if (pattern.matches("api/consumerarea/file/[0-9]+/\\w+\\.\\w+", request.getRequestURI())) {
+
+                String[] parameters = request.getRequestURI().split("/");
                 request.setAttribute("id", parameters[4]);
                 request.setAttribute("filename", parameters[5]);
                 request.getServletContext().getRequestDispatcher("/quicklogin.jsp").forward(request, response);
