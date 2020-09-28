@@ -158,10 +158,13 @@ public class ConsumerArea {
     @PUT
     @Path("/consumer")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void putConsumer(Consumer consumer) {
+    public void putConsumer(Consumer updates) {
 
         em.getTransaction().begin();
-        em.persist(consumer);
+        Consumer consumer = em.find(Consumer.class, updates.getUsername());
+        consumer.setEmail(updates.getEmail());
+        consumer.setNameSurname(updates.getNameSurname());
+        consumer.setPassword(updates.getPassword());
         em.getTransaction().commit();
 
         em.close();

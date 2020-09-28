@@ -39,8 +39,8 @@ public class AdministratorArea {
     @Context
     HttpServletResponse response;
 
-    EntityManagerFactory emf = Persistence.createEntityManagerFactory("productionPU");
-    //EntityManagerFactory emf = Persistence.createEntityManagerFactory("developmentPU");
+    //EntityManagerFactory emf = Persistence.createEntityManagerFactory("productionPU");
+    EntityManagerFactory emf = Persistence.createEntityManagerFactory("developmentPU");
     EntityManager em = emf.createEntityManager();
 
     @GET
@@ -122,16 +122,14 @@ public class AdministratorArea {
     @PUT
     @Path("/uploader")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void modifyUploader(Uploader uploader) {
-
-//        Uploader update = em.find(Uploader.class, uploader.getUsername());
-//        update.setEmail(uploader.getEmail());
-//        update.setNameSurname(uploader.getNameSurname());
-//        update.setLogo(uploader.getLogo());
-//        update.setPassword(uploader.getPassword());
+    public void modifyUploader(Uploader updates) {
 
         em.getTransaction().begin();
-        em.persist(uploader);
+        Uploader uploader = em.find(Uploader.class, updates.getUsername());
+        uploader.setEmail(uploader.getEmail());
+        uploader.setNameSurname(uploader.getNameSurname());
+        uploader.setLogo(uploader.getLogo());
+        uploader.setPassword(uploader.getPassword());
         em.getTransaction().commit();
         em.close();
         emf.close();
@@ -212,11 +210,13 @@ public class AdministratorArea {
     @PUT
     @Path("/administrator")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void putAdministrator(Administrator administrator) {
+    public void putAdministrator(Administrator updates) {
 
         em.getTransaction().begin();
-        administrator.setEmail(administrator.getUsername());
-        em.merge(administrator);
+        Administrator administrator = new Administrator();
+        administrator.setEmail(updates.getUsername());
+        administrator.setNameSurname(updates.getNameSurname());
+        administrator.setPassword(updates.getPassword());
         em.getTransaction().commit();
         em.close();
         emf.close();

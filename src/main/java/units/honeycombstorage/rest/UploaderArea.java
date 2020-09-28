@@ -69,8 +69,8 @@ public class UploaderArea {
         JSONObject info = new JSONObject();
         info.put("total_consumers", qtotalConsumers.getSingleResult());
         info.put("total_files", qtotalUploadedFile.getSingleResult());
-        info.put("role", "uploader"); //sistema
-        info.put("username", uploader.getUsername()); //sistema
+        info.put("role", "uploader");
+        info.put("username", uploader.getUsername());
 
         em.close();
         emf.close();
@@ -185,14 +185,13 @@ public class UploaderArea {
     @Path("/consumer")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public void changeInfo(Consumer consumer) {
+    public void changeInfo(Consumer updates) {
 
         em.getTransaction().begin();
-        //Consumer consumer = em.find(Consumer.class, update.getUsername());
-        //consumer.setEmail(update.getEmail());
-        //consumer.setNameSurname(update.getNameSurname());
-        //consumer.setPassword(update.getPassword());
-        em.merge(consumer);
+        Consumer consumer = em.find(Consumer.class, updates.getUsername());
+        consumer.setEmail(updates.getEmail());
+        consumer.setNameSurname(updates.getNameSurname());
+        consumer.setPassword(updates.getPassword());
         em.getTransaction().commit();
         em.close();
         emf.close();
