@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author massi
  */
 @WebFilter(filterName = "ConsumersRealmFilter",
-        urlPatterns = {"/consumersrealm/*", "/consumerarea/*"})
+        urlPatterns = {"/consumersrealm/*", "/api/consumerarea/*"})
 public class ConsumersRealmFilter implements Filter {
 
     public ConsumersRealmFilter() {

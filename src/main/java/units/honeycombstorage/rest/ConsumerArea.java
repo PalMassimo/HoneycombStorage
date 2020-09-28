@@ -38,8 +38,8 @@ public class ConsumerArea {
     @Context
     HttpServletResponse response;
 
-    EntityManagerFactory emf = Persistence.createEntityManagerFactory("productionPU");
-    //EntityManagerFactory emf = Persistence.createEntityManagerFactory("developmentPU");
+    //EntityManagerFactory emf = Persistence.createEntityManagerFactory("productionPU");
+    EntityManagerFactory emf = Persistence.createEntityManagerFactory("developmentPU");
     EntityManager em = emf.createEntityManager();
 
     @GET
@@ -179,8 +179,8 @@ public class ConsumerArea {
         UploadedFile uploadedFile = em.find(UploadedFile.class, id);
 
         TypedQuery<DownloadFile> dfQuery = em.createQuery("SELECT df FROM DownloadFile df "
-                + "WHERE df.uploadedFile=:id AND df.consumer=:consumer", DownloadFile.class);
-        dfQuery.setParameter("id", uploadedFile);
+                + "WHERE df.uploadedFile=:uploadedFile AND df.consumer=:consumer", DownloadFile.class);
+        dfQuery.setParameter("uploadedFile", uploadedFile);
         dfQuery.setParameter("consumer", em.find(Consumer.class, (String) request.getSession().getAttribute("username")));
         //dfQuery.setParameter("consumer", em.find(Consumer.class, "RSSMRA80B27F205P"));
         DownloadFile df = dfQuery.getSingleResult();
