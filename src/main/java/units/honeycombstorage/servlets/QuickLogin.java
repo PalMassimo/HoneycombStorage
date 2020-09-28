@@ -16,7 +16,7 @@ import units.honeycombstorage.entites.Consumer;
  *
  * @author massi
  */
-@WebServlet(name = "QuickLogin", urlPatterns = {"/QuickLogin"})
+@WebServlet(name = "QuickLogin", urlPatterns = {"/quicklogin"})
 public class QuickLogin extends HttpServlet {
     
     @Override
