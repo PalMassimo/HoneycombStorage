@@ -345,7 +345,7 @@ public class UploaderArea {
             MailSender mailsender = new MailSender();
             mailsender.setDestinatario(consumersJSONArray.getJSONObject(i).getString("email"));
             mailsender.setUploaderUsername(uploader.getUsername());
-            mailsender.setConsumerUsername(consumersJSONArray.getJSONObject(i).getString("username"));
+            mailsender.setConsumerNameSurname(consumersJSONArray.getJSONObject(i).getString("nameSurname"));
             mailsender.setId(uploadedFile.getId());
             mailsender.setFilename(uploadedFile.getName());
 

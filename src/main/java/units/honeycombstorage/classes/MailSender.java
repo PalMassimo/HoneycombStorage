@@ -15,7 +15,7 @@ public class MailSender implements Runnable {
     private long id;
     private String filename;
     private String uploaderUsername;
-    private String consumerUsername;
+    private String consumerNameSurname;
 
     public String getUploaderUsername() {
         return uploaderUsername;
@@ -25,12 +25,12 @@ public class MailSender implements Runnable {
         this.uploaderUsername = uploaderUsername;
     }
 
-    public String getConsumerUsername() {
-        return consumerUsername;
+    public String getConsumerNameSurname() {
+        return consumerNameSurname;
     }
 
-    public void setConsumerUsername(String consumerUsername) {
-        this.consumerUsername = consumerUsername;
+    public void setConsumerNameSurname(String consumerUsername) {
+        this.consumerNameSurname = consumerUsername;
     }
 
     public long getId() {
@@ -65,7 +65,7 @@ public class MailSender implements Runnable {
     public void run() {
         String link = host + id + "/" + filename;
         String subject = "Uploader " + uploaderUsername + " sent new file to you!";
-        String text = "Dear " + consumerUsername + ", the uploader " + uploaderUsername
+        String text = "Dear " + consumerNameSurname + ", the uploader " + uploaderUsername
                 + " has sent the file " + filename + " to you! Click on the link "
                 + link + " to download it!";
 
