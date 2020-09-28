@@ -40,7 +40,7 @@ public class QuickLogin extends HttpServlet {
             if ((em.find(Consumer.class, username).getPassword()).equals(password)) {
                 request.getSession().setAttribute("role", "consumer");
                 request.getSession().setAttribute("username", username);
-                response.sendRedirect("consumerarea/file/" + request.getParameter("id") + "/" + request.getParameter("filename"));
+                response.sendRedirect("api/consumerarea/file/" + request.getParameter("id") + "/" + request.getParameter("filename"));
             } else {
                 response.sendError(422, "the password is wrong");
             }
