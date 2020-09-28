@@ -179,10 +179,10 @@ public class ConsumerArea {
         UploadedFile uploadedFile = em.find(UploadedFile.class, id);
 
         TypedQuery<DownloadFile> dfQuery = em.createQuery("SELECT df FROM DownloadFile df "
-                + "WHERE df.uploadedFile=:id AND df.consumer=:consumer_username", DownloadFile.class);
+                + "WHERE df.uploadedFile=:id AND df.consumer=:consumer", DownloadFile.class);
         dfQuery.setParameter("id", uploadedFile);
-        dfQuery.setParameter("consumer_username", (String) request.getSession().getAttribute("username"));
-        //dfQuery.setParameter("consumer_username", "RSSMRA80B27F205P");
+        dfQuery.setParameter("consumer", em.find(Consumer.class, (String) request.getSession().getAttribute("username")));
+        //dfQuery.setParameter("consumer", em.find(Consumer.class, "RSSMRA80B27F205P"));
         DownloadFile df = dfQuery.getSingleResult();
 
         df.setDownloaded(new Date());
