@@ -22,7 +22,7 @@ public class QuickLogin extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.sendError(405);
+        response.sendError(405, "Method Not Allowed");
     }
     
     @Override

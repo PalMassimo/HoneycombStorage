@@ -87,7 +87,7 @@
 
     </head>
     <body>
-        <form action="quicklogin" method="GET">
+        <form action="quicklogin" method="POST">
             <h1>LITTLE CHECK</h1>
             <p>Your session is expired: insert your credentials to download the file!</p>
             <label for="usernameField"> Username:

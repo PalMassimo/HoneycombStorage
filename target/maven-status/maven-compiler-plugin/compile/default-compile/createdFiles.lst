@@ -5,7 +5,6 @@ units\honeycombstorage\classes\MailUtility.class
 units\honeycombstorage\filters\AdministratorsRealmFilter.class
 units\honeycombstorage\entites\Administrator.class
 units\honeycombstorage\filters\UploadersRealmFilter.class
-units\honeycombstorage\servlets\NewServlet.class
 units\honeycombstorage\entites\DownloadFile.class
 units\honeycombstorage\filters\ConsumersRealmFilter.class
 units\honeycombstorage\servlets\Login.class
