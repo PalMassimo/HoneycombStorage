@@ -51,18 +51,15 @@ public class AdministratorArea {
         //it will contain the number of administrator, uploaders, consumers and uploaded files
         JSONObject generalinfo = new JSONObject();
 
-        TypedQuery<Long> administratorNumberQuery = em.createQuery("SELECT COUNT(a.username) "
-                + "FROM Administrator a", Long.class);
-        TypedQuery<Long> uploaderNumberQuery = em.createQuery("SELECT COUNT(u.username) "
-                + "FROM Uploader u", Long.class);
-        TypedQuery<Long> consumerNumberQuery = em.createQuery("SELECT COUNT(c.username) "
-                + "FROM Consumer c", Long.class);
-        TypedQuery<Long> uploadedFilesNumberQuery = em.createNamedQuery("Administrator.total", Long.class);
+        TypedQuery<Long> administratorTotalQuery = em.createNamedQuery("Administrator.total", Long.class);
+        TypedQuery<Long> uploaderTotalrQuery = em.createNamedQuery("Uploader.total", Long.class);
+        TypedQuery<Long> consumerTotalQuery = em.createNamedQuery("Consumer.total", Long.class);
+        TypedQuery<Long> uploadedFilesTotalQuery = em.createNamedQuery("UploadedFile.total", Long.class);
 
-        generalinfo.put("totalAdministrators", administratorNumberQuery.getSingleResult());
-        generalinfo.put("totalUploaders", uploaderNumberQuery.getSingleResult());
-        generalinfo.put("totalConsumers", consumerNumberQuery.getSingleResult());
-        generalinfo.put("totalUploadedFiles", uploadedFilesNumberQuery.getSingleResult());
+        generalinfo.put("totalAdministrators", administratorTotalQuery.getSingleResult());
+        generalinfo.put("totalUploaders", uploaderTotalrQuery.getSingleResult());
+        generalinfo.put("totalConsumers", consumerTotalQuery.getSingleResult());
+        generalinfo.put("totalUploadedFiles", uploadedFilesTotalQuery.getSingleResult());
 
         em.close();
         emf.close();

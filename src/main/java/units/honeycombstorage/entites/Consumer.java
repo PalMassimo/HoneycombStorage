@@ -9,6 +9,7 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -19,6 +20,7 @@ import javax.persistence.Table;
 //consumer entity
 @Entity(name = "Consumer")
 @Table(name = "consumer")
+@NamedQuery(name="Consumer.total", query="SELECT COUNT(username), FROM Consumer")
 public class Consumer extends Utente implements Serializable {
 
     @ManyToMany(fetch = FetchType.LAZY)

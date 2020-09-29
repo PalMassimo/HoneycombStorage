@@ -12,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -24,6 +25,7 @@ import javax.validation.constraints.NotNull;
  */
 @Entity(name = "UploadedFile")
 @Table(name = "uploadedFile")
+@NamedQuery(name = "UploadedFile.total", query = "SELECT COUNT(id) FROM UploadedFile")
 public class UploadedFile implements Serializable {
 
     @Id
