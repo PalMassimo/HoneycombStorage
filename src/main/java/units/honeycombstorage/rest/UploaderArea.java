@@ -146,8 +146,8 @@ public class UploaderArea {
     @Produces(MediaType.APPLICATION_JSON)
     public List<Consumer> getConsumers() {
 
-        //Uploader uploader = em.find(Uploader.class, (String) request.getSession().getAttribute("username"));
-        Uploader uploader = em.find(Uploader.class, "Sherry");
+        Uploader uploader = em.find(Uploader.class, (String) request.getSession().getAttribute("username"));
+        //Uploader uploader = em.find(Uploader.class, "Sherry");
 
         //utilizzate da due vuejs
         TypedQuery<Consumer> qconsumers = em.createQuery("SELECT c FROM Consumer c INNER JOIN c.uploaders cu "
