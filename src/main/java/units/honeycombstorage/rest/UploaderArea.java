@@ -320,6 +320,7 @@ public class UploaderArea {
 
         JSONArray consumersJSONArray = json.getJSONArray("consumers");
         for (int i = 0; i < consumersJSONArray.length(); i++) {
+            em.getTransaction().begin();
             DownloadFile downloadFile = new DownloadFile();
             downloadFile.setUploadedFile(uploadedFile);
             if (em.find(Consumer.class, consumersJSONArray.getJSONObject(i).getString("username")) != null) {
@@ -333,12 +334,8 @@ public class UploaderArea {
                 consumer.setPassword("password");
                 consumer.addUploader(uploader);
                 downloadFile.setConsumer(consumer);
-                em.getTransaction().begin();
                 em.persist(consumer);
-                em.getTransaction().commit();
             }
-
-            em.getTransaction().begin();
             em.persist(downloadFile);
             em.getTransaction().commit();
 
