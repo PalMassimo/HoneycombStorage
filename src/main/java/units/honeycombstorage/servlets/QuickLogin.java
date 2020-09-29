@@ -28,8 +28,8 @@ public class QuickLogin extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        EntityManagerFactory emf=Persistence.createEntityManagerFactory("developmentPU");
-        //EntityManagerFactory emf = Persistence.createEntityManagerFactory("productionPU");
+        //EntityManagerFactory emf=Persistence.createEntityManagerFactory("developmentPU");
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("productionPU");
         EntityManager em = emf.createEntityManager();
         
         //get username and password from form
