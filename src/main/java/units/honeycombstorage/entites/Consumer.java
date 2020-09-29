@@ -26,8 +26,8 @@ public class Consumer extends Utente implements Serializable {
             name = "Affiliation",
             joinColumns = @JoinColumn(name = "consumer_username"),
             inverseJoinColumns = @JoinColumn(name = "uploader_username"))
-    //Set<Uploader> uploaders = new HashSet<Uploader>(0);
-    Set<Uploader> uploaders;
+    Set<Uploader> uploaders = new HashSet<Uploader>();
+    //Set<Uploader> uploaders;
     
     @OneToMany(mappedBy = "consumer", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private Set<DownloadFile> downloadFiles;

@@ -171,7 +171,7 @@ public class UploaderArea {
 
         em.getTransaction().begin();
         Uploader uploader = em.find(Uploader.class, (String) request.getSession().getAttribute("username"));
-        //Uploader uploader = em.find(Uploader.class, "Sherry");
+        //Uploader uploader = em.find(Uploader.class, "Heij");
         consumer.addUploader(uploader);
         if (em.find(Consumer.class, consumer.getUsername()) == null) {
             em.persist(consumer);
