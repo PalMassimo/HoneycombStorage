@@ -7,6 +7,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToMany;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -18,7 +19,10 @@ import javax.persistence.Table;
 // uploader entity
 @Entity(name = "Uploader")
 @Table(name = "uploader")
-@NamedQuery(name = "Uploader.total", query = "SELECT COUNT(username) FROM Uploader")
+@NamedQueries({
+    @NamedQuery(name = "Uploader.all", query = "SELECT u FROM Uploader u"),
+    @NamedQuery(name = "Uploader.total", query = "SELECT COUNT(username) FROM Uploader"),
+})
 public class Uploader extends Utente implements Serializable {
 
     @Column(name = "logo", nullable = true)

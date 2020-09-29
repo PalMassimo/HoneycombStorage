@@ -72,7 +72,7 @@ public class AdministratorArea {
     public String getUploaders() {
 
         JSONArray uploadersJSONArray = new JSONArray();
-        TypedQuery<Uploader> uploadersQuery = em.createQuery("SELECT u FROM Uploader u", Uploader.class);
+        TypedQuery<Uploader> uploadersQuery = em.createNamedQuery("Uploader.all", Uploader.class);
         for (Uploader uploader : uploadersQuery.getResultList()) {
             JSONObject uploaderJSON = new JSONObject();
             uploaderJSON.put("username", uploader.getUsername());
@@ -149,8 +149,7 @@ public class AdministratorArea {
     public String getAdministrators() {
 
         JSONArray administratorsJSONArray = new JSONArray();
-        TypedQuery<Administrator> administratorsQuery = em.createQuery("SELECT a "
-                + "FROM Administrator a", Administrator.class);
+        TypedQuery<Administrator> administratorsQuery = em.createNamedQuery("Administrator.all", Administrator.class);
         for (Administrator administrator : administratorsQuery.getResultList()) {
             JSONObject administratorJSON = new JSONObject();
             administratorJSON.put("username", administrator.getUsername());

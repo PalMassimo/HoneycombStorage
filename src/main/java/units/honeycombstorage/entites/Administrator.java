@@ -1,6 +1,7 @@
 package units.honeycombstorage.entites;
 
 import javax.persistence.Entity;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
@@ -11,7 +12,11 @@ import javax.persistence.Table;
 // Administrator entity
 @Entity
 @Table(name = "administrator")
-@NamedQuery(name = "Administrator.total", query = "SELECT COUNT(username) FROM Administrator")
+@NamedQueries({
+    @NamedQuery(name = "Administrator.total", query = "SELECT COUNT(username) FROM Administrator"),
+    @NamedQuery(name = "Administrator.all", query = "SELECT a FROM Administrator")
+})
+
 public class Administrator extends Utente {
 
     public Administrator() {
