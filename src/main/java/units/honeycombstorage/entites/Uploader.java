@@ -14,6 +14,9 @@ import javax.persistence.Table;
  *
  * @author massi
  */
+
+// uploader entity
+
 @Entity(name = "Uploader")
 @Table(name = "uploader")
 public class Uploader extends Utente implements Serializable {

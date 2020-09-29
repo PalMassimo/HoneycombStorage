@@ -15,6 +15,11 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author massi
  */
+
+// all administrator resources are or in path administratorsrealm/* or in /api/administratorarea/*
+// this filter check if any request can get this resource, verifying if role in session are equals to 'administrator'
+
+
 @WebFilter(filterName = "AdministatorsRealmFilter",
         urlPatterns = {"/administratorsrealm/*", "/api/administratorarea/*"})
 public class AdministratorsRealmFilter implements Filter {
@@ -23,7 +28,7 @@ public class AdministratorsRealmFilter implements Filter {
     }
 
     @Override
-    public void init(FilterConfig filterConfig){
+    public void init(FilterConfig filterConfig) {
 
     }
 
@@ -35,9 +40,9 @@ public class AdministratorsRealmFilter implements Filter {
         String role = (String) request.getSession().getAttribute("role");
         if (role != null && role.equals("administrator")) {
             chain.doFilter(request, response);
-        } else if(role!=null){
-            response.sendError(401, "Only administrators can come here. You have the role of "+role);
-        } else{
+        } else if (role != null) {
+            response.sendError(401, "Only administrators can come here. You have the role of " + role);
+        } else {
             response.sendError(401, "You are not a user");
         }
 

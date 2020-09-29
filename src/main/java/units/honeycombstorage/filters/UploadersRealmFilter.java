@@ -15,6 +15,12 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author massi
  */
+
+/*
+    all uploaders resources are in paths /uploadersrealm/* or in /api/uploaderarea/*
+    the filter check if the request has the right to get there, check the session role attribute
+*/
+
 @WebFilter(filterName = "UploadersRealmFilter",
         urlPatterns = {"/uploadersrealm/*", "/api/uploaderarea/*"})
 public class UploadersRealmFilter implements Filter {

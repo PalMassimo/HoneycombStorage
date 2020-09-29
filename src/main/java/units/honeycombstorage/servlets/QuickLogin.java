@@ -1,7 +1,6 @@
 package units.honeycombstorage.servlets;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -29,13 +28,15 @@ public class QuickLogin extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        //EntityManagerFactory emf=Persistence.createEntityManagerFactory("deploymentPU");
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("productionPU");
+        EntityManagerFactory emf=Persistence.createEntityManagerFactory("developmentPU");
+        //EntityManagerFactory emf = Persistence.createEntityManagerFactory("productionPU");
         EntityManager em = emf.createEntityManager();
         
+        //get username and password from form
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         
+        //check if user exist and if the credentials are right
         if (em.find(Consumer.class, username) != null) {
             if ((em.find(Consumer.class, username).getPassword()).equals(password)) {
                 request.getSession().setAttribute("role", "consumer");
@@ -47,6 +48,8 @@ public class QuickLogin extends HttpServlet {
         } else {
             response.sendError(401, "consumer doesn't exist");
         }
+        em.close();
+        emf.close();
         
     }
     

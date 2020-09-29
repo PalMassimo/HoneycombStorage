@@ -41,7 +41,7 @@ public class Login extends HttpServlet {
         EntityManager em = emf.createEntityManager();
 
         //search in database based on entity type
-        switch (request.getParameter("role")) {
+        switch (role) {
 
             case "consumer":
                 if (em.find(Consumer.class, username) != null) {
@@ -62,7 +62,6 @@ public class Login extends HttpServlet {
                     if (em.find(Uploader.class, username).getPassword().equals(password)) {
                         request.getSession().setAttribute("role", role);
                         request.getSession().setAttribute("username", username);
-                        String da = (String) request.getSession().getAttribute("username");
                         response.sendRedirect("uploadersrealm/index.html");
                     } else {
                         response.sendError(422, "the password is wrong");
@@ -89,6 +88,8 @@ public class Login extends HttpServlet {
             default:
                 break;
         }
+        em.close();
+        emf.close();
 
     }
 

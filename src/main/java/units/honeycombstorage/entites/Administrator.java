@@ -7,6 +7,9 @@ import javax.persistence.Table;
  *
  * @author massi
  */
+
+// Administrator entity
+
 @Entity
 @Table(name = "administrator")
 public class Administrator extends Utente {
