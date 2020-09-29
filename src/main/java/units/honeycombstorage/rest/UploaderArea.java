@@ -44,8 +44,8 @@ public class UploaderArea {
     @Context
     HttpServletResponse response;
 
-    EntityManagerFactory emf = Persistence.createEntityManagerFactory("productionPU");
-    //EntityManagerFactory emf = Persistence.createEntityManagerFactory("developmentPU");
+    //EntityManagerFactory emf = Persistence.createEntityManagerFactory("productionPU");
+    EntityManagerFactory emf = Persistence.createEntityManagerFactory("developmentPU");
     EntityManager em = emf.createEntityManager();
 
     @GET
@@ -171,11 +171,13 @@ public class UploaderArea {
 
         em.getTransaction().begin();
         Uploader uploader = em.find(Uploader.class, (String) request.getSession().getAttribute("username"));
-        //Uploader uploader = em.find(Uploader.class, "Heij");
-        consumer.addUploader(uploader);
+        //Uploader uploader = em.find(Uploader.class, "Sherry");
         if (em.find(Consumer.class, consumer.getUsername()) == null) {
+            consumer.addUploader(uploader);
             em.persist(consumer);
-        }
+        } else{
+            em.find(Consumer.class, consumer.getUsername()).addUploader(uploader);
+        }        
         em.getTransaction().commit();
         em.close();
         emf.close();
