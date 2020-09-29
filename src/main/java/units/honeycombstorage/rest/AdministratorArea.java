@@ -39,8 +39,8 @@ public class AdministratorArea {
     @Context
     HttpServletResponse response;
 
-    //EntityManagerFactory emf = Persistence.createEntityManagerFactory("productionPU");
-    EntityManagerFactory emf = Persistence.createEntityManagerFactory("developmentPU");
+    EntityManagerFactory emf = Persistence.createEntityManagerFactory("productionPU");
+    //EntityManagerFactory emf = Persistence.createEntityManagerFactory("developmentPU");
     EntityManager em = emf.createEntityManager();
 
     @GET
@@ -172,8 +172,8 @@ public class AdministratorArea {
     @Produces(MediaType.APPLICATION_JSON)
     public String getAdministrator() {
 
-        //Administrator administrator = em.find(Administrator.class, (String) request.getSession().getAttribute("username"));
-        Administrator administrator = em.find(Administrator.class, "massimo.palmisano@gmail.com");
+        Administrator administrator = em.find(Administrator.class, (String) request.getSession().getAttribute("username"));
+        //Administrator administrator = em.find(Administrator.class, "massimo.palmisano@gmail.com");
         JSONObject administratorJSON = new JSONObject();
         administratorJSON.put("username", administrator.getUsername());
         administratorJSON.put("nameSurname", administrator.getNameSurname());
