@@ -79,6 +79,10 @@
                 font-family: "Russo One";
                 font-size: 6vh;
             }
+            
+            form input[type="submit"]:hover{
+                cursor: pointer;
+            }
 
             @media screen and (orientation: portrait) {
 

@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Locale;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.NoResultException;
 import javax.persistence.Persistence;
 import javax.persistence.TypedQuery;
 import javax.servlet.http.HttpServletRequest;
@@ -203,7 +204,7 @@ public class ConsumerArea {
             em.close();
             emf.close();
             return uploadedFile.getContent();
-        } catch(NullPointerException e){
+        } catch(NoResultException e){
             response.sendError(404, "file not found. Maybe the uploader deleted it");
             return null;
         }
