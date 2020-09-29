@@ -126,10 +126,10 @@ public class AdministratorArea {
 
         em.getTransaction().begin();
         Uploader uploader = em.find(Uploader.class, updates.getUsername());
-        uploader.setEmail(uploader.getEmail());
-        uploader.setNameSurname(uploader.getNameSurname());
-        uploader.setLogo(uploader.getLogo());
-        uploader.setPassword(uploader.getPassword());
+        uploader.setEmail(updates.getEmail());
+        uploader.setNameSurname(updates.getNameSurname());
+        uploader.setLogo(updates.getLogo());
+        uploader.setPassword(updates.getPassword());
         em.getTransaction().commit();
         em.close();
         emf.close();

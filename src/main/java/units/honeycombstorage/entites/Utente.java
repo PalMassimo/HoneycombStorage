@@ -9,6 +9,9 @@ import javax.persistence.MappedSuperclass;
  *
  * @author massi
  */
+
+// superclass of entities consumer, uploader, administrator
+
 @MappedSuperclass
 public class Utente implements Serializable {
 
