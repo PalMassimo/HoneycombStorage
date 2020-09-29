@@ -1,5 +1,6 @@
 package units.honeycombstorage.rest;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Base64;
 import java.util.Date;
@@ -49,8 +50,7 @@ public class ConsumerArea {
 
         // all the information about the consumer homepage and subpages,
         // except the private area
-        
-        JSONArray news = new JSONArray();
+        JSONArray consumerNews = new JSONArray();
         SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy HH:mm:ss", Locale.ENGLISH);
 
         Consumer consumer = em.find(Consumer.class, (String) request.getSession().getAttribute("username"));
@@ -110,21 +110,20 @@ public class ConsumerArea {
             }
 
             jsonObjectUploader.put("files", jsonArrayUploadedFiles);
-            news.put(jsonObjectUploader);
+            consumerNews.put(jsonObjectUploader);
         }
 
         em.close();
         emf.close();
-        return news.toString();
+        return consumerNews.toString();
     }
 
     @GET
     @Path("/consumer")
     @Produces(MediaType.APPLICATION_JSON)
     public String getInfo() {
-        
+
         //get current consumer info for the private area page
-        
         Consumer consumer = em.find(Consumer.class, (String) request.getSession().getAttribute("username"));
         //Consumer consumer = em.find(Consumer.class, "RSSMRA80B27F205P");
         JSONObject consumerJSON = new JSONObject();
@@ -168,9 +167,11 @@ public class ConsumerArea {
 
         em.getTransaction().begin();
         Consumer consumer = em.find(Consumer.class, updates.getUsername());
-        consumer.setEmail(updates.getEmail());
-        consumer.setNameSurname(updates.getNameSurname());
-        consumer.setPassword(updates.getPassword());
+        if (consumer != null) {
+            consumer.setEmail(updates.getEmail());
+            consumer.setNameSurname(updates.getNameSurname());
+            consumer.setPassword(updates.getPassword());
+        }
         em.getTransaction().commit();
 
         em.close();
@@ -180,27 +181,33 @@ public class ConsumerArea {
     @GET
     @Path("/file/{id:}/{name:}")
     @Produces(MediaType.MULTIPART_FORM_DATA)
-    public byte[] getFile(@PathParam("id") long id, @PathParam("name") String name) {
+    public byte[] getFile(@PathParam("id") long id, @PathParam("name") String name) throws IOException {
 
-        UploadedFile uploadedFile = em.find(UploadedFile.class, id);
+        try {
+            UploadedFile uploadedFile = em.find(UploadedFile.class, id);
 
-        TypedQuery<DownloadFile> dfQuery = em.createQuery("SELECT df FROM DownloadFile df "
-                + "WHERE df.uploadedFile=:uploadedFile AND df.consumer=:consumer", DownloadFile.class);
-        dfQuery.setParameter("uploadedFile", uploadedFile);
-        dfQuery.setParameter("consumer", em.find(Consumer.class, (String) request.getSession().getAttribute("username")));
-        //dfQuery.setParameter("consumer", em.find(Consumer.class, "RSSMRA80B27F205P"));
-        DownloadFile df = dfQuery.getSingleResult();
+            TypedQuery<DownloadFile> dfQuery = em.createQuery("SELECT df FROM DownloadFile df "
+                    + "WHERE df.uploadedFile=:uploadedFile AND df.consumer=:consumer", DownloadFile.class);
+            dfQuery.setParameter("uploadedFile", uploadedFile);
+            dfQuery.setParameter("consumer", em.find(Consumer.class, (String) request.getSession().getAttribute("username")));
+            //dfQuery.setParameter("consumer", em.find(Consumer.class, "RSSMRA80B27F205P"));
+            DownloadFile df = dfQuery.getSingleResult();
 
-        df.setDownloaded(new Date());
-        df.setIpAddress(request.getRemoteAddr());
+            df.setDownloaded(new Date());
+            df.setIpAddress(request.getRemoteAddr());
 
-        em.getTransaction().begin();
-        em.persist(df);
-        em.getTransaction().commit();
+            em.getTransaction().begin();
+            em.persist(df);
+            em.getTransaction().commit();
 
-        em.close();
-        emf.close();
-        return uploadedFile.getContent();
+            em.close();
+            emf.close();
+            return uploadedFile.getContent();
+        } catch(NullPointerException e){
+            response.sendError(404, "file not found. Maybe the uploader deleted it");
+            return null;
+        }
+
     }
 
 }

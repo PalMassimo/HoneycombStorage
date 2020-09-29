@@ -105,9 +105,11 @@ public class UploaderArea {
         em.getTransaction().begin();
         Uploader uploader = em.find(Uploader.class, (String) request.getSession().getAttribute("username"));
         //Uploader uploader = em.find(Uploader.class, "Sherry");
-        uploader.setEmail(changes.getEmail());
-        uploader.setNameSurname(changes.getNameSurname());
-        uploader.setPassword(changes.getPassword());
+        if (uploader != null) {
+            uploader.setEmail(changes.getEmail());
+            uploader.setNameSurname(changes.getNameSurname());
+            uploader.setPassword(changes.getPassword());
+        }
         em.getTransaction().commit();
         em.close();
         emf.close();
@@ -119,7 +121,6 @@ public class UploaderArea {
 
         Uploader uploader = em.find(Uploader.class, (String) request.getSession().getAttribute("username"));
         //Uploader uploader = em.find(Uploader.class, "Sherry");
-
         byte[] logo = em.find(Uploader.class, uploader.getUsername()).getLogo();
         em.close();
         emf.close();
@@ -175,9 +176,9 @@ public class UploaderArea {
         if (em.find(Consumer.class, consumer.getUsername()) == null) {
             consumer.addUploader(uploader);
             em.persist(consumer);
-        } else{
+        } else {
             em.find(Consumer.class, consumer.getUsername()).addUploader(uploader);
-        }        
+        }
         em.getTransaction().commit();
         em.close();
         emf.close();
@@ -191,9 +192,11 @@ public class UploaderArea {
 
         em.getTransaction().begin();
         Consumer consumer = em.find(Consumer.class, updates.getUsername());
-        consumer.setEmail(updates.getEmail());
-        consumer.setNameSurname(updates.getNameSurname());
-        consumer.setPassword(updates.getPassword());
+        if (consumer != null) {
+            consumer.setEmail(updates.getEmail());
+            consumer.setNameSurname(updates.getNameSurname());
+            consumer.setPassword(updates.getPassword());
+        }
         em.getTransaction().commit();
         em.close();
         emf.close();
@@ -204,7 +207,9 @@ public class UploaderArea {
     public void deleteConsumer(@PathParam("username") String username) throws IOException {
 
         em.getTransaction().begin();
-        em.remove(em.find(Consumer.class, username));
+        if (em.find(Consumer.class, username) != null) {
+            em.remove(em.find(Consumer.class, username));
+        }
         em.getTransaction().commit();
         em.close();
         emf.close();
@@ -362,7 +367,9 @@ public class UploaderArea {
 
         em.getTransaction().begin();
         //UploadedFile uf = em.find(UploadedFile.class, id);
-        em.remove(em.find(UploadedFile.class, id));
+        if (em.find(UploadedFile.class, id) != null) {
+            em.remove(em.find(UploadedFile.class, id));
+        }
         em.getTransaction().commit();
         em.close();
         emf.close();
