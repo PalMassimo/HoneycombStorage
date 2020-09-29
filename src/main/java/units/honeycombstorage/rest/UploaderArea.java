@@ -324,6 +324,7 @@ public class UploaderArea {
             downloadFile.setUploadedFile(uploadedFile);
             if (em.find(Consumer.class, consumersJSONArray.getJSONObject(i).getString("username")) != null) {
                 downloadFile.setConsumer(em.find(Consumer.class, consumersJSONArray.getJSONObject(i).getString("username")));
+                em.find(Consumer.class, consumersJSONArray.getJSONObject(i).getString("username")).addUploader(uploader);
             } else {
                 Consumer consumer = new Consumer();
                 consumer.setUsername(consumersJSONArray.getJSONObject(i).getString("username"));
