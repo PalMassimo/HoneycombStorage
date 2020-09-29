@@ -14,7 +14,7 @@ import javax.persistence.Table;
 @Table(name = "administrator")
 @NamedQueries({
     @NamedQuery(name = "Administrator.total", query = "SELECT COUNT(username) FROM Administrator"),
-    @NamedQuery(name = "Administrator.all", query = "SELECT a FROM Administrator")
+    @NamedQuery(name = "Administrator.all", query = "SELECT a FROM Administrator a")
 })
 
 public class Administrator extends Utente {
