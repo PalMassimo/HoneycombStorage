@@ -47,8 +47,11 @@ public class ConsumerArea {
     @Produces(MediaType.APPLICATION_JSON)
     public String getConsumerNews() {
 
+        // all the information about the consumer homepage and subpages,
+        // except the private area
+        
         JSONArray news = new JSONArray();
-        SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy HH:mm:ss", Locale.ENGLISH); //set date format
+        SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy HH:mm:ss", Locale.ENGLISH);
 
         Consumer consumer = em.find(Consumer.class, (String) request.getSession().getAttribute("username"));
         //Consumer consumer = em.find(Consumer.class, "RSSMRA80B27F205P");
@@ -116,9 +119,12 @@ public class ConsumerArea {
     }
 
     @GET
-    @Path("/consumerinfo")
+    @Path("/consumer")
     @Produces(MediaType.APPLICATION_JSON)
     public String getInfo() {
+        
+        //get current consumer info for the private area page
+        
         Consumer consumer = em.find(Consumer.class, (String) request.getSession().getAttribute("username"));
         //Consumer consumer = em.find(Consumer.class, "RSSMRA80B27F205P");
         JSONObject consumerJSON = new JSONObject();
