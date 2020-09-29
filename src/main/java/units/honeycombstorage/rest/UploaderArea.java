@@ -361,7 +361,7 @@ public class UploaderArea {
     public void deleteFile(@PathParam("id") long id) {
 
         em.getTransaction().begin();
-        UploadedFile uf = em.find(UploadedFile.class, id);
+        //UploadedFile uf = em.find(UploadedFile.class, id);
         em.remove(em.find(UploadedFile.class, id));
         em.getTransaction().commit();
         em.close();

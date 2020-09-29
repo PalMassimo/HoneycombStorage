@@ -100,7 +100,7 @@ public class ConsumerArea {
                 downloadFileQuery.setParameter("currentconsumer", consumer);
                 downloadFileQuery.setParameter("currentuploadedfile", uf);
 
-                //un file potrebbe non essere stato ancora visto
+                //a file might be seen or not
                 if (downloadFileQuery.getSingleResult().getDownloaded() != null) {
                     jsonObjectUploadedFile.put("seen", formatter.format(downloadFileQuery.getSingleResult().getDownloaded()));
                 } else {

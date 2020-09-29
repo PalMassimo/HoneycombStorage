@@ -57,8 +57,7 @@ public class AdministratorArea {
                 + "FROM Uploader u", Long.class);
         TypedQuery<Long> consumerNumberQuery = em.createQuery("SELECT COUNT(c.username) "
                 + "FROM Consumer c", Long.class);
-        TypedQuery<Long> uploadedFilesNumberQuery = em.createQuery("SELECT COUNT(uf.id) "
-                + "FROM UploadedFile uf", Long.class);
+        TypedQuery<Long> uploadedFilesNumberQuery = em.createNamedQuery("Administrator.total", Long.class);
 
         generalinfo.put("totalAdministrators", administratorNumberQuery.getSingleResult());
         generalinfo.put("totalUploaders", uploaderNumberQuery.getSingleResult());
