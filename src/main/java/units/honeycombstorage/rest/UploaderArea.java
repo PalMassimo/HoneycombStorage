@@ -207,8 +207,15 @@ public class UploaderArea {
     public void deleteConsumer(@PathParam("username") String username) throws IOException {
 
         em.getTransaction().begin();
-        if (em.find(Consumer.class, username) != null) {
-            em.remove(em.find(Consumer.class, username));
+        Consumer consumer = em.find(Consumer.class, username);
+        Uploader uploader = em.find(Uploader.class, (String) request.getSession().getAttribute("username"));
+
+        if (consumer != null) {
+            if (consumer.getUploaders().size() == 1) {
+                em.remove(consumer);
+            } else {
+                consumer.getUploaders().remove(uploader);
+            }
         }
         em.getTransaction().commit();
         em.close();

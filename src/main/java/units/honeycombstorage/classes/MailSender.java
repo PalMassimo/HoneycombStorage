@@ -68,7 +68,7 @@ public class MailSender implements Runnable {
         String text = "Dear " + consumerNameSurname + ", the uploader " + uploaderUsername
                 + " has sent the file " + filename + " to you!\nClick on the link "
                 + link + " to download it!\nHere you can go to the homepage system"
-                + "https://honeycombstorage.herokuapp.com/";
+                + " https://honeycombstorage.herokuapp.com/";
 
         try {
             MailUtility.sendMail(destinatario, MITTENTE, subject, text);
