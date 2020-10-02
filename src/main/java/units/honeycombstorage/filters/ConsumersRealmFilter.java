@@ -44,7 +44,7 @@ public class ConsumersRealmFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
         String role = (String) request.getSession().getAttribute("role");
-        String username = (String) request.getSession().getAttribute("username");
+        //String username = (String) request.getSession().getAttribute("username");
         if (role != null && role.equals("consumer")) {
             chain.doFilter(request, response);
         } else if (role != null) {
@@ -57,7 +57,7 @@ public class ConsumersRealmFilter implements Filter {
                 String[] parameters = request.getRequestURI().split("/");
                 request.setAttribute("id", parameters[4]);
                 request.setAttribute("filename", parameters[5]);
-                request.getServletContext().getRequestDispatcher("/quicklogin.jsp").forward(request, response);
+                request.getRequestDispatcher("/quicklogin.jsp").forward(request, response);
             } else {
                 response.sendError(401, "Only consumers can came here.");
             }
