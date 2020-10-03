@@ -141,7 +141,7 @@
             <input type="text" name="username" placeholder=" enter username" />
             <input type="password" name="password" placeholder=" enter password" />
             <input type="hidden" name="id" value="${id}"/>
-            <input type="hidden" name="filename" value="<%=(String) request.getAttribute("filename")%>"/>
+            <input type="hidden" name="filename" value="${filename}"/>
             <input type="submit" value="CHECK" />
         </form>
     </body>
