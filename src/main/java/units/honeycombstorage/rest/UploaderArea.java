@@ -2,6 +2,7 @@ package units.honeycombstorage.rest;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
@@ -26,11 +27,12 @@ import javax.ws.rs.core.MediaType;
 import static org.apache.commons.io.IOUtils.toByteArray;
 import org.json.JSONObject;
 import org.json.JSONArray;
-import units.honeycombstorage.entites.Consumer;
-import units.honeycombstorage.entites.DownloadFile;
-import units.honeycombstorage.entites.UploadedFile;
-import units.honeycombstorage.entites.Uploader;
+import units.honeycombstorage.entities.storage.Consumer;
+import units.honeycombstorage.entities.storage.DownloadFile;
+import units.honeycombstorage.entities.storage.UploadedFile;
+import units.honeycombstorage.entities.storage.Uploader;
 import units.honeycombstorage.classes.MailSender;
+import units.honeycombstorage.entities.rest.RestUploadedFile;
 
 /**
  *
@@ -96,11 +98,11 @@ public class UploaderArea {
         return uploaderJSON.toString();
     }
 
-    @PUT
+    @POST
     @Path("/uploader")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public void modifyUploader(Uploader changes) throws IOException {
+    public void modifyUploader(Uploader changes) {
 
         em.getTransaction().begin();
         Uploader uploader = em.find(Uploader.class, (String) request.getSession().getAttribute("username"));
@@ -130,14 +132,14 @@ public class UploaderArea {
 
     @POST
     @Path("/logo")
-    public void postLogo() throws IOException, ServletException {
+    public void postLogo() throws ServletException, IOException {
 
         em.getTransaction().begin();
         Uploader uploader = em.find(Uploader.class, (String) request.getSession().getAttribute("username"));
         //Uploader uploader = em.find(Uploader.class, "Sherry");
         uploader.setLogo(toByteArray(request.getPart("logo").getInputStream()));
         em.getTransaction().commit();
-        response.sendRedirect(request.getHeader("referer") + "#/PrivateArea");
+        response.sendRedirect(request.getHeader("referer")+"uploadersrealm/#/privatearea");
         em.close();
         emf.close();
     }
@@ -156,6 +158,7 @@ public class UploaderArea {
         qconsumers.setParameter("currentuploader", uploader.getUsername());
         List<Consumer> consumers = qconsumers.getResultList();
 
+        //DIO CANE
         for (Consumer consumer : consumers) {
             consumer.setUploaders(null);
             consumer.setDownloadFiles(null);
@@ -277,7 +280,7 @@ public class UploaderArea {
     @GET
     @Path("/files")
     @Produces(MediaType.APPLICATION_JSON)
-    public String getFileInfo() {
+    public List<RestUploadedFile> getFileInfo() {
 
         Uploader uploader = em.find(Uploader.class, (String) request.getSession().getAttribute("username"));
         //Uploader uploader = em.find(Uploader.class, "Sherry");
@@ -286,24 +289,25 @@ public class UploaderArea {
                 + "WHERE ufu.username =:currentuploader", UploadedFile.class);
         quf.setParameter("currentuploader", uploader.getUsername());
 
-        JSONArray jarray = new JSONArray();
+        ArrayList<RestUploadedFile> rufs = new ArrayList<>();
+
         for (UploadedFile uf : quf.getResultList()) {
-            uf.setUploader(null);
-            JSONObject jobject = new JSONObject();
-            jobject.put("id", uf.getId());
-            jobject.put("name", uf.getName());
+
+            RestUploadedFile ruf = new RestUploadedFile();
+            ruf.setId(uf.getId());
+            ruf.setName(uf.getName());
+            ruf.setUploadDate(formatter.format(uf.getUploadDate()));
             if (uf.getContent() == null) {
-                jobject.put("size", 0);
+                ruf.setSize(0);
             } else {
-                jobject.put("size", uf.getContent().length);
+                ruf.setSize(uf.getContent().length);
             }
-            jobject.put("hashtags", uf.getHashtags());
-            jobject.put("uploadDate", formatter.format(uf.getUploadDate()));
-            jarray.put(jobject);
+
+            rufs.add(ruf);
         }
         em.close();
         emf.close();
-        return jarray.toString();
+        return rufs;
     }
 
     @POST
@@ -367,14 +371,22 @@ public class UploaderArea {
     }
 
     @DELETE
-    @Path("/file/{id:}")
-    public void deleteFile(@PathParam("id") long id) {
+    @Path("/file/{id:[0-9]+}")
+    public void deleteFile(@PathParam("id") long id) throws IOException {
 
-        //IMPLEMENTA: UN UPLOADER NON DEVE POTER ELIMINARE I FILES DI ALTRI!
+        
         em.getTransaction().begin();
-        //UploadedFile uf = em.find(UploadedFile.class, id);
-        if (em.find(UploadedFile.class, id) != null) {
-            em.remove(em.find(UploadedFile.class, id));
+        Uploader uploader = em.find(Uploader.class, (String)request.getSession().getAttribute("username"));
+        //Uploader uploader = em.find(Uploader.class, "Sherry");
+        
+        // catch the file the uploader wants to delete
+        UploadedFile uploadedFile = em.find(UploadedFile.class, id);
+
+        //an uploader can't delete file of another uploader
+        if (uploadedFile != null && (uploadedFile.getUploader().getUsername()).equals(uploader.getUsername())) {
+            em.remove(uploadedFile);
+        } else {
+            response.sendError(404, "file doesn't exist");
         }
         em.getTransaction().commit();
         em.close();

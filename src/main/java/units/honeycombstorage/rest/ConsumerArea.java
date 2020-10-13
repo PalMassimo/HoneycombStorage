@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
-import javax.ws.rs.PUT;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -23,10 +23,11 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import units.honeycombstorage.entites.Consumer;
-import units.honeycombstorage.entites.DownloadFile;
-import units.honeycombstorage.entites.UploadedFile;
-import units.honeycombstorage.entites.Uploader;
+import units.honeycombstorage.entities.rest.RestConsumer;
+import units.honeycombstorage.entities.storage.Consumer;
+import units.honeycombstorage.entities.storage.DownloadFile;
+import units.honeycombstorage.entities.storage.UploadedFile;
+import units.honeycombstorage.entities.storage.Uploader;
 
 /**
  *
@@ -65,7 +66,7 @@ public class ConsumerArea {
         List<Uploader> uploaders = uploadersQuery.getResultList();
 
         for (Uploader uploader : uploaders) {
-            //ogni json per ogni uploader
+            //a json for every uploader
             JSONObject jsonObjectUploader = new JSONObject();
             jsonObjectUploader.put("username", uploader.getUsername());
             if (uploader.getLogo() != null) {
@@ -95,7 +96,7 @@ public class ConsumerArea {
                     jsonObjectUploadedFile.put("hashtags", new JSONArray());
                 }
 
-                //sono necessarie altre informazioni come la data di visualizzazione se presente
+                //let's fetch seen date
                 TypedQuery<DownloadFile> downloadFileQuery = em.createQuery("SELECT df "
                         + "FROM DownloadFile df WHERE df.consumer=:currentconsumer AND df.uploadedFile=:currentuploadedfile", DownloadFile.class);
                 downloadFileQuery.setParameter("currentconsumer", consumer);
@@ -122,50 +123,51 @@ public class ConsumerArea {
     @GET
     @Path("/consumer")
     @Produces(MediaType.APPLICATION_JSON)
-    public String getInfo() {
+    public RestConsumer consumer() {
 
         //get current consumer info for the private area page
         Consumer consumer = em.find(Consumer.class, (String) request.getSession().getAttribute("username"));
         //Consumer consumer = em.find(Consumer.class, "RSSMRA80B27F205P");
-        JSONObject consumerJSON = new JSONObject();
-        consumerJSON.put("username", consumer.getUsername());
-        consumerJSON.put("nameSurname", consumer.getNameSurname());
-        consumerJSON.put("email", consumer.getEmail());
-        consumerJSON.put("password", consumer.getPassword());
+        RestConsumer restConsumer = new RestConsumer();
+        restConsumer.setUsername(consumer.getUsername());
+        restConsumer.setEmail(consumer.getEmail());
+        restConsumer.setNameSurname(consumer.getNameSurname());
+        restConsumer.setPassword(consumer.getPassword());
 
-        //numero degli uploaders cui è affiliato
+        //number of affiliate uploaders
         TypedQuery<Long> numUploadersQuery = em.createQuery("SELECT COUNT(cu) "
                 + "FROM Consumer AS c INNER JOIN c.uploaders AS cu "
                 + "WHERE c.username=:currentconsumer", Long.class);
         numUploadersQuery.setParameter("currentconsumer", consumer.getUsername());
-        consumerJSON.put("totUploaders", numUploadersQuery.getSingleResult());
+        restConsumer.setTotUploaders(numUploadersQuery.getSingleResult());
 
-        //numero dei files ricevuti non visualizzati
+        //number of files not seen yet
         TypedQuery<Long> numFilesUnseenQuery = em.createQuery("SELECT COUNT(dfu.id) "
                 + "FROM DownloadFile AS df INNER JOIN df.uploadedFile dfu INNER JOIN df.consumer dfc "
                 + "WHERE dfc.username=:currentconsumer AND df.downloaded=null", Long.class);
         numFilesUnseenQuery.setParameter("currentconsumer", consumer.getUsername());
-        consumerJSON.put("totUnseenFiles", numFilesUnseenQuery.getSingleResult());
+        restConsumer.setUnseenFiles(numFilesUnseenQuery.getSingleResult());
 
-        //numero dei files ricevuti visualizzati
+        //number of files already seen
         TypedQuery<Long> numFilesSeenQuery = em.createQuery("SELECT COUNT(dfu.id) "
                 + "FROM DownloadFile AS df INNER JOIN df.uploadedFile dfu INNER JOIN df.consumer dfc "
                 + "WHERE dfc.username=:currentconsumer AND df.downloaded<>null", Long.class);
         numFilesSeenQuery.setParameter("currentconsumer", consumer.getUsername());
-        consumerJSON.put("totSeenFiles", numFilesSeenQuery.getSingleResult());
+        restConsumer.setSeenFiles(numFilesSeenQuery.getSingleResult());
 
-        consumerJSON.put("totFiles", numFilesSeenQuery.getSingleResult() + numFilesUnseenQuery.getSingleResult());
+        restConsumer.setTotFiles(restConsumer.getSeenFiles() + restConsumer.getSeenFiles());
 
         em.close();
         emf.close();
-        return consumerJSON.toString();
+        return restConsumer;
     }
 
-    @PUT
+    @POST
     @Path("/consumer")
     @Consumes(MediaType.APPLICATION_JSON)
-    public void putConsumer(Consumer updates) {
+    public void postConsumer(Consumer updates) {
 
+        //change consumer info
         em.getTransaction().begin();
         Consumer consumer = em.find(Consumer.class, updates.getUsername());
         if (consumer != null) {
@@ -180,7 +182,7 @@ public class ConsumerArea {
     }
 
     @GET
-    @Path("/file/{id:}/{name:}")
+    @Path("/file/{id:[0-9]+}/{name:}")
     @Produces(MediaType.MULTIPART_FORM_DATA)
     public byte[] getFile(@PathParam("id") long id, @PathParam("name") String name) throws IOException {
 
@@ -203,8 +205,9 @@ public class ConsumerArea {
 
             em.close();
             emf.close();
+            
             return uploadedFile.getContent();
-        } catch(NoResultException e){
+        } catch (NoResultException e) {
             response.sendError(404, "file not found. Maybe the uploader deleted it");
             return null;
         }

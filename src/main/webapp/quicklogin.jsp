@@ -79,7 +79,7 @@
                 font-family: "Russo One";
                 font-size: 6vh;
             }
-            
+
             form input[type="submit"]:hover{
                 cursor: pointer;
             }
@@ -145,4 +145,13 @@
             <input type="submit" value="CHECK" />
         </form>
     </body>
+
+    <script>
+        let username=document.querySelector("input[name='username']");
+        username.addEventListener("keyup", () => {
+            username.value = username.value.toUpperCase();
+        });
+    </script>
+
+
 </html>

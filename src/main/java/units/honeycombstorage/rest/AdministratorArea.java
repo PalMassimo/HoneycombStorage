@@ -15,7 +15,6 @@ import javax.ws.rs.DELETE;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -23,9 +22,9 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import units.honeycombstorage.entites.Administrator;
-import units.honeycombstorage.entites.UploadedFile;
-import units.honeycombstorage.entites.Uploader;
+import units.honeycombstorage.entities.storage.Administrator;
+import units.honeycombstorage.entities.storage.UploadedFile;
+import units.honeycombstorage.entities.storage.Uploader;
 
 /**
  *
@@ -115,17 +114,19 @@ public class AdministratorArea {
         emf.close();
     }
 
-    @PUT
+    @POST
     @Path("/uploader")
     @Consumes(MediaType.APPLICATION_JSON)
     public void modifyUploader(Uploader updates) {
 
         em.getTransaction().begin();
         Uploader uploader = em.find(Uploader.class, updates.getUsername());
-        uploader.setEmail(updates.getEmail());
-        uploader.setNameSurname(updates.getNameSurname());
-        uploader.setLogo(updates.getLogo());
-        uploader.setPassword(updates.getPassword());
+        if (uploader != null) {
+            uploader.setEmail(updates.getEmail());
+            uploader.setNameSurname(updates.getNameSurname());
+            uploader.setLogo(updates.getLogo());
+            uploader.setPassword(updates.getPassword());
+        }
         em.getTransaction().commit();
         em.close();
         emf.close();
@@ -202,13 +203,13 @@ public class AdministratorArea {
         emf.close();
     }
 
-    @PUT
+    @POST
     @Path("/administrator")
     @Consumes(MediaType.APPLICATION_JSON)
     public void putAdministrator(Administrator updates) {
 
         em.getTransaction().begin();
-        Administrator administrator = new Administrator();
+        Administrator administrator = em.find(Administrator.class, updates.getUsername());
         administrator.setEmail(updates.getUsername());
         administrator.setNameSurname(updates.getNameSurname());
         administrator.setPassword(updates.getPassword());
@@ -229,7 +230,7 @@ public class AdministratorArea {
     }
 
     @GET
-    @Path("/particularinfo")
+    @Path("/uploadedfiles")
     @Produces(MediaType.APPLICATION_JSON)
     public String getParticularInfo() {
 

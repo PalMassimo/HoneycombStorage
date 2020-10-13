@@ -15,38 +15,37 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author massi
  */
-@WebFilter(filterName="CORSFilter", asyncSupported = true, urlPatterns = {"/api/*"})
-public class CORSFilter implements Filter{
+@WebFilter(filterName = "CORSFilter", asyncSupported = true, urlPatterns = {"/api/*"})
+public class CORSFilter implements Filter {
 
-  public CORSFilter() {
-  }
-
-  @Override
-  public void init(FilterConfig filterConfig) throws ServletException {
-    
-  }
-
-  @Override
-  public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain chain) throws IOException, ServletException {
-    HttpServletRequest request = (HttpServletRequest) servletRequest;
-    HttpServletResponse response = (HttpServletResponse)servletResponse;
-    
-    response.addHeader("Access-Control-Allow-Origin", "*");
-    response.addHeader("Access-Control-Allow-Methods", "GET, OPTIONS, HEAD, PUT, POST, DELETE");
-    response.addHeader("Access-Control-Max-Age", "3600");
-    response.addHeader("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With, Accept-Charset");
-
-    if(request.getMethod().equals("OPTIONS")){
-      response.setStatus(HttpServletResponse.SC_ACCEPTED);
-    }else{
-      chain.doFilter(request, response);
+    public CORSFilter() {
     }
-  }
 
-  @Override
-  public void destroy() {
-    
-  }
-  
-  
+    @Override
+    public void init(FilterConfig filterConfig) throws ServletException {
+
+    }
+
+    @Override
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain chain) throws IOException, ServletException {
+        HttpServletRequest request = (HttpServletRequest) servletRequest;
+        HttpServletResponse response = (HttpServletResponse) servletResponse;
+
+        response.addHeader("Access-Control-Allow-Origin", "*");
+        response.addHeader("Access-Control-Allow-Methods", "GET, OPTIONS, HEAD, PUT, POST, DELETE");
+        response.addHeader("Access-Control-Max-Age", "3600");
+        response.addHeader("Access-Control-Allow-Headers", "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With, Accept-Charset");
+
+        if (request.getMethod().equals("OPTIONS")) {
+            response.setStatus(HttpServletResponse.SC_ACCEPTED);
+        } else {
+            chain.doFilter(request, response);
+        }
+    }
+
+    @Override
+    public void destroy() {
+
+    }
+
 }
