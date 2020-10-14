@@ -3,6 +3,7 @@ package units.honeycombstorage.rest;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Base64;
+import java.util.Date;
 import java.util.Locale;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -243,19 +244,19 @@ public class AdministratorArea {
             uploaderJSONObject.put("username", uploader.getUsername());
 
             JSONArray uploadedFilesJSONArray = new JSONArray();
-            TypedQuery<UploadedFile> uploadedFilesQuery = em.createQuery("SELECT uf "
-                    + "FROM UploadedFile uf WHERE uf.uploader=:currentuploader", UploadedFile.class);
+            TypedQuery<Object[]> uploadedFilesQuery = em.createQuery("SELECT uf.id, uf.name, uf.uploadDate "
+                    + "FROM UploadedFile uf WHERE uf.uploader=:currentuploader", Object[].class);
             uploadedFilesQuery.setParameter("currentuploader", uploader);
 
-            for (UploadedFile uploadedFile : uploadedFilesQuery.getResultList()) {
+            for (Object[] uploadedFile : uploadedFilesQuery.getResultList()) {
 
                 TypedQuery<Long> totConsumers = em.createQuery("SELECT COUNT(df.consumer) "
-                        + "FROM DownloadFile df WHERE df.uploadedFile=:currentuploadedfile", Long.class);
-                totConsumers.setParameter("currentuploadedfile", uploadedFile);
+                        + "FROM DownloadFile df WHERE df.uploadedFile.id=:currentuploadedfile", Long.class);
+                totConsumers.setParameter("currentuploadedfile", (Long)uploadedFile[0]);
 
                 JSONObject uploadedFileJSONObject = new JSONObject();
-                uploadedFileJSONObject.put("name", uploadedFile.getName());
-                uploadedFileJSONObject.put("upload", formatter.format(uploadedFile.getUploadDate()));
+                uploadedFileJSONObject.put("name", (String)uploadedFile[1]);
+                uploadedFileJSONObject.put("upload", formatter.format((Date)uploadedFile[2]));
                 uploadedFileJSONObject.put("totConsumers", totConsumers.getSingleResult());
                 uploadedFilesJSONArray.put(uploadedFileJSONObject);
             }
