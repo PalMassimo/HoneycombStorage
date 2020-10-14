@@ -158,10 +158,10 @@ public class UploaderArea {
         qconsumers.setParameter("currentuploader", uploader.getUsername());
         List<Consumer> consumers = qconsumers.getResultList();
 
-//        for (Consumer consumer : consumers) {
-//            consumer.setUploaders(null);
-//            consumer.setDownloadFiles(null);
-//        }
+        for (Consumer consumer : consumers) {
+            consumer.setUploaders(null);
+            consumer.setDownloadFiles(null);
+        }
         em.close();
         emf.close();
         return consumers;
