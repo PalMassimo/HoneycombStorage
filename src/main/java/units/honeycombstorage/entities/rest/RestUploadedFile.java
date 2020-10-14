@@ -11,7 +11,7 @@ public class RestUploadedFile {
     private long id;
     private String name;
     private String uploadDate;
-    private long size;
+    private int size;
 
     public RestUploadedFile() {
     }
@@ -40,11 +40,11 @@ public class RestUploadedFile {
         this.uploadDate = uploadDate;
     }
 
-    public long getSize() {
+    public int getSize() {
         return size;
     }
 
-    public void setSize(long size) {
+    public void setSize(int size) {
         this.size = size;
     }
 

@@ -279,27 +279,28 @@ public class UploaderArea {
     @GET
     @Path("/files")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<RestUploadedFile> getFileInfo() {
+    public ArrayList<RestUploadedFile> getFileInfo() {
 
         Uploader uploader = em.find(Uploader.class, (String) request.getSession().getAttribute("username"));
         //Uploader uploader = em.find(Uploader.class, "Sherry");
         SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy HH:mm:ss", Locale.ENGLISH);
-        TypedQuery<UploadedFile> quf = em.createQuery("SELECT uf FROM UploadedFile uf INNER JOIN uf.uploader ufu "
-                + "WHERE ufu.username =:currentuploader", UploadedFile.class);
+        TypedQuery<Object[]> quf = em.createQuery("SELECT uf.id, uf.name, uf.uploadDate, length(uf.content)"
+                + "FROM UploadedFile uf INNER JOIN uf.uploader ufu "
+                + "WHERE ufu.username =:currentuploader", Object[].class);
         quf.setParameter("currentuploader", uploader.getUsername());
 
         ArrayList<RestUploadedFile> rufs = new ArrayList<>();
 
-        for (UploadedFile uf : quf.getResultList()) {
+        for (Object[] uf : quf.getResultList()) {
 
             RestUploadedFile ruf = new RestUploadedFile();
-            ruf.setId(uf.getId());
-            ruf.setName(uf.getName());
-            ruf.setUploadDate(formatter.format(uf.getUploadDate()));
-            if (uf.getContent() == null) {
+            ruf.setId((long)uf[0]);
+            ruf.setName((String)uf[1]);
+            ruf.setUploadDate(formatter.format((Date)uf[2]));
+            if (uf[3] == null) {
                 ruf.setSize(0);
             } else {
-                ruf.setSize(uf.getContent().length);
+                ruf.setSize((int)uf[3]);
             }
 
             rufs.add(ruf);
