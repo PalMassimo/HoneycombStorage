@@ -58,7 +58,7 @@ public class UploaderArea {
         Uploader uploader = em.find(Uploader.class, (String) request.getSession().getAttribute("username"));
         //Uploader uploader = em.find(Uploader.class, "Sherry");
 
-        //info: numero documenti caricati e numero consumers affiliati
+        //info: number of loaded files and affiliate consumers
         TypedQuery<Long> qtotalConsumers = em.createQuery("SELECT COUNT(c) FROM Uploader u INNER JOIN u.consumers c"
                 + " WHERE u.username= :currentuploader", Long.class);
         qtotalConsumers.setParameter("currentuploader", uploader.getUsername());
@@ -152,17 +152,16 @@ public class UploaderArea {
         Uploader uploader = em.find(Uploader.class, (String) request.getSession().getAttribute("username"));
         //Uploader uploader = em.find(Uploader.class, "Sherry");
 
-        //utilizzate da due vuejs
+        //used by two vuejs
         TypedQuery<Consumer> qconsumers = em.createQuery("SELECT c FROM Consumer c INNER JOIN c.uploaders cu "
                 + "WHERE cu.username= :currentuploader ", Consumer.class);
         qconsumers.setParameter("currentuploader", uploader.getUsername());
         List<Consumer> consumers = qconsumers.getResultList();
 
-        //DIO CANE
-        for (Consumer consumer : consumers) {
-            consumer.setUploaders(null);
-            consumer.setDownloadFiles(null);
-        }
+//        for (Consumer consumer : consumers) {
+//            consumer.setUploaders(null);
+//            consumer.setDownloadFiles(null);
+//        }
         em.close();
         emf.close();
         return consumers;

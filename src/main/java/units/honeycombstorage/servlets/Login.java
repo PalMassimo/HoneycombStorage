@@ -50,7 +50,7 @@ public class Login extends HttpServlet {
                         request.getSession().setAttribute("username", username);
                         response.sendRedirect("consumersrealm/index.html");
                     } else {
-                        response.sendError(422, "the password is wrong");
+                        response.sendError(422, "wrong password");
                     }
                 } else {
                     response.sendError(401, "consumer doesn't exist");
@@ -64,7 +64,7 @@ public class Login extends HttpServlet {
                         request.getSession().setAttribute("username", username);
                         response.sendRedirect("uploadersrealm/index.html");
                     } else {
-                        response.sendError(422, "the password is wrong");
+                        response.sendError(422, "wrong password");
                     }
                 } else {
                     response.sendError(401, "uploader doesn't exist");
@@ -78,7 +78,7 @@ public class Login extends HttpServlet {
                         request.getSession().setAttribute("role", role);
                         response.sendRedirect("administratorsrealm/index.html");
                     } else {
-                        response.sendError(422, "the password is wrong");
+                        response.sendError(422, "wrong password");
                     }
                 } else {
                     response.sendError(401, "administrator doesn't exist");
