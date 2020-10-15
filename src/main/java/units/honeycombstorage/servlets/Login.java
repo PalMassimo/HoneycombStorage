@@ -36,8 +36,13 @@ public class Login extends HttpServlet {
         String password = request.getParameter("password");
         String role = request.getParameter("role");
 
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("developmentPU");
-        //EntityManagerFactory emf = Persistence.createEntityManagerFactory("productionPU");
+        if (username == null || password == null || role == null) {
+            response.sendRedirect("login.html");
+            return;
+        }
+
+        //EntityManagerFactory emf = Persistence.createEntityManagerFactory("developmentPU");
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("productionPU");
         EntityManager em = emf.createEntityManager();
 
         //search in database based on entity type
@@ -95,6 +100,6 @@ public class Login extends HttpServlet {
 
     @Override
     public String getServletInfo() {
-        return "login managment";
+        return "login users";
     }
 }

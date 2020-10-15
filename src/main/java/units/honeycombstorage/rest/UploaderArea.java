@@ -46,8 +46,8 @@ public class UploaderArea {
     @Context
     HttpServletResponse response;
 
-    EntityManagerFactory emf = Persistence.createEntityManagerFactory("developmentPU");
-    //EntityManagerFactory emf = Persistence.createEntityManagerFactory("productionPU");
+    //EntityManagerFactory emf = Persistence.createEntityManagerFactory("developmentPU");
+    EntityManagerFactory emf = Persistence.createEntityManagerFactory("productionPU");
     EntityManager em = emf.createEntityManager();
 
     @GET
@@ -104,14 +104,16 @@ public class UploaderArea {
     @Produces(MediaType.APPLICATION_JSON)
     public void modifyUploader(Uploader changes) {
 
+        if (changes.getEmail() == null || changes.getNameSurname() == null || changes.getPassword() == null) {
+            return;
+        }
+
         em.getTransaction().begin();
         Uploader uploader = em.find(Uploader.class, (String) request.getSession().getAttribute("username"));
         //Uploader uploader = em.find(Uploader.class, "Sherry");
-        if (uploader != null) {
-            uploader.setEmail(changes.getEmail());
-            uploader.setNameSurname(changes.getNameSurname());
-            uploader.setPassword(changes.getPassword());
-        }
+        uploader.setEmail(changes.getEmail());
+        uploader.setNameSurname(changes.getNameSurname());
+        uploader.setPassword(changes.getPassword());
         em.getTransaction().commit();
         em.close();
         emf.close();
@@ -139,7 +141,7 @@ public class UploaderArea {
         //Uploader uploader = em.find(Uploader.class, "Sherry");
         uploader.setLogo(toByteArray(request.getPart("logo").getInputStream()));
         em.getTransaction().commit();
-        response.sendRedirect(request.getHeader("referer")+"uploadersrealm/#/privatearea");
+        response.sendRedirect(request.getHeader("referer"));
         em.close();
         emf.close();
     }
@@ -172,6 +174,11 @@ public class UploaderArea {
     @Consumes(MediaType.APPLICATION_JSON)
     public void postConsumer(Consumer consumer) throws IOException {
 
+        if (consumer.getUsername() == null || consumer.getEmail() == null || consumer.getNameSurname() == null
+                || consumer.getPassword() == null) {
+            return;
+        }
+
         em.getTransaction().begin();
         Uploader uploader = em.find(Uploader.class, (String) request.getSession().getAttribute("username"));
         //Uploader uploader = em.find(Uploader.class, "Sherry");
@@ -187,8 +194,7 @@ public class UploaderArea {
     }
 
     @PUT
-    @Path("/consumer")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Path("/consumer/{username:}")
     @Consumes(MediaType.APPLICATION_JSON)
     public void changeInfo(Consumer updates) {
 
@@ -212,9 +218,10 @@ public class UploaderArea {
         em.getTransaction().begin();
         Consumer consumer = em.find(Consumer.class, username);
         Uploader uploader = em.find(Uploader.class, (String) request.getSession().getAttribute("username"));
-        
-        consumer.removeUploader(uploader);
-  
+
+        if (consumer != null) {
+            consumer.removeUploader(uploader);
+        }
         em.getTransaction().commit();
         em.close();
         emf.close();
@@ -290,13 +297,13 @@ public class UploaderArea {
         for (Object[] uf : quf.getResultList()) {
 
             RestUploadedFile ruf = new RestUploadedFile();
-            ruf.setId((long)uf[0]);
-            ruf.setName((String)uf[1]);
-            ruf.setUploadDate(formatter.format((Date)uf[2]));
+            ruf.setId((long) uf[0]);
+            ruf.setName((String) uf[1]);
+            ruf.setUploadDate(formatter.format((Date) uf[2]));
             if (uf[3] == null) {
                 ruf.setSize(0);
             } else {
-                ruf.setSize((int)uf[3]);
+                ruf.setSize((int) uf[3]);
             }
 
             rufs.add(ruf);
@@ -370,11 +377,10 @@ public class UploaderArea {
     @Path("/file/{id:[0-9]+}")
     public void deleteFile(@PathParam("id") long id) throws IOException {
 
-        
         em.getTransaction().begin();
-        Uploader uploader = em.find(Uploader.class, (String)request.getSession().getAttribute("username"));
+        Uploader uploader = em.find(Uploader.class, (String) request.getSession().getAttribute("username"));
         //Uploader uploader = em.find(Uploader.class, "Sherry");
-        
+
         // catch the file the uploader wants to delete
         UploadedFile uploadedFile = em.find(UploadedFile.class, id);
 

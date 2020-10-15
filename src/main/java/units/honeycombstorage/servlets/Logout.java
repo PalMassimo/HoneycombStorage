@@ -1,7 +1,6 @@
 package units.honeycombstorage.servlets;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -37,6 +36,6 @@ public class Logout extends HttpServlet {
 
     @Override
     public String getServletInfo() {
-        return "Servlet for users logout";
+        return "Servlet for users' logout";
     }
 }

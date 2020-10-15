@@ -28,7 +28,7 @@ public class AddConsumer extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws IOException {
 
         //check if all the parameters are not null
         if (request.getParameter("username") == null || request.getParameter("email") == null
@@ -41,15 +41,15 @@ public class AddConsumer extends HttpServlet {
 
             //verify if the username is already taken
             if (em.find(Consumer.class, request.getParameter("username")) != null) {
-                response.sendRedirect("login.html");
+                response.sendError(409, "the username has already been taken");
             } else {
                 //let's create the new consumer
+                em.getTransaction().begin();
                 Consumer consumer = new Consumer();
                 consumer.setUsername(request.getParameter("username"));
                 consumer.setEmail(request.getParameter("email"));
                 consumer.setNameSurname(request.getParameter("namesurname"));
                 consumer.setPassword(request.getParameter("password"));
-                em.getTransaction().begin();
                 em.persist(consumer);
                 em.getTransaction().commit();
                 request.getSession().setAttribute("username", consumer.getUsername());

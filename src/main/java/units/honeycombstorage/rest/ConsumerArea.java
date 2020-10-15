@@ -41,8 +41,8 @@ public class ConsumerArea {
     @Context
     HttpServletResponse response;
 
-    EntityManagerFactory emf = Persistence.createEntityManagerFactory("developmentPU");
-    //EntityManagerFactory emf = Persistence.createEntityManagerFactory("productionPU");
+    //EntityManagerFactory emf = Persistence.createEntityManagerFactory("developmentPU");
+    EntityManagerFactory emf = Persistence.createEntityManagerFactory("productionPU");
     EntityManager em = emf.createEntityManager();
 
     @GET
@@ -168,6 +168,11 @@ public class ConsumerArea {
     public void postConsumer(Consumer updates) {
 
         //change consumer info
+        if (updates.getUsername() == null || updates.getEmail() == null
+                || updates.getNameSurname() == null || updates.getPassword() == null) {
+            return;
+        }
+
         em.getTransaction().begin();
         Consumer consumer = em.find(Consumer.class, updates.getUsername());
         if (consumer != null) {
@@ -194,19 +199,19 @@ public class ConsumerArea {
             dfQuery.setParameter("uploadedFile", uploadedFile);
             dfQuery.setParameter("consumer", em.find(Consumer.class, (String) request.getSession().getAttribute("username")));
             //dfQuery.setParameter("consumer", em.find(Consumer.class, "RSSMRA80B27F205P"));
+            
+            em.getTransaction().begin();
             DownloadFile df = dfQuery.getSingleResult();
-
             df.setDownloaded(new Date());
             df.setIpAddress(request.getRemoteAddr());
-
-            em.getTransaction().begin();
             em.persist(df);
             em.getTransaction().commit();
 
             em.close();
             emf.close();
-            
+
             return uploadedFile.getContent();
+            
         } catch (NoResultException e) {
             response.sendError(404, "file not found. Maybe the uploader deleted it");
             return null;
