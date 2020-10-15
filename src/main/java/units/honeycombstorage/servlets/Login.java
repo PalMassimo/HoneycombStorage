@@ -36,8 +36,8 @@ public class Login extends HttpServlet {
         String password = request.getParameter("password");
         String role = request.getParameter("role");
 
-        //EntityManagerFactory emf = Persistence.createEntityManagerFactory("developmentPU");
-        EntityManagerFactory emf = Persistence.createEntityManagerFactory("productionPU");
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("developmentPU");
+        //EntityManagerFactory emf = Persistence.createEntityManagerFactory("productionPU");
         EntityManager em = emf.createEntityManager();
 
         //search in database based on entity type

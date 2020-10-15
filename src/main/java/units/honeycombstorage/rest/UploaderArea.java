@@ -46,8 +46,8 @@ public class UploaderArea {
     @Context
     HttpServletResponse response;
 
-    //EntityManagerFactory emf = Persistence.createEntityManagerFactory("developmentPU");
-    EntityManagerFactory emf = Persistence.createEntityManagerFactory("productionPU");
+    EntityManagerFactory emf = Persistence.createEntityManagerFactory("developmentPU");
+    //EntityManagerFactory emf = Persistence.createEntityManagerFactory("productionPU");
     EntityManager em = emf.createEntityManager();
 
     @GET
@@ -208,17 +208,13 @@ public class UploaderArea {
     @Path("/consumer/{username:}")
     public void deleteConsumer(@PathParam("username") String username) throws IOException {
 
+        //we remove the association, not the whole consumer entity
         em.getTransaction().begin();
         Consumer consumer = em.find(Consumer.class, username);
         Uploader uploader = em.find(Uploader.class, (String) request.getSession().getAttribute("username"));
-
-        if (consumer != null) {
-            if (consumer.getUploaders().size() == 1) {
-                em.remove(consumer);
-            } else {
-                consumer.getUploaders().remove(uploader);
-            }
-        }
+        
+        consumer.removeUploader(uploader);
+  
         em.getTransaction().commit();
         em.close();
         emf.close();

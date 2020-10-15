@@ -3,14 +3,17 @@
 
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="author" content="Massimo Palmisano">
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Russo One">
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="author" content="Massimo Palmisano" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Russo One" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito" />
         <link rel="icon" href="favicon.ico"/>
         <title>Subscribe Page</title>
 
         <style>
+            *{
+                box-sizing: border-box;
+            }
             @media screen and (orientation: landscape){
                 html,
                 body {
@@ -20,7 +23,6 @@
                 }
 
                 body {
-                    box-sizing: border-box;
                     background-image: url("background.jpg");
                     background-color: rgba(0, 0, 0, 0.83);
                     background-position: right;
@@ -63,8 +65,8 @@
                 form input[type="text"],
                 form input[type="email"],
                 form input[type="password"]{
-                    margin:1vh auto;
-                    border:1px solid black; 
+                    margin: 1vh auto;
+                    border: 1px solid black; 
                     border-radius: 10px; 
                     flex-basis: 6%;
                     width: 40%;
@@ -108,7 +110,6 @@
                 }
 
                 body {
-                    box-sizing: border-box;
                     background-image: url("background.jpg");
                     background-color: rgba(0, 0, 0, 0.83);
                     background-position: center;
@@ -141,15 +142,12 @@
 
                 form img:last-of-type {
                     margin: 0 auto 1vh auto;
-                    margin-right: auto;
-                    margin-left: auto;
                     height: 15vh;
                 }
 
                 form input[type="text"],
                 form input[type="email"],
                 form input[type="password"] {
-                    box-sizing: border-box;
                     width: 90%;
                     height: 6vh;
                     margin: 1vh 5%;
@@ -160,7 +158,6 @@
 
                 form input[type="submit"] {
                     background-color: rgba(0, 0, 0, 0.83);
-                    box-sizing: border-box;
                     width: 90%;
                     height: 10vh;
                     margin: 1vh auto;
@@ -222,13 +219,20 @@
             <img src="honey.jpg" alt="honey" />
             <h1>Subcribe now!</h1>
             <img src="default_profile_picture.png" alt="default_profile_picture">
-            <input type="text" name="username" placeholder="enter username" onchange="validateUsername()" required />
-            <input type="email" name="email" placeholder="enter email" required />
-            <input type="text" name="namesurname" placeholder="enter name and surname" required>
-            <input type="password" name="password" placeholder="enter password" required>
+            <input type="text" name="username" placeholder=" enter username" onchange="validateUsername()" required />
+            <input type="email" name="email" placeholder=" enter email" required />
+            <input type="text" name="namesurname" placeholder=" enter name and surname" required>
+            <input type="password" name="password" placeholder=" enter password" required>
             <input type="submit" value="Subscribe" />
             <span>Already a user? Back to <a href="login.html">sign in</a> page</span>
         </form>
     </body>
 
 </html>
+
+<script>
+    let username = document.getElementsByName("username")[0];
+    username.addEventListener("keyup", () => {
+        username.value = username.value.toUpperCase();
+    });
+</script>

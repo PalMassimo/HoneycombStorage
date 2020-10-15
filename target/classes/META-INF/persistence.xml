@@ -9,7 +9,7 @@
             <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
             <property name="javax.persistence.jdbc.password" value="admin"/>
             <property name="hibernate.cache.provider_class" value="org.hibernate.cache.NoCacheProvider"/>
-            <property name="hibernate.show_sql" value="true"/>
+            <!--<property name="hibernate.show_sql" value="true"/>-->
             <property name="javax.persistence.schema-generation.database.action" value="none"/>
             <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL94Dialect" />
         </properties>
@@ -26,7 +26,7 @@
             <property name="javax.persistence.jdbc.password" value="c65b29a4256e05f0ddcacd2d874420d2d735393e3103f3db088056f60b749a57"/>
             <property name="hibernate.cache.provider_class" value="org.hibernate.cache.NoCacheProvider"/>
             <property name="javax.persistence.schema-generation.database.action" value="none"/>
-            <property name="hibernate.show_sql" value="true" />
+            <!--<property name="hibernate.show_sql" value="true" />-->
         </properties>
     </persistence-unit>
 </persistence>

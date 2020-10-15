@@ -24,7 +24,6 @@ import javax.ws.rs.core.MediaType;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import units.honeycombstorage.entities.storage.Administrator;
-import units.honeycombstorage.entities.storage.UploadedFile;
 import units.honeycombstorage.entities.storage.Uploader;
 
 /**
@@ -39,8 +38,8 @@ public class AdministratorArea {
     @Context
     HttpServletResponse response;
 
-    //EntityManagerFactory emf = Persistence.createEntityManagerFactory("developmentPU");
-    EntityManagerFactory emf = Persistence.createEntityManagerFactory("productionPU");
+    EntityManagerFactory emf = Persistence.createEntityManagerFactory("developmentPU");
+    //EntityManagerFactory emf = Persistence.createEntityManagerFactory("productionPU");
     EntityManager em = emf.createEntityManager();
 
     @GET

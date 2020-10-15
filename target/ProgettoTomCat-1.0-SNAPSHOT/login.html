@@ -2,16 +2,21 @@
 <html lang="en">
 
     <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta name="author" content="Massimo Palmisano">
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Russo One">
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Archivo Black">
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito">
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="author" content="Massimo Palmisano" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Russo One" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Archivo Black" />
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito" />
         <link rel="icon" href="favicon.ico"/>
         <title>Login Page</title>
 
         <style>
+
+            *{
+                box-sizing: border-box;   
+            }
+
             @media screen and (orientation: landscape){
                 html,
                 body {
@@ -64,10 +69,9 @@
                 form div {
                     width: 42%;
                     margin: 3.5vh auto 1vh auto;
-                    /*min-height: 20px;*/
                     display: flex;
                     flex-flow: row wrap;
-                    justify-items: center;
+                    justify-content: center;
                     box-sizing: border-box;
                 }
 
@@ -102,12 +106,12 @@
                     background-color: whitesmoke;
                     border: 1px solid black;
                 }
-                
+
                 form input[type="radio"]{
                     width: 2vh;
                     height: 2vh;
-                    max-width:2vw;
-                    max-height:2vw;
+                    max-width: 2vw;
+                    max-height: 2vw;
                 }
 
                 form input[type="submit"] {
@@ -194,7 +198,6 @@
                 }
 
                 form div label {
-                    box-sizing: border-box;
                     font-family: "Nunito";
                     font-size: 2.5vh;
                     margin: 1vh;
@@ -210,7 +213,6 @@
 
                 form input[type="text"],
                 form input[type="password"] {
-                    box-sizing: border-box;
                     width: 90%;
                     height: 6vh;
                     margin: 1vh 5%;
@@ -259,34 +261,43 @@
 
 
         </style>
+
     </head>
 
     <body>
         <form action="login" method="post" autocomplete="on">
             <img src="honey.jpg" alt="honey" />
             <h1>Welcome Back!</h1>
-            <img src="default_profile_picture.png" alt="default_profile_picture">
+            <img src="default_profile_picture.png" alt="default_profile_picture" />
             <div>
                 <label for="consumerRadio">
-                    <input type="radio" value="consumer" name="role" id="consumerRadio" checked>
+                    <input type="radio" value="consumer" name="role" id="consumerRadio" checked />
                     Consumer
                 </label>
                 <label for="uploaderRadio">
-                    <input type="radio" value="uploader" name="role" id="uploaderRadio">
+                    <input type="radio" value="uploader" name="role" id="uploaderRadio" />
                     Uploader
                 </label>
                 <label for="administratorRadio">
-                    <input type="radio" value="administrator" name="role" id="administratorRadio">
+                    <input type="radio" value="administrator" name="role" id="administratorRadio" />
                     Administrator
                 </label>
             </div>
-            <input type="text" name="username" placeholder=" enter username" />
-            <input type="password" name="password" placeholder=" enter password">
+            <input type="text" name="username" placeholder=" enter username" onchange="onkeyup()"/>
+            <input type="password" name="password" placeholder=" enter password" />
             <input type="submit" value="Login" />
 
             <span>Not a user? Subscribe <a href="subscribe.html">here</a></span>
         </form>
 
     </body>
-
 </html>
+
+<script>
+    let username = document.getElementsByName("username")[0];
+    username.addEventListener("keyup", () => {
+        if (document.getElementById("consumerRadio").checked) {
+            username.value = username.value.toUpperCase();
+        }
+    });
+</script>

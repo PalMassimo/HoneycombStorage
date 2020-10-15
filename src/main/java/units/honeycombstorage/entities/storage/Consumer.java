@@ -29,7 +29,6 @@ public class Consumer extends Utente implements Serializable {
             joinColumns = @JoinColumn(name = "consumer_username"),
             inverseJoinColumns = @JoinColumn(name = "uploader_username"))
     Set<Uploader> uploaders = new HashSet<Uploader>();
-    //Set<Uploader> uploaders;
     
     @OneToMany(mappedBy = "consumer", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private Set<DownloadFile> downloadFiles;
@@ -48,6 +47,10 @@ public class Consumer extends Utente implements Serializable {
 
     public void addUploader(Uploader uploader) {
         this.uploaders.add(uploader);
+    }
+    
+    public void removeUploader(Uploader uploader){
+        this.uploaders.remove(uploader);
     }
 
     public Set<DownloadFile> getDownloadFiles() {
