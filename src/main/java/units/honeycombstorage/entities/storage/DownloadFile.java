@@ -25,21 +25,21 @@ public class DownloadFile implements Serializable {
     //a tale scopo servono anche le annotation @MapsId
     private final DownloadFileId id = new DownloadFileId();
 
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("consumer_username")
-    @NotNull
+    @Column(nullable = false)
     private Consumer consumer;
 
-    @ManyToOne(fetch=FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("uploadedFileId")
-    @NotNull
+    @Column(nullable = false)
     private UploadedFile uploadedFile;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @Column(name="downloaded")
+    @Column(name = "downloaded", nullable = true)
     private Date downloaded;
-    
-    @Column(name="ipAddress")
+
+    @Column(name = "ipAddress", nullable = true)
     private String ipAddress;
 
     public String getIpAddress() {

@@ -29,7 +29,7 @@ public class UploadedFile implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", updatable = false)
+    @Column(name = "id")
     private long id;
 
     @Column(name = "content", nullable = false)
