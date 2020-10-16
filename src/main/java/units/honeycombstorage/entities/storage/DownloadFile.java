@@ -27,12 +27,12 @@ public class DownloadFile implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("consumer_username")
-    @Column(nullable = false)
+    @NotNull
     private Consumer consumer;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("uploadedFileId")
-    @Column(nullable = false)
+    @NotNull
     private UploadedFile uploadedFile;
 
     @Temporal(TemporalType.TIMESTAMP)
