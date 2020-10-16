@@ -31,7 +31,7 @@ public class QuickLogin extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         String idFile = request.getParameter("id");
-        String fileName = request.getParameter("fileName");
+        String fileName = request.getParameter("filename");
 
         if (username == null || password == null || idFile == null || fileName == null) {
             response.sendRedirect(request.getHeader("referer"));
