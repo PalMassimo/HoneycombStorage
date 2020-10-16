@@ -16,6 +16,13 @@
         <title>Quick Login</title>
 
         <style>
+            /*
+            * Prefixed by https://autoprefixer.github.io
+            * PostCSS: v7.0.29,
+            * Autoprefixer: v9.7.6
+            * Browsers: last 4 version
+            */
+
             html, body{
                 margin: 0;
                 border: 0;
@@ -25,8 +32,15 @@
             body{
                 width: 100vw;
                 height: 100vh;
+                display: -webkit-box;
+                display: -ms-flexbox;
                 display: flex;
+                -webkit-box-orient: horizontal;
+                -webkit-box-direction: normal;
+                -ms-flex-flow: row nowrap;
                 flex-flow: row nowrap;
+                -webkit-box-align: center;
+                -ms-flex-align: center;
                 align-items: center;
             }
 
@@ -34,9 +48,18 @@
                 margin-right: auto;
                 margin-left: auto;
                 width: 400px;
+                display: -webkit-box;
+                display: -ms-flexbox;
                 display: flex;
+                -webkit-box-orient: vertical;
+                -webkit-box-direction: normal;
+                -ms-flex-flow: column nowrap;
                 flex-flow: column nowrap;
+                -webkit-box-align: center;
+                -ms-flex-align: center;
                 align-items: center;
+                -webkit-box-pack: center;
+                -ms-flex-pack: center;
                 justify-content: center;
                 border: 3px solid black;
                 border-radius: 40px;
@@ -95,8 +118,15 @@
                 body{
                     width: 100vw;
                     height: 100vh;
+                    display: -webkit-box;
+                    display: -ms-flexbox;
                     display: flex;
+                    -webkit-box-orient: horizontal;
+                    -webkit-box-direction: normal;
+                    -ms-flex-flow: row nowrap;
                     flex-flow: row nowrap;
+                    -webkit-box-align: center;
+                    -ms-flex-align: center;
                     align-items: center;
                 }
 
@@ -105,9 +135,18 @@
                     margin-left: auto;
                     height: 80%;
                     width: 70%;
+                    display: -webkit-box;
+                    display: -ms-flexbox;
                     display: flex;
+                    -webkit-box-orient: vertical;
+                    -webkit-box-direction: normal;
+                    -ms-flex-flow: column nowrap;
                     flex-flow: column nowrap;
+                    -webkit-box-align: center;
+                    -ms-flex-align: center;
                     align-items: center;
+                    -webkit-box-pack: center;
+                    -ms-flex-pack: center;
                     justify-content: center;
                     border: 3px solid black;
                     border-radius: 40px;
@@ -147,7 +186,7 @@
     </body>
 
     <script>
-        let username=document.querySelector("input[name='username']");
+        let username = document.querySelector("input[name='username']");
         username.addEventListener("keyup", () => {
             username.value = username.value.toUpperCase();
         });

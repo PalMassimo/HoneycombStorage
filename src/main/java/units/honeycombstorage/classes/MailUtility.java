@@ -31,13 +31,13 @@ public class MailUtility {
         message.setSubject(subject);
         message.setText(text);
 
-        // Aggiunta degli indirizzi del mittente e del destinatario
+        // adding the addresses and the sender
         InternetAddress fromAddress = new InternetAddress(mittente);
         InternetAddress toAddress = new InternetAddress(destinatario);
         message.setFrom(fromAddress);
         message.setRecipient(Message.RecipientType.TO, toAddress);
 
-        // Invio del messaggio
+        // send the message
         Transport.send(message);
     }
 }
