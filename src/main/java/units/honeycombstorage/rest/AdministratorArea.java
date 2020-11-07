@@ -134,7 +134,6 @@ public class AdministratorArea {
 
     @DELETE
     @Path("/uploader/{username:}")
-    @Consumes(MediaType.APPLICATION_JSON)
     public void deleteUploader(@PathParam("username") String username) {
 
         em.getTransaction().begin();
